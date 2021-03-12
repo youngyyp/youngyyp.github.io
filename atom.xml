@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-03-05T15:12:39.149Z</updated>
+  <updated>2021-03-12T11:52:56.896Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -17,24 +17,29 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>考研感悟</title>
-    <link href="https://youngyyp.github.io/2021/03/02/%E8%80%83%E7%A0%94%E6%84%9F%E6%82%9F/"/>
-    <id>https://youngyyp.github.io/2021/03/02/%E8%80%83%E7%A0%94%E6%84%9F%E6%82%9F/</id>
-    <published>2021-03-02T13:22:31.000Z</published>
-    <updated>2021-03-05T15:12:39.149Z</updated>
+    <title>毕业设计——基于Atlas_200_DK的障碍物识别系统设计与实现</title>
+    <link href="https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
+    <id>https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</id>
+    <published>2021-03-12T11:20:57.000Z</published>
+    <updated>2021-03-12T11:52:56.896Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="2021-3-2"><a href="#2021-3-2" class="headerlink" title="2021/3/2"></a>2021/3/2</h4><p>​        考研分数出来了，考的很糟糕，政治69，英语一71，数学一102，专业课127，总分369。</p><p>​        按照目前群里的统计，400分以上的已经远超往年，我很大概率不会过线了。我爸想让我调剂，我有点想直接去找工作了。</p><a id="more"></a><p>​        一时间不知道如何是好，辛辛苦苦准备了差不多一年，最后的结果就是这样吗？本来估分起码有个三百八九十分，结果谁知数学给了我当头一棒，这一棒瞬间把我打成了一个没有梦想的咸鱼。或许自己真的是数学天赋不够吧，毕竟高考也是数学考砸了。付出了那么多的时间，反而还没别人考的好。或许我真该反思一下是不是自己做了太多的无用功。</p><p>​        或许一开始就不应该选择考研这条路。当初凭着一腔热血以及对步入社会的恐惧，选择了考研，硬撑着颈椎病走到了现在，看着别的同学能坐那不动学一天，好生羡慕，而我顶多坐一个小时就必须出去活动一下，不然疼的受不了。跟别人说我脖子疼，大多也是笑笑，只有得过颈椎病的人才能体会我的难处。</p><p>​        当然，这也并不是说为成绩考差找借口，我承认数学没考好是我自己的原因，我也确确实实尽到了我能做的最大努力。只是确实心有不甘，明明是保研边缘的成绩，最后连研都没考上，做了一年的无用题，真的是对不起我自己，也对不起大家对我的厚望。有时候，我常常想，要是我一直成绩就很差那该多好啊，那样大家就不会对我期望那么高了，我找个工资一般的工作也不会有人说什么了，我是不是就可以做我想做的事情了呢？（不过，我到底想做什么呢，哈哈我自己也不知道，我可能只是想混吧）</p><p>​        哎，明明感觉心里有很多东西想说，可是真要我来写，又不知道写什么了，要是研真没考上，找几个兄弟去喝酒吧，或许这样我能把堵在心中的话说出来吧。记得以前我说过，要是什么时候我开始喝酒了，那就证明我向这个世界妥协了。我真的有点累了，虽然确实很想为这个世界做点什么，做点什么能让后人记得的好事。小时候以为自己以后能够很厉害，自己的qq号昵称都是 I am the one and only (我独一无二) 。而现在才发现，自己不过是一个毫不起眼的小角色罢了，特别是在东九下课的时候，上千人蜂拥而出，在这人潮中，所有人都和我差不多，仅仅在这些人中，我就已经被淹没的无影无踪，只能随着人潮慢慢前进。</p><p>​    <img src="/2021/03/02/%E8%80%83%E7%A0%94%E6%84%9F%E6%82%9F/image-20210302221734426.png" alt="image-20210302221734426"></p><p>​        今天在一本书中看到上面一段话，有人又成功考上了研，又拿了几个好offer，又谈了恋爱，而我，一无所有。</p><p>​        时候不早了，教室只有我一个人了，下次再写吧。</p><p><img src="/2021/03/02/%E8%80%83%E7%A0%94%E6%84%9F%E6%82%9F/image-20210302222157963.png" alt="image-20210302222157963"></p><h4 id="2021-3-5"><a href="#2021-3-5" class="headerlink" title="2021/3/5"></a>2021/3/5</h4><p>​        这两天感觉好了很多，决定一条路走到黑了，不管找工作的事情了，这让我轻松许多。在小木虫上发布了我的调剂信息后，一个中科院近物所的老师加了我，很希望我去他们那。同时曾老师也帮我找了一些调剂信息，虽然不太行，但还是投了一个西电的。总之是有保底的了，那就加油冲吧！</p>]]></content>
-    
-    
-    <summary type="html">&lt;h4 id=&quot;2021-3-2&quot;&gt;&lt;a href=&quot;#2021-3-2&quot; class=&quot;headerlink&quot; title=&quot;2021/3/2&quot;&gt;&lt;/a&gt;2021/3/2&lt;/h4&gt;&lt;p&gt;​        考研分数出来了，考的很糟糕，政治69，英语一71，数学一102，专业课127，总分369。&lt;/p&gt;
-&lt;p&gt;​        按照目前群里的统计，400分以上的已经远超往年，我很大概率不会过线了。我爸想让我调剂，我有点想直接去找工作了。&lt;/p&gt;</summary>
+    <content type="html"><![CDATA[<h2 id="开题答辩——2021-3-12"><a href="#开题答辩——2021-3-12" class="headerlink" title="开题答辩——2021/3/12"></a>开题答辩——2021/3/12</h2><p>毕业设计的题目是《基于<strong>Atlas 200 DK</strong>的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）</p><p>这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛应用于开发者方案验证、高校教育、科学研究等场景。）怎么说也卖3999元呢，希望后面不要有太多的坑。</p><p>下一步的计划肯定是先拿到这个开发板，然后把一切环境都配置好。后面会再这里记录一下使用Atlas 200 DK的过程以及碰到的一些坑。</p><a id="more"></a>]]></content>
     
     
+    <summary type="html">&lt;h2 id=&quot;开题答辩——2021-3-12&quot;&gt;&lt;a href=&quot;#开题答辩——2021-3-12&quot; class=&quot;headerlink&quot; title=&quot;开题答辩——2021/3/12&quot;&gt;&lt;/a&gt;开题答辩——2021/3/12&lt;/h2&gt;&lt;p&gt;毕业设计的题目是《基于&lt;strong&gt;Atlas 200 DK&lt;/strong&gt;的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）&lt;/p&gt;
+&lt;p&gt;这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛应用于开发者方案验证、高校教育、科学研究等场景。）怎么说也卖3999元呢，希望后面不要有太多的坑。&lt;/p&gt;
+&lt;p&gt;下一步的计划肯定是先拿到这个开发板，然后把一切环境都配置好。后面会再这里记录一下使用Atlas 200 DK的过程以及碰到的一些坑。&lt;/p&gt;</summary>
     
-    <category term="考研" scheme="https://youngyyp.github.io/categories/%E8%80%83%E7%A0%94/"/>
     
     
-    <category term="考研" scheme="https://youngyyp.github.io/tags/%E8%80%83%E7%A0%94/"/>
+    <category term="毕业设计" scheme="https://youngyyp.github.io/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+    <category term="深度学习" scheme="https://youngyyp.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="Atlas" scheme="https://youngyyp.github.io/tags/Atlas/"/>
+    
+    <category term="神经网络，障碍物识别，目标识别" scheme="https://youngyyp.github.io/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%8C%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%EF%BC%8C%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB/"/>
     
   </entry>
   
@@ -78,9 +83,9 @@
     <link href="https://youngyyp.github.io/2021/02/17/%E9%A2%88%E6%A4%8E%E7%97%85%E3%80%81%E8%85%B0%E8%82%8C%E5%8A%B3%E6%8D%9F%E5%BA%B7%E5%A4%8D%E7%BB%8F%E5%8E%86/"/>
     <id>https://youngyyp.github.io/2021/02/17/%E9%A2%88%E6%A4%8E%E7%97%85%E3%80%81%E8%85%B0%E8%82%8C%E5%8A%B3%E6%8D%9F%E5%BA%B7%E5%A4%8D%E7%BB%8F%E5%8E%86/</id>
     <published>2021-02-17T10:48:49.000Z</published>
-    <updated>2021-03-05T15:07:39.352Z</updated>
+    <updated>2021-03-12T11:53:17.989Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="2021-2-17"><a href="#2021-2-17" class="headerlink" title="2021/2/17"></a>2021/2/17</h4><p>这几天颈椎病加重了，每天早上起床右边头疼，经检查诊断为<strong>枕神经痛</strong>，每天要去医院做理疗，包括针灸和一些仪器治疗，一共持续五天。</p><p>今天在 <strong>FIT</strong> app上找到了一些很好的锻炼腰背的教程，以后每天下午坚持锻炼，相信一定可以康复的！</p><a id="more"></a><h4 id="2021-2-20"><a href="#2021-2-20" class="headerlink" title="2021/2/20"></a>2021/2/20</h4><p>换了一个乳胶枕，右边头不太疼了，只是头晕，总的来说好了许多，要是一回来就换枕头应该就不会出现头疼的问题了。</p><h4 id="2021-2-22"><a href="#2021-2-22" class="headerlink" title="2021/2/22"></a>2021/2/22</h4><p>昨天和朋友出去玩了一天，没有休息好，今天又开始头疼了，于是鸽了另一个聚会，在家尝试进行<strong>康奈基疗法</strong>。</p><h4 id="2021-2-23"><a href="#2021-2-23" class="headerlink" title="2021/2/23"></a>2021/2/23</h4><p>发现了一个很严重的问题，之前一直拘泥于睡姿问题，生怕是因为睡姿不好而出的问题，导致睡觉仰睡不敢换别的动作，然后每天早晨起床身体都很僵硬。其实完全不用受困于睡觉姿势，建议<strong>怎么舒服怎么睡，变换动作越多越好</strong>！我其实从小睡觉是喜欢翻身的，可能是因为学校床小了，所以睡觉动的少了，身体就慢慢僵硬了。</p><p>今天中午尝试了下，把床垫再加了一层，然后睡上去就觉得很舒服，也不管什么睡觉姿势了，跟婴儿一样乱睡，结果出乎意料睡的很好，午睡起来身体也还不错，打算今晚再试试。</p><h4 id="2021-2-24"><a href="#2021-2-24" class="headerlink" title="2021/2/24"></a>2021/2/24</h4><p>今天起床头又不疼了，回顾昨天，一共采用了以下几种方法：康奈基疗法、keep上的肩颈训练、fit上的背部腰部训练。早上起来脖子和背部有那种锻炼后的酸痛感，而不是之前那种病态的酸痛感。</p><p>总之，千万不能被颈椎病吓到，不就是锻炼吗，干就完事了。要是我的未来被区区一个颈椎病阻挡，那将是多么可笑啊。加油，坚持锻炼，一定可以的！</p><h4 id="2021-3-5"><a href="#2021-3-5" class="headerlink" title="2021/3/5"></a>2021/3/5</h4><p>最近还是头晕晕的，没太多好转，今天去学校的健身房办了3个月的卡，400块钱，体验还不错，进一步加强锻炼，我一定可以的！</p>]]></content>
+    <content type="html"><![CDATA[<h4 id="2021-2-17"><a href="#2021-2-17" class="headerlink" title="2021/2/17"></a>2021/2/17</h4><p>这几天颈椎病加重了，每天早上起床右边头疼，经检查诊断为<strong>枕神经痛</strong>，每天要去医院做理疗，包括针灸和一些仪器治疗，一共持续五天。</p><p>今天在 <strong>FIT</strong> app上找到了一些很好的锻炼腰背的教程，以后每天下午坚持锻炼，相信一定可以康复的！</p><a id="more"></a><h4 id="2021-2-20"><a href="#2021-2-20" class="headerlink" title="2021/2/20"></a>2021/2/20</h4><p>换了一个乳胶枕，右边头不太疼了，只是头晕，总的来说好了许多，要是一回来就换枕头应该就不会出现头疼的问题了。</p><h4 id="2021-2-22"><a href="#2021-2-22" class="headerlink" title="2021/2/22"></a>2021/2/22</h4><p>昨天和朋友出去玩了一天，没有休息好，今天又开始头疼了，于是鸽了另一个聚会，在家尝试进行<strong>康奈基疗法</strong>。</p><h4 id="2021-2-23"><a href="#2021-2-23" class="headerlink" title="2021/2/23"></a>2021/2/23</h4><p>发现了一个很严重的问题，之前一直拘泥于睡姿问题，生怕是因为睡姿不好而出的问题，导致睡觉仰睡不敢换别的动作，然后每天早晨起床身体都很僵硬。其实完全不用受困于睡觉姿势，建议<strong>怎么舒服怎么睡，变换动作越多越好</strong>！我其实从小睡觉是喜欢翻身的，可能是因为学校床小了，所以睡觉动的少了，身体就慢慢僵硬了。</p><p>今天中午尝试了下，把床垫再加了一层，然后睡上去就觉得很舒服，也不管什么睡觉姿势了，跟婴儿一样乱睡，结果出乎意料睡的很好，午睡起来身体也还不错，打算今晚再试试。</p><h4 id="2021-2-24"><a href="#2021-2-24" class="headerlink" title="2021/2/24"></a>2021/2/24</h4><p>今天起床头又不疼了，回顾昨天，一共采用了以下几种方法：康奈基疗法、keep上的肩颈训练、fit上的背部腰部训练。早上起来脖子和背部有那种锻炼后的酸痛感，而不是之前那种病态的酸痛感。</p><p>总之，千万不能被颈椎病吓到，不就是锻炼吗，干就完事了。要是我的未来被区区一个颈椎病阻挡，那将是多么可笑啊。加油，坚持锻炼，一定可以的！</p><h4 id="2021-3-5"><a href="#2021-3-5" class="headerlink" title="2021/3/5"></a>2021/3/5</h4><p>最近还是头晕晕的，没太多好转，今天去学校的健身房办了3个月的卡，400块钱，体验还不错，进一步加强锻炼，我一定可以的！</p><h4 id="2021-3-8"><a href="#2021-3-8" class="headerlink" title="2021/3/8"></a>2021/3/8</h4><p>在健身房锻炼了几天背，感觉好多了。用固定器械锻炼背真的效果比自己在家瞎搞好多了，坚持！</p>]]></content>
     
     
     <summary type="html">&lt;h4 id=&quot;2021-2-17&quot;&gt;&lt;a href=&quot;#2021-2-17&quot; class=&quot;headerlink&quot; title=&quot;2021/2/17&quot;&gt;&lt;/a&gt;2021/2/17&lt;/h4&gt;&lt;p&gt;这几天颈椎病加重了，每天早上起床右边头疼，经检查诊断为&lt;strong&gt;枕神经痛&lt;/strong&gt;，每天要去医院做理疗，包括针灸和一些仪器治疗，一共持续五天。&lt;/p&gt;
@@ -159,12 +164,13 @@
     <link href="https://youngyyp.github.io/2021/01/27/markdown_skills/"/>
     <id>https://youngyyp.github.io/2021/01/27/markdown_skills/</id>
     <published>2021-01-27T15:36:01.000Z</published>
-    <updated>2021-02-17T12:03:27.080Z</updated>
+    <updated>2021-03-12T11:30:59.766Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Markdown语法"><a href="#Markdown语法" class="headerlink" title="Markdown语法"></a>Markdown语法</h1><!-- 这是一行注释 --><div style="display: none">哈哈我是注释，不会在浏览器中显示。</div><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题  "></a>六级标题  <!--最多6级标题--></h6><a id="more"></a><h1 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h1><ul><li><input disabled="" type="checkbox"> 任务一 未做任务 <code>- + 空格 + [ ]</code></li><li><input checked="" disabled="" type="checkbox"> 任务二 已做任务 <code>- + 空格 + [x]</code></li></ul><h1 id="首行缩进"><a href="#首行缩进" class="headerlink" title="首行缩进"></a>首行缩进</h1><p>【1】  或  //全角<br>【2】  或  //半角<br>【3】 &nbsp;或&nbsp;  //半角之半角  </p><!-- 换行需要每行后加两个空格 --><h1 id="对齐方式-（支持部分html语法）"><a href="#对齐方式-（支持部分html语法）" class="headerlink" title="对齐方式 （支持部分html语法）"></a>对齐方式 （支持部分html语法）</h1><center>行中心对齐</center><p align="left">行左对齐</p><p align="right">行右对齐</p><p><em>斜体</em> 或 <em>斜体</em><br><strong>粗体</strong>   <strong><em>注意加粗不可与括号混用，可能出现bug</em></strong><br><strong><em>加粗斜体</em></strong><br><del>删除线</del><br>++下划线++<br>==背景高亮==</p><h1 id="超链接、页内链接、自动链接、注脚"><a href="#超链接、页内链接、自动链接、注脚" class="headerlink" title="超链接、页内链接、自动链接、注脚"></a>超链接、页内链接、自动链接、注脚</h1><h2 id="行内式"><a href="#行内式" class="headerlink" title="行内式"></a>行内式</h2><p>欢迎阅读 <a href="https://www.jianshu.com/u/16d77399d3a7" title="择势">择势勤</a></p><h2 id="参考式"><a href="#参考式" class="headerlink" title="参考式"></a>参考式</h2><p>我经常去的几个网站<a href="http://www.google.com/">Google</a>、<a href="http://www.leanote.com/">Leanote</a>。</p><h2 id="注脚"><a href="#注脚" class="headerlink" title="注脚"></a>注脚</h2><p>使用 Markdown<a href="Markdown%E6%98%AF%E4%B8%80%E7%A7%8D%E7%BA%AF%E6%96%87%E6%9C%AC%E6%A0%87%E8%AE%B0%E8%AF%AD%E8%A8%80">^1</a>可以效率的书写文档, 直接转换成 HTML<a href="Hyperssssssssssssssssssss%E4%B8%8D%E8%83%BD%E5%B8%A6%E7%A9%BA%E6%A0%BC%EF%BC%9F">^2</a>。</p><h1 id="无序列表、有序列表、定义型列表"><a href="#无序列表、有序列表、定义型列表" class="headerlink" title="无序列表、有序列表、定义型列表"></a>无序列表、有序列表、定义型列表</h1><ul><li>无序列表项 一</li></ul><ul><li>无序列表项 二</li></ul><ul><li>无序列表项 三  </li></ul><ul><li>无序列表项 一</li></ul><ol><li>有序列表项 一</li><li>有序列表项 二</li><li>有序列表项 三</li></ol><p><img src="/2021/01/27/markdown_skills/2021-01-27-15-35-30.png"><br>注意:   存放图片的文件夹名称要和title一样<br><a href="https://www.etyang.com/2020/10/15/vscode/">vscode贴图</a><br>[hexo显示图片]<a href="https://blog.csdn.net/cnds123321/article/details/109085776">https://blog.csdn.net/cnds123321/article/details/109085776</a></p><h1 id="多级引用"><a href="#多级引用" class="headerlink" title="多级引用"></a>多级引用</h1><blockquote><blockquote><blockquote><p>请问 Markdwon 怎么用？ - 小白<br>自己看教程！ - 愤青<br>教程在哪？ - 小白</p></blockquote></blockquote></blockquote><h1 id="字体格式"><a href="#字体格式" class="headerlink" title="字体格式"></a>字体格式</h1><p><font face="黑体">我是黑体字</font><br><font face="微软雅黑">我是微软雅黑</font><br><font face="STCAIYUN">我是华文彩云</font><br><font color="#0099ff" size="12" face="黑体">黑体</font><br><font color="gray" size="5">gray</font><br><font color="#00ffff" size="3">null</font></p><h1 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h1><p>C语言里的函数 <code>scanf()</code> 怎么使用？</p><pre><code>include &lt;stdio.h&gt; //这个点是键盘左上角的点int main(void){printf("Hello world\n");}</code></pre><hr><h1 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h1><pre class=" language-mermaid"><code class="language-mermaid">graph TDA[方形] --> B(圆角)    B --> C{条件a}    C --> |a=1| D[结果1]    C --> |a=2| E[结果2]    F[竖向流程图]</code></pre>]]></content>
     
     
     <summary type="html">&lt;h1 id=&quot;Markdown语法&quot;&gt;&lt;a href=&quot;#Markdown语法&quot; class=&quot;headerlink&quot; title=&quot;Markdown语法&quot;&gt;&lt;/a&gt;Markdown语法&lt;/h1&gt;&lt;!-- 这是一行注释 --&gt;
+
 &lt;div style=&quot;display: none&quot;&gt;
 哈哈我是注释，不会在浏览器中显示。
 &lt;/div&gt;
