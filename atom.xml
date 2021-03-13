@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-03-13T13:12:00.701Z</updated>
+  <updated>2021-03-13T13:23:06.348Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -21,23 +21,21 @@
     <link href="https://youngyyp.github.io/2021/03/13/test/"/>
     <id>https://youngyyp.github.io/2021/03/13/test/</id>
     <published>2021-03-13T13:11:30.000Z</published>
-    <updated>2021-03-13T13:12:00.701Z</updated>
+    <updated>2021-03-13T13:23:06.348Z</updated>
     
-    <content type="html"><![CDATA[<center>**端对端记忆网络**</center><br><div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> <br>]]></content>
+    <content type="html"><![CDATA[<center>**端对端记忆网络**</center><br><div class="pdfobject-container" data-target="./test.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> <br>]]></content>
     
     
       
       
     <summary type="html">&lt;center&gt;**端对端记忆网络**&lt;/center&gt;
 
-
 &lt;br&gt;
 
+&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;./test.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/div&gt; 
 
-&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;test.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/div&gt; 
 
-
-&lt;br&gt;</summary>
+&lt;div class=&quot;pdfo</summary>
       
     
     
@@ -81,7 +79,7 @@
     <link href="https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
     <id>https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</id>
     <published>2021-03-12T11:20:57.000Z</published>
-    <updated>2021-03-12T12:15:55.999Z</updated>
+    <updated>2021-03-13T13:17:02.363Z</updated>
     
     <content type="html"><![CDATA[<h2 id="开题答辩——2021-3-12"><a href="#开题答辩——2021-3-12" class="headerlink" title="开题答辩——2021/3/12"></a>开题答辩——2021/3/12</h2><p>毕业设计的题目是《基于<strong>Atlas 200 DK</strong>的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）</p><p>这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛应用于开发者方案验证、高校教育、科学研究等场景。）怎么说也卖3999元呢，希望后面不要有太多的坑。</p><p>下一步的计划肯定是先拿到这个开发板，然后把一切环境都配置好。后面会再这里记录一下使用Atlas 200 DK的过程以及碰到的一些坑。</p><a id="more"></a>]]></content>
     
@@ -97,9 +95,13 @@
     
     <category term="深度学习" scheme="https://youngyyp.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
+    <category term="神经网络" scheme="https://youngyyp.github.io/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"/>
+    
     <category term="Atlas" scheme="https://youngyyp.github.io/tags/Atlas/"/>
     
-    <category term="神经网络，障碍物识别，目标识别" scheme="https://youngyyp.github.io/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%8C%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%EF%BC%8C%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB/"/>
+    <category term="障碍物识别" scheme="https://youngyyp.github.io/tags/%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB/"/>
+    
+    <category term="目标识别" scheme="https://youngyyp.github.io/tags/%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB/"/>
     
   </entry>
   
