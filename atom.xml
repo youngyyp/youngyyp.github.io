@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-03-13T13:23:06.348Z</updated>
+  <updated>2021-03-13T13:46:44.480Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://youngyyp.github.io/2021/03/13/test/"/>
     <id>https://youngyyp.github.io/2021/03/13/test/</id>
     <published>2021-03-13T13:11:30.000Z</published>
-    <updated>2021-03-13T13:23:06.348Z</updated>
+    <updated>2021-03-13T13:46:44.480Z</updated>
     
-    <content type="html"><![CDATA[<center>**端对端记忆网络**</center><br><div class="pdfobject-container" data-target="./test.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> <br>]]></content>
+    <content type="html"><![CDATA[<center>**端对端记忆网络**</center><br><div class="pdfobject-container" data-target="https://yzb.sjtu.edu.cn/2019.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="./test.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> <br>]]></content>
     
     
       
@@ -32,10 +32,7 @@
 
 &lt;br&gt;
 
-&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;./test.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/div&gt; 
-
-
-&lt;div class=&quot;pdfo</summary>
+&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;https://yzb.sjtu.edu.cn/2019.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/di</summary>
       
     
     
