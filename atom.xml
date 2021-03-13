@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-03-13T13:06:07.163Z</updated>
+  <updated>2021-03-13T13:12:00.701Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>test</title>
+    <link href="https://youngyyp.github.io/2021/03/13/test/"/>
+    <id>https://youngyyp.github.io/2021/03/13/test/</id>
+    <published>2021-03-13T13:11:30.000Z</published>
+    <updated>2021-03-13T13:12:00.701Z</updated>
+    
+    <content type="html"><![CDATA[<center>**端对端记忆网络**</center><br><div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> <br>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;center&gt;**端对端记忆网络**&lt;/center&gt;
+
+
+&lt;br&gt;
+
+
+&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;test.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/div&gt; 
+
+
+&lt;br&gt;</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>【电赛】线路负载及故障检测装置</title>
     <link href="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/"/>
     <id>https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/</id>
     <published>2021-03-13T12:43:36.000Z</published>
-    <updated>2021-03-13T13:06:07.163Z</updated>
+    <updated>2021-03-13T13:10:23.126Z</updated>
     
     <content type="html"><![CDATA[<p> 测试</p><div class="pdfobject-container" data-target="线路负载及故障检测装置作品报告.pdf" data-height="500px"></div>]]></content>
     
@@ -39,7 +68,11 @@
     <category term="电赛" scheme="https://youngyyp.github.io/categories/%E7%94%B5%E8%B5%9B/"/>
     
     
-    <category term="线路故障检测，自平衡电桥，正交解调" scheme="https://youngyyp.github.io/tags/%E7%BA%BF%E8%B7%AF%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%EF%BC%8C%E8%87%AA%E5%B9%B3%E8%A1%A1%E7%94%B5%E6%A1%A5%EF%BC%8C%E6%AD%A3%E4%BA%A4%E8%A7%A3%E8%B0%83/"/>
+    <category term="线路故障检测" scheme="https://youngyyp.github.io/tags/%E7%BA%BF%E8%B7%AF%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B/"/>
+    
+    <category term="自平衡电桥" scheme="https://youngyyp.github.io/tags/%E8%87%AA%E5%B9%B3%E8%A1%A1%E7%94%B5%E6%A1%A5/"/>
+    
+    <category term="正交解调" scheme="https://youngyyp.github.io/tags/%E6%AD%A3%E4%BA%A4%E8%A7%A3%E8%B0%83/"/>
     
   </entry>
   
