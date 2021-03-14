@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-03-13T14:11:22.890Z</updated>
+  <updated>2021-03-14T12:21:05.657Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -17,41 +17,18 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="https://youngyyp.github.io/2021/03/13/test/"/>
-    <id>https://youngyyp.github.io/2021/03/13/test/</id>
-    <published>2021-03-13T13:11:30.077Z</published>
-    <updated>2021-03-13T14:11:22.890Z</updated>
-    
-    <content type="html"><![CDATA[<div class="pdfobject-container" data-target="https://yzb.sjtu.edu.cn/2019.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="../test1.pdf" data-height="500px"></div> <div class="pdfobject-container" data-target="test.pdf" data-height="500px"></div> ]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;div class=&quot;pdfobject-container&quot; data-target=&quot;https://yzb.sjtu.edu.cn/2019.pdf&quot; data-height=&quot;500px&quot;&gt;&lt;/div&gt; 
-
-&lt;div class=&quot;pdfobject-container</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>【电赛】线路负载及故障检测装置</title>
     <link href="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/"/>
     <id>https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/</id>
     <published>2021-03-13T12:43:36.000Z</published>
-    <updated>2021-03-13T14:30:25.574Z</updated>
+    <updated>2021-03-14T12:21:05.657Z</updated>
     
-    <content type="html"><![CDATA[<p>这是2019年的国赛题，报告下载链接<a href="https://youngyyp.github.io/test1.pdf">https://youngyyp.github.io/test1.pdf</a></p>]]></content>
+    <content type="html"><![CDATA[<p>这是2019年的国赛题，报告下载链接<a href="https://youngyyp.github.io/2019%E5%9B%BD%E8%B5%9B%E6%8A%A5%E5%91%8A.pdf">https://youngyyp.github.io/2019国赛报告.pdf</a></p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;这是2019年的国赛题，报告下载链接&lt;a href=&quot;https://youngyyp.github.io/test1.pdf&quot;&gt;https://youngyyp.github.io/test1.pdf&lt;/a&gt;&lt;/p&gt;
-</summary>
+    <summary type="html">&lt;p&gt;这是2019年的国赛题，报告下载链接&lt;a href=&quot;https://youngyyp.github.io/2019%E5%9B%BD%E8%B5%9B%E6%8A%A5%E5%91%8A.pdf&quot;&gt;https://youngyyp.github.io/2019国赛报告.p</summary>
       
     
     
@@ -68,11 +45,11 @@
   </entry>
   
   <entry>
-    <title>毕业设计——基于Atlas_200_DK的障碍物识别系统设计与实现</title>
-    <link href="https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
-    <id>https://youngyyp.github.io/2021/03/12/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</id>
+    <title>【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现</title>
+    <link href="https://youngyyp.github.io/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
+    <id>https://youngyyp.github.io/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</id>
     <published>2021-03-12T11:20:57.000Z</published>
-    <updated>2021-03-13T13:17:02.363Z</updated>
+    <updated>2021-03-14T12:08:13.821Z</updated>
     
     <content type="html"><![CDATA[<h2 id="开题答辩——2021-3-12"><a href="#开题答辩——2021-3-12" class="headerlink" title="开题答辩——2021/3/12"></a>开题答辩——2021/3/12</h2><p>毕业设计的题目是《基于<strong>Atlas 200 DK</strong>的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）</p><p>这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛应用于开发者方案验证、高校教育、科学研究等场景。）怎么说也卖3999元呢，希望后面不要有太多的坑。</p><p>下一步的计划肯定是先拿到这个开发板，然后把一切环境都配置好。后面会再这里记录一下使用Atlas 200 DK的过程以及碰到的一些坑。</p><a id="more"></a>]]></content>
     
