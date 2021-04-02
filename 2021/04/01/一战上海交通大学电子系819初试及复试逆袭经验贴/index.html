@@ -20,30 +20,20 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="这是2019年的国赛题，赛题链接为 https:&#x2F;&#x2F;youngyyp.github.io&#x2F;download&#x2F;2019_c.pdf 我们小组的报告下载链接为 https:&#x2F;&#x2F;youngyyp.github.io&#x2F;download&#x2F;2019report.pdf">
+  <meta name="description" content="前言参考书什么的，我会简单一提，主要讲下对于819专业课的理解。我更多的想写一写我在考研的过程中的一些感悟和小建议，在我看来这比单纯的列写推荐书目以及进度安排更为重要。 首先，我希望学弟学妹们在考研之前认真的想一想以下几个问题：  我为什么要考研？  为什么不选择工作或出国呢？  我是一个能沉得住心的人吗？或者说，考研这枯燥的几个月甚至是一年，我能坚持下来吗？   其次，我会说说我自己对这几个问题">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【电赛】线路负载及故障检测装置">
-<meta property="og:url" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/index.html">
+<meta property="og:title" content="一战上海交通大学电子系819初试及复试逆袭经验贴">
+<meta property="og:url" content="https://youngyyp.github.io/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/index.html">
 <meta property="og:site_name" content="youngyyp&#39;s blog">
-<meta property="og:description" content="这是2019年的国赛题，赛题链接为 https:&#x2F;&#x2F;youngyyp.github.io&#x2F;download&#x2F;2019_c.pdf 我们小组的报告下载链接为 https:&#x2F;&#x2F;youngyyp.github.io&#x2F;download&#x2F;2019report.pdf">
+<meta property="og:description" content="前言参考书什么的，我会简单一提，主要讲下对于819专业课的理解。我更多的想写一写我在考研的过程中的一些感悟和小建议，在我看来这比单纯的列写推荐书目以及进度安排更为重要。 首先，我希望学弟学妹们在考研之前认真的想一想以下几个问题：  我为什么要考研？  为什么不选择工作或出国呢？  我是一个能沉得住心的人吗？或者说，考研这枯燥的几个月甚至是一年，我能坚持下来吗？   其次，我会说说我自己对这几个问题">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314203332601.png">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314204048793.png">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/98A42894CD1A83DF99E066FF81B52447.jpg">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/073EEBE3ADC8768CD77F6E7458FEE2EF.jpg">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/72E10092A5795009CC075D06B096D162.jpg">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314215346801.png">
-<meta property="og:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/72A042A874BB3868CB583A44600D94D2.jpg">
-<meta property="article:published_time" content="2021-03-13T12:43:36.000Z">
-<meta property="article:modified_time" content="2021-03-29T03:23:29.185Z">
+<meta property="article:published_time" content="2021-04-01T11:51:39.000Z">
+<meta property="article:modified_time" content="2021-04-01T14:30:44.547Z">
 <meta property="article:author" content="杨业鹏">
-<meta property="article:tag" content="线路故障检测">
-<meta property="article:tag" content="自平衡电桥">
-<meta property="article:tag" content="正交解调">
+<meta property="article:tag" content="考研">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314203332601.png">
 
-<link rel="canonical" href="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/">
+<link rel="canonical" href="https://youngyyp.github.io/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/">
 
 
 <script id="page-configurations">
@@ -56,7 +46,7 @@
   };
 </script>
 
-  <title>【电赛】线路负载及故障检测装置 | youngyyp's blog</title>
+  <title>一战上海交通大学电子系819初试及复试逆袭经验贴 | youngyyp's blog</title><meta name="robots" content="noindex">
   
 
 
@@ -203,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
@@ -216,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【电赛】线路负载及故障检测装置
+          一战上海交通大学电子系819初试及复试逆袭经验贴
         </h1>
 
         <div class="post-meta">
@@ -225,28 +215,22 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-03-13 20:43:36" itemprop="dateCreated datePublished" datetime="2021-03-13T20:43:36+08:00">2021-03-13</time>
+              <time title="创建时间：2021-04-01 19:51:39 / 修改时间：22:30:44" itemprop="dateCreated datePublished" datetime="2021-04-01T19:51:39+08:00">2021-04-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-29 11:23:29" itemprop="dateModified" datetime="2021-03-29T11:23:29+08:00">2021-03-29</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%B5%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">电赛</span></a>
+                  <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
                 </span>
             </span>
 
           
-            <span id="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/" class="post-meta-item leancloud_visitors" data-flag-title="【电赛】线路负载及故障检测装置" title="阅读次数">
+            <span id="/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/" class="post-meta-item leancloud_visitors" data-flag-title="一战上海交通大学电子系819初试及复试逆袭经验贴" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -268,8 +252,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -284,25 +268,54 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>这是2019年的国赛题，赛题链接为 <a href="https://youngyyp.github.io/download/2019_c.pdf">https://youngyyp.github.io/download/2019_c.pdf</a></p>
-<p>我们小组的报告下载链接为 <a href="https://youngyyp.github.io/download/2019report.pdf">https://youngyyp.github.io/download/2019report.pdf</a></p>
-<a id="more"></a>
-
-<p>题目要求如下图所示：</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314203332601.png" alt="image-20210314203332601"></p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314204048793.png" alt="image-20210314204048793"></p>
-<p>这个题目我们就差负载的网络结构没有做出来，不过这部分的分值较大，最后只得了省二等奖。还差一名就是省一，差两名就是国奖。（希望明天上交的分数线不要这样搞我心态，球球了&gt;.&lt;）</p>
-<p>最终的作品实物图</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/98A42894CD1A83DF99E066FF81B52447.jpg" alt="img"></p>
-<p>比赛期间的伙食</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/073EEBE3ADC8768CD77F6E7458FEE2EF.jpg" alt="img"></p>
-<p>调bug</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/72E10092A5795009CC075D06B096D162.jpg" alt="img"></p>
-<p>截止时间到</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/image-20210314215346801.png" alt="image-20210314215346801"></p>
-<p>装箱评测</p>
-<p><img src="/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/72A042A874BB3868CB583A44600D94D2.jpg" alt="img"></p>
-
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>参考书什么的，我会简单一提，主要讲下对于819专业课的理解。我更多的想写一写我在考研的过程中的一些感悟和小建议，在我看来这比单纯的列写推荐书目以及进度安排更为重要。</p>
+<p>首先，我希望学弟学妹们在考研之前认真的想一想以下几个问题：</p>
+<ol>
+<li><p>我为什么要考研？</p>
+</li>
+<li><p>为什么不选择工作或出国呢？</p>
+</li>
+<li><p>我是一个能沉得住心的人吗？或者说，考研这枯燥的几个月甚至是一年，我能坚持下来吗？</p>
+</li>
+</ol>
+<p>其次，我会说说我自己对这几个问题的理解，以及我的一些小感悟和小建议。</p>
+<p>最后，我会讲述我的<strong>复试经历</strong>。（复试面试时一共5位老师，其中有<strong>4位</strong>老师在面试完后都给我打电话邀请我加入团队）</p>
+<h3 id="个人背景介绍（21届考研）"><a href="#个人背景介绍（21届考研）" class="headerlink" title="个人背景介绍（21届考研）"></a>个人背景介绍（21届考研）</h3><p>本科：武汉某985，加权排名年级前27%</p>
+<p>初试成绩：总分370– （21年分数线355），出乎意料的数学爆炸（只有一百零几分），所以可以说初试考的很糟糕，且初试成绩排名处于录取人数（120人）的边缘。</p>
+<p>复试：总分160+（满分200分），复试成绩使我排名上涨40+。</p>
+<hr>
+<h3 id="参考书推荐"><a href="#参考书推荐" class="headerlink" title="参考书推荐"></a>参考书推荐</h3><p><strong>专业课：</strong>专业课我考的还不错，我的推荐书目可能有点不一样。<strong>信号与系统（ss)**当然还是推荐上交本科的教材——</strong>胡光锐老师编写的《信号与系统》<strong>（作为课本）以及配套的习题</strong>《信号与系统习题精解与考研指导》<strong>（俗称白皮书）。不过数字信号处理（dsp）我其实不太推荐奥本海默的书，反而我强推上交本科的教材——刘兴钊老师的</strong>《数字信号处理》**（作为课本）。</p>
+<p>奥本海默的书实在是写的太细了，其实对于最近几年的命题趋势来说，没必要这么细。我一开始也是看的奥本的书，啃的很难受，而且上面很多不会考的内容。同时奥本书后的的习题，我刷的时候感觉就是一直抄答案（个人认为时间较紧的话刷一遍重点题就行了，不过记得做好笔记）。直到我有一天翻开了<strong>刘兴钊</strong>老师的书，里面的内容都是活生生的考点啊！而且内容简洁明了，我觉得更适合中国学生，看着本书的效率完爆看奥本的书。而且我做了真题后发现，真题中很多题目都是直接来自于这本书的例题中，同时课后的习题质量也很高，做一遍选填题后对概念的理解会更深入。而且最近几年dsp考试的题型都更偏向于概念，选填题增多，刘的书更符合这个趋势。</p>
+<p>总结，其实819并不是特别难，说难其实是因为奥本的书以及习题特别难啃，但是在我看来，可以以刘的书为主力，奥本的书为辅助。如果不追求130以上的分数，看刘的书绝对是更好的选择，特别是对于时间紧张的同学。</p>
+<p><strong>数学：</strong>不建议大家一直纠结于买谁的书好，多刷题才是王道，而且不要以为以前很少考的今年就不考，复习一定要全面！（我就是吃了这个亏）。具体推荐书目大家看看别的帖子吧，别太纠结。</p>
+<p><strong>英语、政治：</strong>相信我，如果时间紧的话，这两门没必要花太多时间，最后的分数差不了多少。在保证数学专业课能拿高分的情况下再多看看英语，政治最后突击一下分都差不多。（当然，这两门你想打80+的话还是得多下功夫的，但是实际情况是你可能比别人多看很久，最后却只比别人高几分或者甚至还比别人低。大家一般都在70分左右）</p>
+<h3 id="问题解答以及一些建议"><a href="#问题解答以及一些建议" class="headerlink" title="问题解答以及一些建议"></a>问题解答以及一些建议</h3><p>先说说我对下面这几个问题的理解吧。</p>
+<ol>
+<li><p><strong>我为什么要考研？</strong></p>
+<p> 是因为大家都考研吗？还是因为父母的期待？还是因为自己对于职场的恐惧，想给自己一点缓冲的时间？还是因为自己对学术很感兴趣，想进一步深造？还是觉得自己本科过的太混了或者觉得本科学校不够好？还是觉得考研后工资更高？我相信每个人对这个问题都有不同的答案，不管是什么样的回答，希望这个答案能足以坚持你走完这条并不平坦的路。</p>
+</li>
+<li><p><strong>为什么不选择工作或出国呢？</strong></p>
+<p> 其实很多人在考研途中又去选择了工作，或者边找工作边考研。如果能更早的明确以后的方向，岂不是更好？</p>
+<p> 如果你的专业是互联网行业相关（别的我不了解），认真准备一年或者半年是绝对可以找到一份不错的工作的，而且研究生的工资并不会高特别多，如果你中途退出或者因为没有认真准备而没过初试，转而去找工作，为什么不一开始就选择找工作呢？</p>
+<p> 如果家庭条件允许，出国其实也是一个很好的选择，同等努力下，出国可以进入更好的学校。（我个人对国外不向往，热爱祖国，当然家庭条件也不允许哈哈~）</p>
+</li>
+<li><p><strong>我是一个能沉得住心的人吗？或者说，考研这枯燥的几个月甚至是一年，我能坚持下来吗？</strong></p>
+<p> 当你备考时，会陆陆续续听到周围许多同学都找到了工作，有的甚至工资很高，你会继续坚持吗？</p>
+<p> 当你备考时，找到工作的和保研了的人都在和小伙伴愉快的玩耍，你会继续坚持吗？</p>
+<p> 当你备考时，找工作和出国的同学都拿到了offer，而你的未来还很迷茫，你会继续坚持吗？</p>
+<p> 当你备考时，遇到了一位心爱的ta，你会继续坚持吗？</p>
+<p> ……</p>
+</li>
+</ol>
+<p><strong>我的一些小建议：</strong></p>
+<ol>
+<li>尽早确定学校，最好不要中途换</li>
+<li>找几个一起考研的小伙伴，互相监督，互相鼓励，更容易坚持下去哦~</li>
+<li>学的好不如选的好，选择学校和专业也是一场博弈，非常重要！</li>
+<li>知乎很好，但不要贪多哦！每个人的说法都各有不同，还是得跟着自己的节奏来</li>
+<li>考研其实也没那么难，别被一些文章和公众号营造的焦虑困扰。</li>
+</ol>
+<!-- flag of hidden posts -->
     </div>
 
     
@@ -317,7 +330,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://youngyyp.github.io/2021/03/13/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/" title="【电赛】线路负载及故障检测装置">https://youngyyp.github.io/2021/03/13/【电赛】线路负载及故障检测装置/</a>
+    <a href="https://youngyyp.github.io/2021/04/01/%E4%B8%80%E6%88%98%E4%B8%8A%E6%B5%B7%E4%BA%A4%E9%80%9A%E5%A4%A7%E5%AD%A6%E7%94%B5%E5%AD%90%E7%B3%BB819%E5%88%9D%E8%AF%95%E5%8F%8A%E5%A4%8D%E8%AF%95%E9%80%86%E8%A2%AD%E7%BB%8F%E9%AA%8C%E8%B4%B4/" title="一战上海交通大学电子系819初试及复试逆袭经验贴">https://youngyyp.github.io/2021/04/01/一战上海交通大学电子系819初试及复试逆袭经验贴/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -329,22 +342,13 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E7%BA%BF%E8%B7%AF%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B/" rel="tag"><i class="fa fa-tag"></i> 线路故障检测</a>
-              <a href="/tags/%E8%87%AA%E5%B9%B3%E8%A1%A1%E7%94%B5%E6%A1%A5/" rel="tag"><i class="fa fa-tag"></i> 自平衡电桥</a>
-              <a href="/tags/%E6%AD%A3%E4%BA%A4%E8%A7%A3%E8%B0%83/" rel="tag"><i class="fa fa-tag"></i> 正交解调</a>
+              <a href="/tags/%E8%80%83%E7%A0%94/" rel="tag"><i class="fa fa-tag"></i> 考研</a>
           </div>
 
         
 
 
         
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="prev" title="【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现">
-      <i class="fa fa-chevron-left"></i> 【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现
-    </a></div>
-      <div class="post-nav-item"></div>
-    </div>
       </footer>
     
   </article>
@@ -403,6 +407,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D%EF%BC%8821%E5%B1%8A%E8%80%83%E7%A0%94%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">个人背景介绍（21届考研）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E4%B9%A6%E6%8E%A8%E8%8D%90"><span class="nav-number">3.</span> <span class="nav-text">参考书推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94%E4%BB%A5%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">问题解答以及一些建议</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
