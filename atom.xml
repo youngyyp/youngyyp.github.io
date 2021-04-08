@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>youngyyp&#39;s blog</title>
+  <title>young&#39;s blog</title>
   
   <subtitle>慢慢来，比较快</subtitle>
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>https://youngyyp.github.io/</id>
   
   <author>
-    <name>杨业鹏</name>
+    <name>young</name>
     
   </author>
   
