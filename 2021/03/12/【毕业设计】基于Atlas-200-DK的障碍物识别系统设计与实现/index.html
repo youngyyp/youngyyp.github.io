@@ -28,8 +28,10 @@
 <meta property="og:description" content="开题答辩——2021&#x2F;3&#x2F;12毕业设计的题目是《基于Atlas 200 DK的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过） 这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210401155249903.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203242498.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203313368.png">
 <meta property="article:published_time" content="2021-03-12T11:20:57.000Z">
-<meta property="article:modified_time" content="2021-04-02T02:21:39.370Z">
+<meta property="article:modified_time" content="2021-04-07T07:06:00.651Z">
 <meta property="article:author" content="杨业鹏">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="神经网络">
@@ -229,7 +231,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-02 10:21:39" itemprop="dateModified" datetime="2021-04-02T10:21:39+08:00">2021-04-02</time>
+                <time title="修改时间：2021-04-07 15:06:00" itemprop="dateModified" datetime="2021-04-07T15:06:00+08:00">2021-04-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -279,11 +281,12 @@
 <a id="more"></a>
 
 <h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p>主机密码：Huawei@123</p>
-<p>连接atlas：ssh <a href="mailto:HwHiAiUser@192.168.1.2">HwHiAiUser@192.168.1.2</a>     atlas密码为：Mind@123</p>
-<p>启动mindstudio：~/program/MindStudio-ubuntu/bin/MindStudio.sh</p>
+<p>连接atlas：ssh <a href="mailto:HwHiAiUser@192.168.1.2">HwHiAiUser@192.168.1.2</a>     atlas密码为：Mind@123        </p>
+<p>启动mindstudio（版本为2.0.0beta2）：~/program/MindStudio-ubuntu/bin/MindStudio.sh</p>
 <p>若连接不上atlas，则在命令行输入 rm -rf ~/.ssh/known_hosts 即可</p>
 <p>主从机文件传输：  <a target="_blank" rel="noopener" href="https://bbs.huaweicloud.com/blogs/168928">https://bbs.huaweicloud.com/blogs/168928</a></p>
 <pre class=" language-javascript"><code class="language-javascript">sudo scp <span class="token operator">-</span>r HwHiAiUser@<span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">1.2</span><span class="token punctuation">:</span><span class="token operator">/</span>home<span class="token operator">/</span>HwHiAiUser<span class="token operator">/</span>ascendcamera<span class="token operator">/</span>out<span class="token operator">/</span>output <span class="token operator">/</span>home<span class="token operator">/</span>Ascend<span class="token operator">/</span>ascend_ddk</code></pre>
+<pre class=" language-html"><code class="language-html">scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUsr/mask_detection/output ~/Pictures</code></pre>
 <p><strong>开发板断电后需要重新进行联网配置：</strong></p>
 <p>主机中：</p>
 <p>su root </p>
@@ -306,9 +309,18 @@ export ASCEND_OPP_PATH=/home/Ascend/Ascend/ascend-toolkit/latest/opp
 export ASCEND_AICPU_PATH=/home/Ascend/Ascend/ascend-toolkit/latest</code></pre>
 <p>/home/Ascend/Ascend/ascend-toolkit/20.1.rc1/atc/bin/atc</p>
 <p><img src="/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210401155249903.png" alt="image-20210401155249903"></p>
-<p>摄像头：<a target="_blank" rel="noopener" href="https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera">https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera</a>  （我的树莓派摄像头版本为V2）</p>
+<p><strong>摄像头</strong>：<a target="_blank" rel="noopener" href="https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera">https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera</a>  （我的树莓派摄像头版本为V2）</p>
 <p>cd $HOME/ascendcamera/out</p>
 <p>./main -i -c 1 -o ./output/filename.jpg –overwrite</p>
+<p>presenterserver： </p>
+<p>cd $HOME/ascendcamera/out</p>
+<p>./main -v -c 1 -t 60 –fps 20 -w 704 -h 576 -s ip:192.168.1.223:7002/youngyep        (命令行输7002，浏览器输7003)</p>
+<p>若要使用presenter server进行实时显示，则需要在开发环境修改ascendcamera中的script/.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为虚拟网卡的ip地址：</p>
+<p><img src="/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203242498.png" alt="image-20210405203242498"></p>
+<p><img src="/2021/03/12/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203313368.png" alt="image-20210405203313368"></p>
+<p>将口罩检测和摄像头的代码通过shell脚本结合：</p>
+<p>运行环境：cd ~/mask_detection             ./start_detection.sh</p>
+<p>开发环境：scp -r <a href="mailto:HwHiAiUser@192.168.1.2">HwHiAiUser@192.168.1.2</a>:/home/HwHiAiUsr/mask_detection/output ~/Pictures</p>
 
     </div>
 
@@ -430,7 +442,7 @@ export ASCEND_AICPU_PATH=/home/Ascend/Ascend/ascend-toolkit/latest</code></pre>
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
