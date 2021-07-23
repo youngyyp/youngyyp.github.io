@@ -20,19 +20,24 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="2021&#x2F;7&#x2F;4好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。 的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧">
+  <meta name="description" content="图像的中值滤波统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的中值滤波，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。 一、行缓存在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。  图像数据以数据流的方式，先从左到右，然后从上到下将每一">
 <meta property="og:type" content="article">
-<meta property="og:title" content="日常随笔">
-<meta property="og:url" content="https://youngyyp.github.io/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/index.html">
+<meta property="og:title" content="【FPGA】图像处理">
+<meta property="og:url" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="2021&#x2F;7&#x2F;4好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。 的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧">
+<meta property="og:description" content="图像的中值滤波统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的中值滤波，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。 一、行缓存在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。  图像数据以数据流的方式，先从左到右，然后从上到下将每一">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-07-04T07:53:49.000Z">
-<meta property="article:modified_time" content="2021-07-04T08:42:39.286Z">
+<meta property="og:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723155419045.png">
+<meta property="article:published_time" content="2021-07-23T06:52:46.000Z">
+<meta property="article:modified_time" content="2021-07-23T08:02:03.737Z">
 <meta property="article:author" content="young">
+<meta property="article:tag" content="图像处理">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png">
 
-<link rel="canonical" href="https://youngyyp.github.io/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/">
+<link rel="canonical" href="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">
 
 
 <script id="page-configurations">
@@ -45,7 +50,7 @@
   };
 </script>
 
-  <title>日常随笔 | young's blog</title>
+  <title>【FPGA】图像处理 | young's blog</title>
   
 
 
@@ -192,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
@@ -205,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          日常随笔
+          【FPGA】图像处理
         </h1>
 
         <div class="post-meta">
@@ -216,7 +221,16 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-04 15:53:49 / 修改时间：16:42:39" itemprop="dateCreated datePublished" datetime="2021-07-04T15:53:49+08:00">2021-07-04</time>
+              <time title="创建时间：2021-07-23 14:52:46 / 修改时间：16:02:03" itemprop="dateCreated datePublished" datetime="2021-07-23T14:52:46+08:00">2021-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
+                </span>
             </span>
 
           
@@ -235,8 +249,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -251,9 +265,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h4 id="2021-7-4"><a href="#2021-7-4" class="headerlink" title="2021/7/4"></a>2021/7/4</h4><p>好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。</p>
-<p>的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧，也可能是没有到那种情绪吧。和朋友们一起玩的时候，常常他们玩的很嗨的时候，我内心却毫无波澜。他们或笑，或跳，或讲故事，或聊综艺，而我只是静静地听着，好像他们越兴奋，我离他们越远。不知道这算不算所谓的社恐，不过对于有些特别好的朋友不会出现这样的情况。</p>
-<p>总有人问我，你不打游戏，也不看综艺，也不追剧，你每天都在干什么。是啊，我每天在干什么呢。我想说，我打游戏，而且打的也不少，只是越长大越觉得，缺少了小时候那种对游戏不知名的热爱，现在在我看来打游戏只是一种社交；我也会看剧，只是看的没有许多狂热看剧爱好者看的多，我喜欢好剧，喜欢那种能让人回想好久的剧，而不是紧跟最新更新的剧。若你认为除了这些，就没有其他的事情可做了，或者说就没有其他的娱乐可做了，那你挺惨的。对于我来说，我有着更多喜欢做的事情。我喜欢和朋友一起运动，我喜欢一个人在房间的时候唱歌弹琴，我喜欢在清晨背上包，到图书馆安安静静地看一本书，我喜欢在夕阳落下之前去健身房健身，我喜欢在黄昏之时出去遛狗，我喜欢在月亮高悬之时和你散步聊天，我喜欢你（哈哈，不知道是不是你）。</p>
+        <h2 id="图像的中值滤波"><a href="#图像的中值滤波" class="headerlink" title="图像的中值滤波"></a>图像的中值滤波</h2><p>统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的<strong>中值滤波</strong>，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。</p>
+<h3 id="一、行缓存"><a href="#一、行缓存" class="headerlink" title="一、行缓存"></a>一、行缓存</h3><p>在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。</p>
+<p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png" alt="image-20210723151332772"><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png" alt="image-20210723151214106" style="zoom: 80%;"></p>
+<p>图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上左图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。</p>
+<p>![未命名文件 (1)](【FPGA】图像处理/未命名文件 (1).png)</p>
+<h3 id="二、并行全比较排序"><a href="#二、并行全比较排序" class="headerlink" title="二、并行全比较排序"></a>二、并行全比较排序</h3><p>排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“<strong>以空间换时间</strong>”排序算法。</p>
+<p>假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： </p>
+<p><strong>(1) 两两比较，并累积分数。</strong>考虑到可能出现相同的数，规定<strong>下标越大的数优先级越高</strong>，即：</p>
+<pre class=" language-c"><code class="language-c">若m<span class="token operator">></span>n<span class="token punctuation">,</span>则选用  （Am<span class="token operator">>=</span>An）<span class="token operator">?</span> <span class="token number">1</span>：<span class="token number">0</span> <span class="token punctuation">;</span>
+若m<span class="token operator">&lt;</span>n，则选用  <span class="token punctuation">(</span>Am<span class="token operator">></span>An<span class="token punctuation">)</span><span class="token operator">?</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span> <span class="token punctuation">;</span></code></pre>
+<p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723155419045.png" alt="image-20210723155419045"></p>
+<p><strong>(2) 按积分排序。</strong>由上图可知，积分越大，表明对应的数越大。</p>
+<h4 id="3-3数据的中值"><a href="#3-3数据的中值" class="headerlink" title="3*3数据的中值"></a>3*3数据的中值</h4><p>若直接对3*3掩膜所覆盖的9个数据进行并行全比较排序，资源消耗较大，这里可以分别对每一行的3个数据进行并行全比较排序，获得每一行的中值，再将这3个中值再进行一次排序，取出中值。（这样取出来的不一定是真正的中值，但比较近似，算法复杂度也不高）</p>
 
     </div>
 
@@ -269,7 +293,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://youngyyp.github.io/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/" title="日常随笔">https://youngyyp.github.io/2021/07/04/随笔/日常随笔/</a>
+    <a href="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" title="【FPGA】图像处理">https://youngyyp.github.io/2021/07/23/FPGA/【FPGA】图像处理/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -279,6 +303,10 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="tag"><i class="fa fa-tag"></i> 图像处理</a>
+          </div>
 
         
 
@@ -286,13 +314,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/05/30/%E7%BC%96%E7%A8%8B/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="cpp学习笔记">
-      <i class="fa fa-chevron-left"></i> cpp学习笔记
+    <a href="/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="verilog学习笔记">
+      <i class="fa fa-chevron-left"></i> verilog学习笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="verilog学习笔记">
-      verilog学习笔记 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -352,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#2021-7-4"><span class="nav-number">1.</span> <span class="nav-text">2021&#x2F;7&#x2F;4</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E7%9A%84%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="nav-number">1.</span> <span class="nav-text">图像的中值滤波</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%A1%8C%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.</span> <span class="nav-text">一、行缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B9%B6%E8%A1%8C%E5%85%A8%E6%AF%94%E8%BE%83%E6%8E%92%E5%BA%8F"><span class="nav-number">1.2.</span> <span class="nav-text">二、并行全比较排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B8%AD%E5%80%BC"><span class="nav-number">1.2.1.</span> <span class="nav-text">3*3数据的中值</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

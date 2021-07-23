@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-07-22T07:41:12.317Z</updated>
+  <updated>2021-07-23T08:02:03.737Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>【FPGA】图像处理</title>
+    <link href="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"/>
+    <id>https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/</id>
+    <published>2021-07-23T06:52:46.000Z</published>
+    <updated>2021-07-23T08:02:03.737Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="图像的中值滤波"><a href="#图像的中值滤波" class="headerlink" title="图像的中值滤波"></a>图像的中值滤波</h2><p>统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的<strong>中值滤波</strong>，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。</p><h3 id="一、行缓存"><a href="#一、行缓存" class="headerlink" title="一、行缓存"></a>一、行缓存</h3><p>在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。</p><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png" alt="image-20210723151332772"><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png" alt="image-20210723151214106" style="zoom: 80%;"></p><p>图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上左图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。</p><p>![未命名文件 (1)](【FPGA】图像处理/未命名文件 (1).png)</p><h3 id="二、并行全比较排序"><a href="#二、并行全比较排序" class="headerlink" title="二、并行全比较排序"></a>二、并行全比较排序</h3><p>排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“<strong>以空间换时间</strong>”排序算法。</p><p>假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： </p><p><strong>(1) 两两比较，并累积分数。</strong>考虑到可能出现相同的数，规定<strong>下标越大的数优先级越高</strong>，即：</p><pre class=" language-c"><code class="language-c">若m<span class="token operator">></span>n<span class="token punctuation">,</span>则选用  （Am<span class="token operator">>=</span>An）<span class="token operator">?</span> <span class="token number">1</span>：<span class="token number">0</span> <span class="token punctuation">;</span>若m<span class="token operator">&lt;</span>n，则选用  <span class="token punctuation">(</span>Am<span class="token operator">></span>An<span class="token punctuation">)</span><span class="token operator">?</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span> <span class="token punctuation">;</span></code></pre><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723155419045.png" alt="image-20210723155419045"></p><p><strong>(2) 按积分排序。</strong>由上图可知，积分越大，表明对应的数越大。</p><h4 id="3-3数据的中值"><a href="#3-3数据的中值" class="headerlink" title="3*3数据的中值"></a>3*3数据的中值</h4><p>若直接对3*3掩膜所覆盖的9个数据进行并行全比较排序，资源消耗较大，这里可以分别对每一行的3个数据进行并行全比较排序，获得每一行的中值，再将这3个中值再进行一次排序，取出中值。（这样取出来的不一定是真正的中值，但比较近似，算法复杂度也不高）</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;图像的中值滤波&quot;&gt;&lt;a href=&quot;#图像的中值滤波&quot; class=&quot;headerlink&quot; title=&quot;图像的中值滤波&quot;&gt;&lt;/a&gt;图像的中值滤波&lt;/h2&gt;&lt;p&gt;统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的&lt;strong&gt;中值滤波&lt;/strong&gt;</summary>
+      
+    
+    
+    
+    <category term="FPGA" scheme="https://youngyyp.github.io/categories/FPGA/"/>
+    
+    
+    <category term="图像处理" scheme="https://youngyyp.github.io/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
     <title>verilog学习笔记</title>
-    <link href="https://youngyyp.github.io/2021/07/16/%E7%BC%96%E7%A8%8B/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://youngyyp.github.io/2021/07/16/%E7%BC%96%E7%A8%8B/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://youngyyp.github.io/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://youngyyp.github.io/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
     <published>2021-07-16T07:50:28.000Z</published>
-    <updated>2021-07-22T07:41:12.317Z</updated>
+    <updated>2021-07-23T06:53:18.042Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Modelsim使用技巧"><a href="#Modelsim使用技巧" class="headerlink" title="Modelsim使用技巧"></a>Modelsim使用技巧</h2><h3 id="基本操作流程"><a href="#基本操作流程" class="headerlink" title="基本操作流程"></a>基本操作流程</h3><h4 id="图形界面操作"><a href="#图形界面操作" class="headerlink" title="图形界面操作"></a>图形界面操作</h4><ol><li>新建工程（建议给每个工程单独建文件夹）</li><li>调试的时候直接在library中的work目录下对testbench文件右键simulate</li></ol><h4 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h4><p>①创建一个工程和工程库;<br>②加载设计文件（包括你编写好的testbench）；<br>③编译源文件；<br>④运行仿真，并查看结果；<br>⑤最后进行工程调试。<br>上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步。</p><p>例程<br>（1） sim_run.bat文件用于批处理<br>@set modelsim=C:\modeltech64_10.7\win64\vsim.exe<br>@if exist vsim.wlf del vsim.wlf<br>%modelsim% -do sim_top.do</p><p>（“％环境变量名％”用法的含义是取指定环境变量的值）<br>首先设置modelsim的执行路径，可以是vsim.exe也可以是modelsim.exe<br>然后删除历史运行的vsim.wlf文件，以便后面进行更新<br>最后用DOS命令调用modelsim工具，并在modelsim工具中执行sim._top.do文件<br>(2)sim_top.do文件<br>vlib work<br>//建立work库</p><p>vmap work work<br>//将目前逻辑库work和实际工作库work相映射对应<br>vlog -f vlog-rtl.list<br>#将vlog-rtl.list文件中所有文件编译</p><p>vopt +acc=npr tb_top -o tb_top_opt<br>#仿真时优化tb_top输出tb_top_opt<br>vsim tb_top_opt<br>#仿真tb_top_opt</p><p>(也可以直接 vsim -novopt work.tb_top)</p><p>do wave.do<br>#运行wave.do，添加wave的信息<br>run 20ms<br>#运行20ms （run -all：运行全过程）<br>（3）vlog-rtl.list<br>../rtl/<em>.v<br>#上级文件夹rtl的所有v文件<br>../../calc_engine/</em>.v<br>#上上级文件夹calc_engine文件夹的所有v文件<br>../sim/tb/*.v<br>上级sim/tb文件夹内的所有v文件<br>（4）wave.do<br>通过添加并设置波形参数，保存为wave.do文件</p><p>更多详情可参考 <a href="http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html">http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html</a></p><p> log -r /* 对所有的信号记录，运行这个命令后即使在仿真前没有把信号加入wave窗口，仿真完成后直接加入wave窗口就可以查看波形，比较方便，但是缺点是当工程较大和仿真时间很长时仿真速度较慢，占用内存也较大。<br> vsim  -voptargs=”+acc”<br>+acc意思是设计中所有的信号都提供入口，可以观察，而log命令的意思就是在运行仿真的时候信号不用加入wave窗口在开始仿真后直接可以看波形，意思就是他记录了所有的信号波形<br>观察其它窗口的结果，用view *命令显示 。view *命令可以观察包括signals、wave、dataflow等窗口文件，也可以分别打开。例如用view signals来观察信号变量。</p><h2 id="verilog语法"><a href="#verilog语法" class="headerlink" title="verilog语法"></a>verilog语法</h2><ul><li><p>always块中被赋值的变量只能为reg</p></li><li><p>不可在不同的always块中对同一个reg赋值</p></li><li><p>assign 语句对已经定义的wire赋值，wire也可在被定义的时候赋值，wire变量只能被赋值一次</p></li><li><p>组合逻辑用阻塞赋值，非组合逻辑用非阻塞赋值。——<strong>组合逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出仅仅取决于该时刻的输入，与电路原来的状态无关。<strong>时序逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出不仅取决于当时的输入信号，而且还取决于电路原来的状态，或者说，还与以前的输入有关</p></li><li><p>`timescale 1 ns / 1 ps 该指令用于定义时延、仿真的单位和精度</p></li><li><p>`default_nettype wand 用于默认设置为线网类型</p></li><li><p><a href="https://blog.csdn.net/qq397381823/article/details/87521885">verilog设计过程寄存器使用#1的问题_烟花一时的博客-CSDN博客</a></p></li><li><p>{1’b0,1’b0,1’b0,1’b0,1’b0,1’b0,1’b0,1’b0}可以简单写成{8{1’b0}}</p></li><li><p>input、inout 类型不能声明为 reg 数据类型，因为 reg 类型是用于保存数值的，而输入端口只能反映与其相连的外部信号的变化，不能保存这些信号的值。</p><p>  output 可以声明为 wire 或 reg 数据类型。</p></li><li><h6 id="端口连接规则"><a href="#端口连接规则" class="headerlink" title="端口连接规则:"></a>端口连接规则:</h6><p>  <strong>输入端口</strong></p><p>  模块例化时，从模块外部来讲， input 端口可以连接 wire 或 reg 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>input 端口必须是 wire 型变量</strong>。</p><p>  <strong>输出端口</strong></p><p>  模块例化时，从模块外部来讲，output 端口必须连接 wire 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>output 端口可以是 wire 或 reg 型变量</strong>。</p><p>  <strong>输入输出端口</strong></p><p>  模块例化时，从模块外部来讲，inout 端口必须连接 wire 型变量。这与模块声明是相同的。</p><p>  <strong>悬空端口</strong></p><p>  模块例化时，如果某些信号不需要与外部信号进行连接交互，我们可以将其悬空，即端口例化处保留空白即可，上述例子中有提及。</p><p>  output 端口正常悬空时，我们甚至可以在例化时将其删除。</p><p>  input 端口正常悬空时，悬空信号的逻辑功能表现为高阻状态（逻辑值为 z）。但是，例化时一般不能将悬空的 input 端口删除，否则编译会报错。</p></li><li></li></ul>]]></content>
     
@@ -33,7 +57,7 @@
     
     
     
-    <category term="编程语言" scheme="https://youngyyp.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+    <category term="FPGA" scheme="https://youngyyp.github.io/categories/FPGA/"/>
     
     
     <category term="verilog" scheme="https://youngyyp.github.io/tags/verilog/"/>
