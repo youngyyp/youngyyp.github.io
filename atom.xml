@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-06-07T10:31:02.782Z</updated>
+  <updated>2021-07-22T07:41:12.317Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -17,9 +17,55 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>verilog学习笔记</title>
+    <link href="https://youngyyp.github.io/2021/07/16/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://youngyyp.github.io/2021/07/16/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <published>2021-07-16T07:50:28.000Z</published>
+    <updated>2021-07-22T07:41:12.317Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Modelsim使用技巧"><a href="#Modelsim使用技巧" class="headerlink" title="Modelsim使用技巧"></a>Modelsim使用技巧</h2><h3 id="基本操作流程"><a href="#基本操作流程" class="headerlink" title="基本操作流程"></a>基本操作流程</h3><h4 id="图形界面操作"><a href="#图形界面操作" class="headerlink" title="图形界面操作"></a>图形界面操作</h4><ol><li>新建工程（建议给每个工程单独建文件夹）</li><li>调试的时候直接在library中的work目录下对testbench文件右键simulate</li></ol><h4 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h4><p>①创建一个工程和工程库;<br>②加载设计文件（包括你编写好的testbench）；<br>③编译源文件；<br>④运行仿真，并查看结果；<br>⑤最后进行工程调试。<br>上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步。</p><p>例程<br>（1） sim_run.bat文件用于批处理<br>@set modelsim=C:\modeltech64_10.7\win64\vsim.exe<br>@if exist vsim.wlf del vsim.wlf<br>%modelsim% -do sim_top.do</p><p>（“％环境变量名％”用法的含义是取指定环境变量的值）<br>首先设置modelsim的执行路径，可以是vsim.exe也可以是modelsim.exe<br>然后删除历史运行的vsim.wlf文件，以便后面进行更新<br>最后用DOS命令调用modelsim工具，并在modelsim工具中执行sim._top.do文件<br>(2)sim_top.do文件<br>vlib work<br>//建立work库</p><p>vmap work work<br>//将目前逻辑库work和实际工作库work相映射对应<br>vlog -f vlog-rtl.list<br>#将vlog-rtl.list文件中所有文件编译</p><p>vopt +acc=npr tb_top -o tb_top_opt<br>#仿真时优化tb_top输出tb_top_opt<br>vsim tb_top_opt<br>#仿真tb_top_opt</p><p>(也可以直接 vsim -novopt work.tb_top)</p><p>do wave.do<br>#运行wave.do，添加wave的信息<br>run 20ms<br>#运行20ms （run -all：运行全过程）<br>（3）vlog-rtl.list<br>../rtl/<em>.v<br>#上级文件夹rtl的所有v文件<br>../../calc_engine/</em>.v<br>#上上级文件夹calc_engine文件夹的所有v文件<br>../sim/tb/*.v<br>上级sim/tb文件夹内的所有v文件<br>（4）wave.do<br>通过添加并设置波形参数，保存为wave.do文件</p><p>更多详情可参考 <a href="http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html">http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html</a></p><p> log -r /* 对所有的信号记录，运行这个命令后即使在仿真前没有把信号加入wave窗口，仿真完成后直接加入wave窗口就可以查看波形，比较方便，但是缺点是当工程较大和仿真时间很长时仿真速度较慢，占用内存也较大。<br> vsim  -voptargs=”+acc”<br>+acc意思是设计中所有的信号都提供入口，可以观察，而log命令的意思就是在运行仿真的时候信号不用加入wave窗口在开始仿真后直接可以看波形，意思就是他记录了所有的信号波形<br>观察其它窗口的结果，用view *命令显示 。view *命令可以观察包括signals、wave、dataflow等窗口文件，也可以分别打开。例如用view signals来观察信号变量。</p><h2 id="verilog语法"><a href="#verilog语法" class="headerlink" title="verilog语法"></a>verilog语法</h2><ul><li><p>always块中被赋值的变量只能为reg</p></li><li><p>不可在不同的always块中对同一个reg赋值</p></li><li><p>assign 语句对已经定义的wire赋值，wire也可在被定义的时候赋值，wire变量只能被赋值一次</p></li><li><p>组合逻辑用阻塞赋值，非组合逻辑用非阻塞赋值。——<strong>组合逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出仅仅取决于该时刻的输入，与电路原来的状态无关。<strong>时序逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出不仅取决于当时的输入信号，而且还取决于电路原来的状态，或者说，还与以前的输入有关</p></li><li><p>`timescale 1 ns / 1 ps 该指令用于定义时延、仿真的单位和精度</p></li><li><p>`default_nettype wand 用于默认设置为线网类型</p></li><li><p><a href="https://blog.csdn.net/qq397381823/article/details/87521885">verilog设计过程寄存器使用#1的问题_烟花一时的博客-CSDN博客</a></p></li><li><p>{1’b0,1’b0,1’b0,1’b0,1’b0,1’b0,1’b0,1’b0}可以简单写成{8{1’b0}}</p></li><li><p>input、inout 类型不能声明为 reg 数据类型，因为 reg 类型是用于保存数值的，而输入端口只能反映与其相连的外部信号的变化，不能保存这些信号的值。</p><p>  output 可以声明为 wire 或 reg 数据类型。</p></li><li><h6 id="端口连接规则"><a href="#端口连接规则" class="headerlink" title="端口连接规则:"></a>端口连接规则:</h6><p>  <strong>输入端口</strong></p><p>  模块例化时，从模块外部来讲， input 端口可以连接 wire 或 reg 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>input 端口必须是 wire 型变量</strong>。</p><p>  <strong>输出端口</strong></p><p>  模块例化时，从模块外部来讲，output 端口必须连接 wire 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>output 端口可以是 wire 或 reg 型变量</strong>。</p><p>  <strong>输入输出端口</strong></p><p>  模块例化时，从模块外部来讲，inout 端口必须连接 wire 型变量。这与模块声明是相同的。</p><p>  <strong>悬空端口</strong></p><p>  模块例化时，如果某些信号不需要与外部信号进行连接交互，我们可以将其悬空，即端口例化处保留空白即可，上述例子中有提及。</p><p>  output 端口正常悬空时，我们甚至可以在例化时将其删除。</p><p>  input 端口正常悬空时，悬空信号的逻辑功能表现为高阻状态（逻辑值为 z）。但是，例化时一般不能将悬空的 input 端口删除，否则编译会报错。</p></li><li></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;Modelsim使用技巧&quot;&gt;&lt;a href=&quot;#Modelsim使用技巧&quot; class=&quot;headerlink&quot; title=&quot;Modelsim使用技巧&quot;&gt;&lt;/a&gt;Modelsim使用技巧&lt;/h2&gt;&lt;h3 id=&quot;基本操作流程&quot;&gt;&lt;a href=&quot;#基本操作流程&quot;</summary>
+      
+    
+    
+    
+    <category term="编程语言" scheme="https://youngyyp.github.io/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+    
+    
+    <category term="verilog" scheme="https://youngyyp.github.io/tags/verilog/"/>
+    
+    <category term="modelsim" scheme="https://youngyyp.github.io/tags/modelsim/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>日常随笔</title>
+    <link href="https://youngyyp.github.io/2021/07/04/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/"/>
+    <id>https://youngyyp.github.io/2021/07/04/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/</id>
+    <published>2021-07-04T07:53:49.000Z</published>
+    <updated>2021-07-04T08:42:39.286Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="2021-7-4"><a href="#2021-7-4" class="headerlink" title="2021/7/4"></a>2021/7/4</h4><p>好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。</p><p>的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧，也可能是没有到那种情绪吧。和朋友们一起玩的时候，常常他们玩的很嗨的时候，我内心却毫无波澜。他们或笑，或跳，或讲故事，或聊综艺，而我只是静静地听着，好像他们越兴奋，我离他们越远。不知道这算不算所谓的社恐，不过对于有些特别好的朋友不会出现这样的情况。</p><p>总有人问我，你不打游戏，也不看综艺，也不追剧，你每天都在干什么。是啊，我每天在干什么呢。我想说，我打游戏，而且打的也不少，只是越长大越觉得，缺少了小时候那种对游戏不知名的热爱，现在在我看来打游戏只是一种社交；我也会看剧，只是看的没有许多狂热看剧爱好者看的多，我喜欢好剧，喜欢那种能让人回想好久的剧，而不是紧跟最新更新的剧。若你认为除了这些，就没有其他的事情可做了，或者说就没有其他的娱乐可做了，那你挺惨的。对于我来说，我有着更多喜欢做的事情。我喜欢和朋友一起运动，我喜欢一个人在房间的时候唱歌弹琴，我喜欢在清晨背上包，到图书馆安安静静地看一本书，我喜欢在夕阳落下之前去健身房健身，我喜欢在黄昏之时出去遛狗，我喜欢在月亮高悬之时和你散步聊天，我喜欢你（哈哈，不知道是不是你）。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h4 id=&quot;2021-7-4&quot;&gt;&lt;a href=&quot;#2021-7-4&quot; class=&quot;headerlink&quot; title=&quot;2021/7/4&quot;&gt;&lt;/a&gt;2021/7/4&lt;/h4&gt;&lt;p&gt;好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>cpp学习笔记</title>
-    <link href="https://youngyyp.github.io/2021/05/30/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://youngyyp.github.io/2021/05/30/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://youngyyp.github.io/2021/05/30/test/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>https://youngyyp.github.io/2021/05/30/test/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
     <published>2021-05-30T14:33:06.000Z</published>
     <updated>2021-06-07T10:31:02.782Z</updated>
     
