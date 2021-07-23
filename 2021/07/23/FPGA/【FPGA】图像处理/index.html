@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="图像的中值滤波">
+  <meta name="description" content="图像的中值滤波统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的中值滤波，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。 一、行缓存在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【FPGA】图像处理">
 <meta property="og:url" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="图像的中值滤波">
+<meta property="og:description" content="图像的中值滤波统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的中值滤波，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。 一、行缓存在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png">
 <meta property="og:image" content="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png">
