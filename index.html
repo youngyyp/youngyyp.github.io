@@ -214,7 +214,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-07-23 14:52:46 / 修改时间：16:13:27" itemprop="dateCreated datePublished" datetime="2021-07-23T14:52:46+08:00">2021-07-23</time>
+              <time title="创建时间：2021-07-23 14:52:46 / 修改时间：16:43:48" itemprop="dateCreated datePublished" datetime="2021-07-23T14:52:46+08:00">2021-07-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,6 +255,10 @@
           <h2 id="图像的中值滤波"><a href="#图像的中值滤波" class="headerlink" title="图像的中值滤波"></a>图像的中值滤波</h2><p>统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的<strong>中值滤波</strong>，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。</p>
 <h3 id="一、行缓存"><a href="#一、行缓存" class="headerlink" title="一、行缓存"></a>一、行缓存</h3><p>在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。</p>
 <p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png" alt="image-20210723151332772"><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png" alt="image-20210723151214106" style="zoom: 80%;"></p>
+<p>图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。</p>
+<p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/line_buffer.png" alt="line_buffer.png"></p>
+<h3 id="二、并行全比较排序"><a href="#二、并行全比较排序" class="headerlink" title="二、并行全比较排序"></a>二、并行全比较排序</h3><p>排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“<strong>以空间换时间</strong>”排序算法。</p>
+<p>假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： </p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/#more" rel="contents">
@@ -354,7 +358,11 @@
 <li>新建工程（建议给每个工程单独建文件夹）</li>
 <li>调试的时候直接在library中的work目录下对testbench文件右键simulate</li>
 </ol>
-<h4 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h4>
+<h4 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h4><p>①创建一个工程和工程库;<br>②加载设计文件（包括你编写好的testbench）；<br>③编译源文件；<br>④运行仿真，并查看结果；<br>⑤最后进行工程调试。<br>上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步。</p>
+<p>例程<br>（1） sim_run.bat文件用于批处理<br>@set modelsim=C:\modeltech64_10.7\win64\vsim.exe<br>@if exist vsim.wlf del vsim.wlf<br>%modelsim% -do sim_top.do</p>
+<p>（“％环境变量名％”用法的含义是取指定环境变量的值）<br>首先设置modelsim的执行路径，可以是vsim.exe也可以是modelsim.exe<br>然后删除历史运行的vsim.wlf文件，以便后面进行更新<br>最后用DOS命令调用modelsim工具，并在modelsim工具中执行sim._top.do文件<br>(2)sim_top.do文件<br>vlib work<br>//建立work库</p>
+<p>vmap work work<br>//将目前逻辑库work和实际工作库work相映射对应<br>vlog -f vlog-rtl.list<br>#将vlog-rtl.list文件中所有文件编译</p>
+<p>vopt +acc=npr tb_top -o tb_top_opt<br>#仿真时优化tb_top输出tb_top_opt<br>vsim tb_top_opt<br>#仿真tb_top_opt</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" rel="contents">
@@ -439,6 +447,14 @@
 <p>的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧，也可能是没有到那种情绪吧。和朋友们一起玩的时候，常常他们玩的很嗨的时候，我内心却毫无波澜。他们或笑，或跳，或讲故事，或聊综艺，而我只是静静地听着，好像他们越兴奋，我离他们越远。不知道这算不算所谓的社恐，不过对于有些特别好的朋友不会出现这样的情况。</p>
 <p>总有人问我，你不打游戏，也不看综艺，也不追剧，你每天都在干什么。是啊，我每天在干什么呢。我想说，我打游戏，而且打的也不少，只是越长大越觉得，缺少了小时候那种对游戏不知名的热爱，现在在我看来打游戏只是一种社交；我也会看剧，只是看的没有许多狂热看剧爱好者看的多，我喜欢好剧，喜欢那种能让人回想好久的剧，而不是紧跟最新更新的剧。若你认为除了这些，就没有其他的事情可做了，或者说就没有其他的娱乐可做了，那你挺惨的。对于我来说，我有着更多喜欢做的事情。我喜欢和朋友一起运动，我喜欢一个人在房间的时候唱歌弹琴，我喜欢在清晨背上包，到图书馆安安静静地看一本书，我喜欢在夕阳落下之前去健身房健身，我喜欢在黄昏之时出去遛狗，我喜欢在月亮高悬之时和你散步聊天，我喜欢你（哈哈，不知道是不是你）。</p>
 
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/07/04/%E9%9A%8F%E7%AC%94/%E6%97%A5%E5%B8%B8%E9%9A%8F%E7%AC%94/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -528,6 +544,31 @@
         
           <h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h4 id="相关网站"><a href="#相关网站" class="headerlink" title="相关网站"></a>相关网站</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ClaireSy/article/details/108422945">《黑马》——C++基础入门_漏网小鱼的博客-CSDN博客</a></p>
 <h4 id="函数的分文件编写"><a href="#函数的分文件编写" class="headerlink" title="函数的分文件编写"></a>函数的分文件编写</h4><p>函数分文件编写一般有4个步骤</p>
+<ol>
+<li>创建后缀名为.h的头文件</li>
+<li>创建后缀名为.cpp的源文件</li>
+<li>在头文件中写函数的声明</li>
+<li>在源文件中写函数的定义，include头文件</li>
+<li>在要用改函数的文件中include头文件</li>
+</ol>
+<h4 id="冒泡排序函数"><a href="#冒泡排序函数" class="headerlink" title="冒泡排序函数"></a>冒泡排序函数</h4><pre class=" language-c++"><code class="language-c++">//冒泡排序函数
+void bubbleSort(int * arr, int len)  //int * arr 也可以写为int arr[]
+{
+    for (int i = 0; i < len - 1; i++)
+    {
+        for (int j = 0; j < len - 1 - i; j++)
+        {
+            if (arr[j] > arr[j + 1])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+</code></pre>
+<h4 id="结构体指针"><a href="#结构体指针" class="headerlink" title="结构体指针"></a>结构体指针</h4><p>结构体变量通过 <code>.</code> 来访问成员，而结构体指针通过 <code>-&gt;</code> 来访问成员</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/05/30/%E7%BC%96%E7%A8%8B/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" rel="contents">

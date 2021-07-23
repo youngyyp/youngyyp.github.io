@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2021-07-23T08:13:27.653Z</updated>
+  <updated>2021-07-23T08:43:48.861Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -21,14 +21,18 @@
     <link href="https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"/>
     <id>https://youngyyp.github.io/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/</id>
     <published>2021-07-23T06:52:46.000Z</published>
-    <updated>2021-07-23T08:13:27.653Z</updated>
+    <updated>2021-07-23T08:43:48.861Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="图像的中值滤波"><a href="#图像的中值滤波" class="headerlink" title="图像的中值滤波"></a>图像的中值滤波</h2><p>统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的<strong>中值滤波</strong>，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。</p><h3 id="一、行缓存"><a href="#一、行缓存" class="headerlink" title="一、行缓存"></a>一、行缓存</h3><p>在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。</p><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png" alt="image-20210723151332772"><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png" alt="image-20210723151214106" style="zoom: 80%;"></p><p>图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上左图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。</p><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/line_buffer.png" alt="line_buffer.png"></p><h3 id="二、并行全比较排序"><a href="#二、并行全比较排序" class="headerlink" title="二、并行全比较排序"></a>二、并行全比较排序</h3><p>排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“<strong>以空间换时间</strong>”排序算法。</p><p>假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： </p><p><strong>(1) 两两比较，并累积分数。</strong>考虑到可能出现相同的数，规定<strong>下标越大的数优先级越高</strong>，即：</p><pre class=" language-c"><code class="language-c">若m<span class="token operator">></span>n<span class="token punctuation">,</span>则选用  （Am<span class="token operator">>=</span>An）<span class="token operator">?</span> <span class="token number">1</span>：<span class="token number">0</span> <span class="token punctuation">;</span>若m<span class="token operator">&lt;</span>n，则选用  <span class="token punctuation">(</span>Am<span class="token operator">></span>An<span class="token punctuation">)</span><span class="token operator">?</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span> <span class="token punctuation">;</span></code></pre><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723155419045.png" alt="image-20210723155419045"></p><p><strong>(2) 按积分排序。</strong>由上图可知，积分越大，表明对应的数越大。</p><h4 id="3-3数据的中值"><a href="#3-3数据的中值" class="headerlink" title="3*3数据的中值"></a>3*3数据的中值</h4><p>若直接对3*3掩膜所覆盖的9个数据进行并行全比较排序，资源消耗较大，这里可以分别对每一行的3个数据进行并行全比较排序，获得每一行的中值，再将这3个中值再进行一次排序，取出中值。（这样取出来的不一定是真正的中值，但比较近似，算法复杂度也不高）</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="图像的中值滤波"><a href="#图像的中值滤波" class="headerlink" title="图像的中值滤波"></a>图像的中值滤波</h2><p>统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的<strong>中值滤波</strong>，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。</p><h3 id="一、行缓存"><a href="#一、行缓存" class="headerlink" title="一、行缓存"></a>一、行缓存</h3><p>在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。</p><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png" alt="image-20210723151332772"><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png" alt="image-20210723151214106" style="zoom: 80%;"></p><p>图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。</p><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/line_buffer.png" alt="line_buffer.png"></p><h3 id="二、并行全比较排序"><a href="#二、并行全比较排序" class="headerlink" title="二、并行全比较排序"></a>二、并行全比较排序</h3><p>排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“<strong>以空间换时间</strong>”排序算法。</p><p>假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： </p><p><strong>(1) 两两比较，并累积分数。</strong>考虑到可能出现相同的数，规定<strong>下标越大的数优先级越高</strong>，即：</p><pre class=" language-c"><code class="language-c">若m<span class="token operator">></span>n<span class="token punctuation">,</span>则选用  （Am<span class="token operator">>=</span>An）<span class="token operator">?</span> <span class="token number">1</span>：<span class="token number">0</span> <span class="token punctuation">;</span>若m<span class="token operator">&lt;</span>n，则选用  <span class="token punctuation">(</span>Am<span class="token operator">></span>An<span class="token punctuation">)</span><span class="token operator">?</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token number">0</span> <span class="token punctuation">;</span></code></pre><p><img src="/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723155419045.png" alt="image-20210723155419045"></p><p><strong>(2) 按积分排序。</strong>由上图可知，积分越大，表明对应的数越大。</p><h4 id="3-3数据的中值"><a href="#3-3数据的中值" class="headerlink" title="3*3数据的中值"></a>3*3数据的中值</h4><p>若直接对3*3掩膜所覆盖的9个数据进行并行全比较排序，资源消耗较大，这里可以分别对每一行的3个数据进行并行全比较排序，获得每一行的中值，再将这3个中值再进行一次排序，取出中值。（这样取出来的不一定是真正的中值，但比较近似，算法复杂度也不高）</p>]]></content>
     
     
     <summary type="html">&lt;h2 id=&quot;图像的中值滤波&quot;&gt;&lt;a href=&quot;#图像的中值滤波&quot; class=&quot;headerlink&quot; title=&quot;图像的中值滤波&quot;&gt;&lt;/a&gt;图像的中值滤波&lt;/h2&gt;&lt;p&gt;统计排序滤波器是非线性滤波器的一种，这里我们学习较为常见的&lt;strong&gt;中值滤波&lt;/strong&gt;，并以掩膜大小为3*3进行举例，来说明使用FPGA设计二维中值滤波器的流程。&lt;/p&gt;
 &lt;h3 id=&quot;一、行缓存&quot;&gt;&lt;a href=&quot;#一、行缓存&quot; class=&quot;headerlink&quot; title=&quot;一、行缓存&quot;&gt;&lt;/a&gt;一、行缓存&lt;/h3&gt;&lt;p&gt;在FPGA数字图像处理中，行缓存的使用非常频繁，例如我们需要图像矩阵操作的时候就需要进行缓存，例如图像的均值滤波，中值滤波，高斯滤波以及sobel边缘查找等都需要行缓存设计。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png&quot; alt=&quot;image-20210723151332772&quot;&gt;&lt;img src=&quot;/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png&quot; alt=&quot;image-20210723151214106&quot; style=&quot;zoom: 80%;&quot;&gt;&lt;/p&gt;</summary>
+&lt;p&gt;&lt;img src=&quot;/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151332772.png&quot; alt=&quot;image-20210723151332772&quot;&gt;&lt;img src=&quot;/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/image-20210723151214106.png&quot; alt=&quot;image-20210723151214106&quot; style=&quot;zoom: 80%;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;图像数据以数据流的方式，先从左到右，然后从上到下将每一个像素数据输出。若要获取如上图中的3*3矩阵，则必须对行数据进行缓存，如下图所示，采用两个FIFO即可解决行缓存的问题，下图即可同时获取到第一个掩膜所覆盖的9个数据。基本思路是，第一行数据依次输入进来写入fifo1，当写到第一行最后一个数据时，开始从fifo1依次读出数据然后写入fifo2，依次类推。通过行缓存的方式使前三行的输出对齐。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2021/07/23/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/line_buffer.png&quot; alt=&quot;line_buffer.png&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;二、并行全比较排序&quot;&gt;&lt;a href=&quot;#二、并行全比较排序&quot; class=&quot;headerlink&quot; title=&quot;二、并行全比较排序&quot;&gt;&lt;/a&gt;二、并行全比较排序&lt;/h3&gt;&lt;p&gt;排序是一种重要的数据运算，传统的排序方法主要靠软件串行方式实现，包括冒泡法、选择法、计数法等，这些算法大多采用循环比较，运算费时，实时性差。不能满足工程上越来越高的实时性要求。并行全比较实时排序算法是基于序列中任意两个数并行比较实现。由于全部数字同时进行比较处理，将会占用大量的处理空间，因此此算法也可称为“&lt;strong&gt;以空间换时间&lt;/strong&gt;”排序算法。&lt;/p&gt;
+&lt;p&gt;假设有一数组{20，80，40，40，60，70}，定为A0=20、A1=80、 A2=40、A3=40、A4=60、A5=70，要求对该数组按从大到小的顺序排列。排序按以下过程进行 ： &lt;/p&gt;</summary>
     
     
     
@@ -53,7 +57,11 @@
 &lt;li&gt;新建工程（建议给每个工程单独建文件夹）&lt;/li&gt;
 &lt;li&gt;调试的时候直接在library中的work目录下对testbench文件右键simulate&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&quot;命令行操作&quot;&gt;&lt;a href=&quot;#命令行操作&quot; class=&quot;headerlink&quot; title=&quot;命令行操作&quot;&gt;&lt;/a&gt;命令行操作&lt;/h4&gt;</summary>
+&lt;h4 id=&quot;命令行操作&quot;&gt;&lt;a href=&quot;#命令行操作&quot; class=&quot;headerlink&quot; title=&quot;命令行操作&quot;&gt;&lt;/a&gt;命令行操作&lt;/h4&gt;&lt;p&gt;①创建一个工程和工程库;&lt;br&gt;②加载设计文件（包括你编写好的testbench）；&lt;br&gt;③编译源文件；&lt;br&gt;④运行仿真，并查看结果；&lt;br&gt;⑤最后进行工程调试。&lt;br&gt;上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步。&lt;/p&gt;
+&lt;p&gt;例程&lt;br&gt;（1） sim_run.bat文件用于批处理&lt;br&gt;@set modelsim=C:\modeltech64_10.7\win64\vsim.exe&lt;br&gt;@if exist vsim.wlf del vsim.wlf&lt;br&gt;%modelsim% -do sim_top.do&lt;/p&gt;
+&lt;p&gt;（“％环境变量名％”用法的含义是取指定环境变量的值）&lt;br&gt;首先设置modelsim的执行路径，可以是vsim.exe也可以是modelsim.exe&lt;br&gt;然后删除历史运行的vsim.wlf文件，以便后面进行更新&lt;br&gt;最后用DOS命令调用modelsim工具，并在modelsim工具中执行sim._top.do文件&lt;br&gt;(2)sim_top.do文件&lt;br&gt;vlib work&lt;br&gt;//建立work库&lt;/p&gt;
+&lt;p&gt;vmap work work&lt;br&gt;//将目前逻辑库work和实际工作库work相映射对应&lt;br&gt;vlog -f vlog-rtl.list&lt;br&gt;#将vlog-rtl.list文件中所有文件编译&lt;/p&gt;
+&lt;p&gt;vopt +acc=npr tb_top -o tb_top_opt&lt;br&gt;#仿真时优化tb_top输出tb_top_opt&lt;br&gt;vsim tb_top_opt&lt;br&gt;#仿真tb_top_opt&lt;/p&gt;</summary>
     
     
     
@@ -76,10 +84,10 @@
     <content type="html"><![CDATA[<h4 id="2021-7-4"><a href="#2021-7-4" class="headerlink" title="2021/7/4"></a>2021/7/4</h4><p>好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。</p><p>的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧，也可能是没有到那种情绪吧。和朋友们一起玩的时候，常常他们玩的很嗨的时候，我内心却毫无波澜。他们或笑，或跳，或讲故事，或聊综艺，而我只是静静地听着，好像他们越兴奋，我离他们越远。不知道这算不算所谓的社恐，不过对于有些特别好的朋友不会出现这样的情况。</p><p>总有人问我，你不打游戏，也不看综艺，也不追剧，你每天都在干什么。是啊，我每天在干什么呢。我想说，我打游戏，而且打的也不少，只是越长大越觉得，缺少了小时候那种对游戏不知名的热爱，现在在我看来打游戏只是一种社交；我也会看剧，只是看的没有许多狂热看剧爱好者看的多，我喜欢好剧，喜欢那种能让人回想好久的剧，而不是紧跟最新更新的剧。若你认为除了这些，就没有其他的事情可做了，或者说就没有其他的娱乐可做了，那你挺惨的。对于我来说，我有着更多喜欢做的事情。我喜欢和朋友一起运动，我喜欢一个人在房间的时候唱歌弹琴，我喜欢在清晨背上包，到图书馆安安静静地看一本书，我喜欢在夕阳落下之前去健身房健身，我喜欢在黄昏之时出去遛狗，我喜欢在月亮高悬之时和你散步聊天，我喜欢你（哈哈，不知道是不是你）。</p>]]></content>
     
     
-      
-      
-    <summary type="html">&lt;h4 id=&quot;2021-7-4&quot;&gt;&lt;a href=&quot;#2021-7-4&quot; class=&quot;headerlink&quot; title=&quot;2021/7/4&quot;&gt;&lt;/a&gt;2021/7/4&lt;/h4&gt;&lt;p&gt;好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍</summary>
-      
+    <summary type="html">&lt;h4 id=&quot;2021-7-4&quot;&gt;&lt;a href=&quot;#2021-7-4&quot; class=&quot;headerlink&quot; title=&quot;2021/7/4&quot;&gt;&lt;/a&gt;2021/7/4&lt;/h4&gt;&lt;p&gt;好久没有静下来写点什么了，这几天放假回家，一直都在和朋友们玩儿，散步，吃饭，聊天，看鬼片，拍照，打麻将，游泳，遛狗，弹琴，唱歌。好像挺充实的，但心中却又总觉得空落落的，为什么呢，可能是心中有好多话压抑着没有言说吧。此刻，当我独自一人，戴着耳机，听着舒缓的音乐，敲击着键盘，写下心中所想，才觉得轻松了许多。&lt;/p&gt;
+&lt;p&gt;的确像许多人说的那样，我好像总是把自己的事情埋在心里。可能是语言表达能力不够吧，也可能是没有到那种情绪吧。和朋友们一起玩的时候，常常他们玩的很嗨的时候，我内心却毫无波澜。他们或笑，或跳，或讲故事，或聊综艺，而我只是静静地听着，好像他们越兴奋，我离他们越远。不知道这算不算所谓的社恐，不过对于有些特别好的朋友不会出现这样的情况。&lt;/p&gt;
+&lt;p&gt;总有人问我，你不打游戏，也不看综艺，也不追剧，你每天都在干什么。是啊，我每天在干什么呢。我想说，我打游戏，而且打的也不少，只是越长大越觉得，缺少了小时候那种对游戏不知名的热爱，现在在我看来打游戏只是一种社交；我也会看剧，只是看的没有许多狂热看剧爱好者看的多，我喜欢好剧，喜欢那种能让人回想好久的剧，而不是紧跟最新更新的剧。若你认为除了这些，就没有其他的事情可做了，或者说就没有其他的娱乐可做了，那你挺惨的。对于我来说，我有着更多喜欢做的事情。我喜欢和朋友一起运动，我喜欢一个人在房间的时候唱歌弹琴，我喜欢在清晨背上包，到图书馆安安静静地看一本书，我喜欢在夕阳落下之前去健身房健身，我喜欢在黄昏之时出去遛狗，我喜欢在月亮高悬之时和你散步聊天，我喜欢你（哈哈，不知道是不是你）。&lt;/p&gt;
+</summary>
     
     
     
@@ -97,7 +105,32 @@
     
     
     <summary type="html">&lt;h2 id=&quot;基础语法&quot;&gt;&lt;a href=&quot;#基础语法&quot; class=&quot;headerlink&quot; title=&quot;基础语法&quot;&gt;&lt;/a&gt;基础语法&lt;/h2&gt;&lt;h4 id=&quot;相关网站&quot;&gt;&lt;a href=&quot;#相关网站&quot; class=&quot;headerlink&quot; title=&quot;相关网站&quot;&gt;&lt;/a&gt;相关网站&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/ClaireSy/article/details/108422945&quot;&gt;《黑马》——C++基础入门_漏网小鱼的博客-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id=&quot;函数的分文件编写&quot;&gt;&lt;a href=&quot;#函数的分文件编写&quot; class=&quot;headerlink&quot; title=&quot;函数的分文件编写&quot;&gt;&lt;/a&gt;函数的分文件编写&lt;/h4&gt;&lt;p&gt;函数分文件编写一般有4个步骤&lt;/p&gt;</summary>
+&lt;h4 id=&quot;函数的分文件编写&quot;&gt;&lt;a href=&quot;#函数的分文件编写&quot; class=&quot;headerlink&quot; title=&quot;函数的分文件编写&quot;&gt;&lt;/a&gt;函数的分文件编写&lt;/h4&gt;&lt;p&gt;函数分文件编写一般有4个步骤&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;创建后缀名为.h的头文件&lt;/li&gt;
+&lt;li&gt;创建后缀名为.cpp的源文件&lt;/li&gt;
+&lt;li&gt;在头文件中写函数的声明&lt;/li&gt;
+&lt;li&gt;在源文件中写函数的定义，include头文件&lt;/li&gt;
+&lt;li&gt;在要用改函数的文件中include头文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;冒泡排序函数&quot;&gt;&lt;a href=&quot;#冒泡排序函数&quot; class=&quot;headerlink&quot; title=&quot;冒泡排序函数&quot;&gt;&lt;/a&gt;冒泡排序函数&lt;/h4&gt;&lt;pre class=&quot; language-c++&quot;&gt;&lt;code class=&quot;language-c++&quot;&gt;//冒泡排序函数
+void bubbleSort(int * arr, int len)  //int * arr 也可以写为int arr[]
+{
+    for (int i = 0; i &lt; len - 1; i++)
+    {
+        for (int j = 0; j &lt; len - 1 - i; j++)
+        {
+            if (arr[j] &gt; arr[j + 1])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;结构体指针&quot;&gt;&lt;a href=&quot;#结构体指针&quot; class=&quot;headerlink&quot; title=&quot;结构体指针&quot;&gt;&lt;/a&gt;结构体指针&lt;/h4&gt;&lt;p&gt;结构体变量通过 &lt;code&gt;.&lt;/code&gt; 来访问成员，而结构体指针通过 &lt;code&gt;-&amp;gt;&lt;/code&gt; 来访问成员&lt;/p&gt;</summary>
     
     
     
