@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="2021&#x2F;7&#x2F;21汇报：上周工作：  根据菜鸟教程复习了verilog的基础语法，并搭建好了modelsim的环境，学习了modelsim的图形界面操作方式和使用命令行操作的方式 参考图书《基于FPGA的数字图像处理原理及应用》学习线性滤波和非线性滤波的内容，主要尝试实现中值滤波的代码  本周计划：  验证基于sobel算子边缘检测的飞散点滤波的代码。  学习二维中值滤波的代码。  学习tof的工">
+  <meta name="description" content="2021&#x2F;7&#x2F;21 汇报： 上周工作：   1. 根据菜鸟教程复习了verilog的基础语法，并搭建好了modelsim的环境，学习了modelsim的图形界面操作方式和使用命令行操作的方式  2. 参考图书《基于FPGA的数字图像处理原理及应用》学习线性滤波和非线性滤波的内容，主要尝试实现中值滤波的代码  本周计划：   1. 验证基于sobel算子边缘检测的飞散点滤波的代码。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="组会汇报及记录">
 <meta property="og:url" content="https://youngyyp.github.io/2021/07/20/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5%E5%8F%8A%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="2021&#x2F;7&#x2F;21汇报：上周工作：  根据菜鸟教程复习了verilog的基础语法，并搭建好了modelsim的环境，学习了modelsim的图形界面操作方式和使用命令行操作的方式 参考图书《基于FPGA的数字图像处理原理及应用》学习线性滤波和非线性滤波的内容，主要尝试实现中值滤波的代码  本周计划：  验证基于sobel算子边缘检测的飞散点滤波的代码。  学习二维中值滤波的代码。  学习tof的工">
+<meta property="og:description" content="2021&#x2F;7&#x2F;21 汇报： 上周工作：   1. 根据菜鸟教程复习了verilog的基础语法，并搭建好了modelsim的环境，学习了modelsim的图形界面操作方式和使用命令行操作的方式  2. 参考图书《基于FPGA的数字图像处理原理及应用》学习线性滤波和非线性滤波的内容，主要尝试实现中值滤波的代码  本周计划：   1. 验证基于sobel算子边缘检测的飞散点滤波的代码。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-20T12:48:55.000Z">
-<meta property="article:modified_time" content="2021-07-22T01:12:57.339Z">
+<meta property="article:modified_time" content="2021-07-29T01:41:17.677Z">
 <meta property="article:author" content="young">
 <meta name="twitter:card" content="summary">
 
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-22 09:12:57" itemprop="dateModified" datetime="2021-07-22T09:12:57+08:00">2021-07-22</time>
+                <time title="修改时间：2021-07-29 09:41:17" itemprop="dateModified" datetime="2021-07-29T09:41:17+08:00">2021-07-29</time>
               </span>
 
           
@@ -278,6 +278,18 @@
 <p><strong>Chisel</strong> 和 scala语言  </p>
 <p>HLS语言</p>
 <p>大工程用python小程序来判断仿真结果（而不是一直看波形）</p>
+<h2 id="2021-7-28"><a href="#2021-7-28" class="headerlink" title="2021/7/28"></a>2021/7/28</h2><h4 id="汇报：-1"><a href="#汇报：-1" class="headerlink" title="汇报："></a>汇报：</h4><p>上周工作：</p>
+<ol>
+<li><p>验证基于sobel算子边缘检测的飞散点滤波的代码。</p>
+</li>
+<li><p>学习二维中值滤波的代码。</p>
+</li>
+<li><p>学习tof的工作原理和数据处理流程。</p>
+</li>
+</ol>
+<p>本周计划：</p>
+<h4 id="记录：-1"><a href="#记录：-1" class="headerlink" title="记录："></a>记录：</h4><p>ISP（Image Signal Processor）</p>
+<p><a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-24765042-id-3217103.html">乒乓缓存</a></p>
 <!-- flag of hidden posts -->
     </div>
 
@@ -366,7 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-7-21"><span class="nav-number">1.</span> <span class="nav-text">2021&#x2F;7&#x2F;21</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%87%E6%8A%A5%EF%BC%9A"><span class="nav-number">1.0.1.</span> <span class="nav-text">汇报：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%EF%BC%9A"><span class="nav-number">1.0.2.</span> <span class="nav-text">记录：</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-7-21"><span class="nav-number">1.</span> <span class="nav-text">2021&#x2F;7&#x2F;21</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%87%E6%8A%A5%EF%BC%9A"><span class="nav-number">1.0.1.</span> <span class="nav-text">汇报：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%EF%BC%9A"><span class="nav-number">1.0.2.</span> <span class="nav-text">记录：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-7-28"><span class="nav-number">2.</span> <span class="nav-text">2021&#x2F;7&#x2F;28</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%87%E6%8A%A5%EF%BC%9A-1"><span class="nav-number">2.0.1.</span> <span class="nav-text">汇报：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%EF%BC%9A-1"><span class="nav-number">2.0.2.</span> <span class="nav-text">记录：</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -381,7 +393,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

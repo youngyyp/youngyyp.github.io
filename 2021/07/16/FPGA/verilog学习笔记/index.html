@@ -28,7 +28,7 @@
 <meta property="og:description" content="Modelsim使用技巧基本操作流程图形界面操作 新建工程（建议给每个工程单独建文件夹） 调试的时候直接在library中的work目录下对testbench文件右键simulate  命令行操作①创建一个工程和工程库;②加载设计文件（包括你编写好的testbench）；③编译源文件；④运行仿真，并查看结果；⑤最后进行工程调试。上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-16T07:50:28.000Z">
-<meta property="article:modified_time" content="2021-07-23T06:53:18.042Z">
+<meta property="article:modified_time" content="2021-07-29T11:26:57.038Z">
 <meta property="article:author" content="young">
 <meta property="article:tag" content="verilog">
 <meta property="article:tag" content="modelsim">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-23 14:53:18" itemprop="dateModified" datetime="2021-07-23T14:53:18+08:00">2021-07-23</time>
+                <time title="修改时间：2021-07-29 19:26:57" itemprop="dateModified" datetime="2021-07-29T19:26:57+08:00">2021-07-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,12 +275,17 @@
 <h4 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h4><p>①创建一个工程和工程库;<br>②加载设计文件（包括你编写好的testbench）；<br>③编译源文件；<br>④运行仿真，并查看结果；<br>⑤最后进行工程调试。<br>上面为利用modelsim的仿真步骤，利用do文件可以完成以上1—4步。</p>
 <p>例程<br>（1） sim_run.bat文件用于批处理<br>@set modelsim=C:\modeltech64_10.7\win64\vsim.exe<br>@if exist vsim.wlf del vsim.wlf<br>%modelsim% -do sim_top.do</p>
 <p>（“％环境变量名％”用法的含义是取指定环境变量的值）<br>首先设置modelsim的执行路径，可以是vsim.exe也可以是modelsim.exe<br>然后删除历史运行的vsim.wlf文件，以便后面进行更新<br>最后用DOS命令调用modelsim工具，并在modelsim工具中执行sim._top.do文件<br>(2)sim_top.do文件<br>vlib work<br>//建立work库</p>
-<p>vmap work work<br>//将目前逻辑库work和实际工作库work相映射对应<br>vlog -f vlog-rtl.list<br>#将vlog-rtl.list文件中所有文件编译</p>
-<p>vopt +acc=npr tb_top -o tb_top_opt<br>#仿真时优化tb_top输出tb_top_opt<br>vsim tb_top_opt<br>#仿真tb_top_opt</p>
-<p>(也可以直接 vsim -novopt work.tb_top)</p>
-<p>do wave.do<br>#运行wave.do，添加wave的信息<br>run 20ms<br>#运行20ms （run -all：运行全过程）<br>（3）vlog-rtl.list<br>../rtl/<em>.v<br>#上级文件夹rtl的所有v文件<br>../../calc_engine/</em>.v<br>#上上级文件夹calc_engine文件夹的所有v文件<br>../sim/tb/*.v<br>上级sim/tb文件夹内的所有v文件<br>（4）wave.do<br>通过添加并设置波形参数，保存为wave.do文件</p>
+<p>vmap work work<br>//将目前逻辑库work和实际工作库work相映射对应<br>vlog -f vlog-rtl.list </p>
+<h1 id="将vlog-rtl-list文件中所有文件编译"><a href="#将vlog-rtl-list文件中所有文件编译" class="headerlink" title="将vlog-rtl.list文件中所有文件编译"></a>将vlog-rtl.list文件中所有文件编译</h1><p>vopt +acc=npr tb_top -o tb_top_opt</p>
+<h1 id="仿真时优化tb-top输出tb-top-opt"><a href="#仿真时优化tb-top输出tb-top-opt" class="headerlink" title="仿真时优化tb_top输出tb_top_opt"></a>仿真时优化tb_top输出tb_top_opt</h1><p>vsim tb_top_opt</p>
+<h1 id="仿真tb-top-opt"><a href="#仿真tb-top-opt" class="headerlink" title="仿真tb_top_opt"></a>仿真tb_top_opt</h1><p>(也可以直接 vsim -novopt work.tb_top)</p>
+<p>do wave.do</p>
+<h1 id="运行wave-do，添加wave的信息"><a href="#运行wave-do，添加wave的信息" class="headerlink" title="运行wave.do，添加wave的信息"></a>运行wave.do，添加wave的信息</h1><p>run 20ms</p>
+<h1 id="运行20ms-（run-all：运行全过程）"><a href="#运行20ms-（run-all：运行全过程）" class="headerlink" title="运行20ms （run -all：运行全过程）"></a>运行20ms （run -all：运行全过程）</h1><p>（3）vlog-rtl.list<br>../rtl/*.v</p>
+<h1 id="上级文件夹rtl的所有v文件"><a href="#上级文件夹rtl的所有v文件" class="headerlink" title="上级文件夹rtl的所有v文件"></a>上级文件夹rtl的所有v文件</h1><p>../../calc_engine/*.v</p>
+<h1 id="上上级文件夹calc-engine文件夹的所有v文件"><a href="#上上级文件夹calc-engine文件夹的所有v文件" class="headerlink" title="上上级文件夹calc_engine文件夹的所有v文件"></a>上上级文件夹calc_engine文件夹的所有v文件</h1><p>../sim/tb/*.v<br>上级sim/tb文件夹内的所有v文件<br>（4）wave.do<br>通过添加并设置波形参数，保存为wave.do文件</p>
 <p>更多详情可参考 <a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html">http://blog.sina.com.cn/s/blog_7e2e98ad0101gxx7.html</a></p>
-<p> log -r /* 对所有的信号记录，运行这个命令后即使在仿真前没有把信号加入wave窗口，仿真完成后直接加入wave窗口就可以查看波形，比较方便，但是缺点是当工程较大和仿真时间很长时仿真速度较慢，占用内存也较大。<br> vsim  -voptargs=”+acc”<br>+acc意思是设计中所有的信号都提供入口，可以观察，而log命令的意思就是在运行仿真的时候信号不用加入wave窗口在开始仿真后直接可以看波形，意思就是他记录了所有的信号波形<br>观察其它窗口的结果，用view *命令显示 。view *命令可以观察包括signals、wave、dataflow等窗口文件，也可以分别打开。例如用view signals来观察信号变量。</p>
+<p> log -r /<em> 对所有的信号记录，运行这个命令后即使在仿真前没有把信号加入wave窗口，仿真完成后直接加入wave窗口就可以查看波形，比较方便，但是缺点是当工程较大和仿真时间很长时仿真速度较慢，占用内存也较大。<br> vsim  -voptargs=”+acc”<br>+acc意思是设计中所有的信号都提供入口，可以观察，而log命令的意思就是在运行仿真的时候信号不用加入wave窗口在开始仿真后直接可以看波形，意思就是他记录了所有的信号波形<br>观察其它窗口的结果，用view </em>命令显示 。view *命令可以观察包括signals、wave、dataflow等窗口文件，也可以分别打开。例如用view signals来观察信号变量。</p>
 <h2 id="verilog语法"><a href="#verilog语法" class="headerlink" title="verilog语法"></a>verilog语法</h2><ul>
 <li><p>always块中被赋值的变量只能为reg</p>
 </li>
@@ -289,10 +294,17 @@
 <li><p>assign 语句对已经定义的wire赋值，wire也可在被定义的时候赋值，wire变量只能被赋值一次</p>
 </li>
 <li><p>组合逻辑用阻塞赋值，非组合逻辑用非阻塞赋值。——<strong>组合逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出仅仅取决于该时刻的输入，与电路原来的状态无关。<strong>时序逻辑</strong>电路在逻辑功能上的特点是任意时刻的输出不仅取决于当时的输入信号，而且还取决于电路原来的状态，或者说，还与以前的输入有关</p>
+<pre class=" language-lang-verilog"><code class="language-lang-verilog">  组合逻辑：always @(*)  //组合always块相当于assign语句，因此组合电路存在两种表达方法
+  时序逻辑：always @(posedge clk)
+</code></pre>
+</li>
+<li><p>在<strong>时序逻辑</strong>中，不完整的 if…else… 结构并<strong>不会生成锁存器</strong>，而组合逻辑中不完整的 if…else… 结构就会生成锁存器</p>
 </li>
 <li><p>`timescale 1 ns / 1 ps 该指令用于定义时延、仿真的单位和精度</p>
 </li>
-<li><p>`default_nettype wand 用于默认设置为线网类型</p>
+<li><p>`default_nettype wand 用于默认设置为线网类型 </p>
+</li>
+<li><p>`default_nettype none 会关闭隐式声明功能，有助于查bug</p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq397381823/article/details/87521885">verilog设计过程寄存器使用#1的问题_烟花一时的博客-CSDN博客</a></p>
 </li>
@@ -302,9 +314,9 @@
 <p>  output 可以声明为 wire 或 reg 数据类型。</p>
 </li>
 <li><h6 id="端口连接规则"><a href="#端口连接规则" class="headerlink" title="端口连接规则:"></a>端口连接规则:</h6><p>  <strong>输入端口</strong></p>
-<p>  模块例化时，从模块外部来讲， input 端口可以连接 wire 或 reg 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>input 端口必须是 wire 型变量</strong>。</p>
+<p>  模块例化时，从模块外部来讲， input 端口可以连接 wire 或 reg 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong><em>input 端口必须是 wire 型变量</em></strong>。</p>
 <p>  <strong>输出端口</strong></p>
-<p>  模块例化时，从模块外部来讲，output 端口必须连接 wire 型变量。这与模块声明是不同的，从<strong>模块内部</strong>来讲，<strong>output 端口可以是 wire 或 reg 型变量</strong>。</p>
+<p>  模块例化时，<strong>从模块外部来讲，output 端口必须连接 wire 型变量</strong>。这与模块声明是不同的，从<strong>模块内部</strong>来讲，output 端口可以是 wire 或 reg 型变量。</p>
 <p>  <strong>输入输出端口</strong></p>
 <p>  模块例化时，从模块外部来讲，inout 端口必须连接 wire 型变量。这与模块声明是相同的。</p>
 <p>  <strong>悬空端口</strong></p>
@@ -312,7 +324,76 @@
 <p>  output 端口正常悬空时，我们甚至可以在例化时将其删除。</p>
 <p>  input 端口正常悬空时，悬空信号的逻辑功能表现为高阻状态（逻辑值为 z）。但是，例化时一般不能将悬空的 input 端口删除，否则编译会报错。</p>
 </li>
+<li><pre class=" language-lang-verilog"><code class="language-lang-verilog">  reg [7:0] mem [255:0];//定义在向量名之前的是向量的位宽，定义在向量名之后的维度可以理解为向量数组的长度
+</code></pre>
+</li>
+<li><pre class=" language-lang-verilog"><code class="language-lang-verilog">  always @(*) begin
+      casez (in[3:0])
+          4'bzzz1: out = 0;   // in[3:1]输入什么都可以
+          4'bzz1z: out = 1;
+          4'bz1zz: out = 2;
+          4'b1zzz: out = 3;
+          default: out = 0;
+      endcase
+  end
+  //case项是按顺序检查的(实际上，它更像是生成一个巨大的真值表然后生成超大的门)。注意有输入(例如，4'b1111)匹配多个case项。选择第一个匹配(因此4'b1111匹配第一个case项，out = 0)。
+</code></pre>
+</li>
+<li><pre class=" language-lang-verilog"><code class="language-lang-verilog">  for(i=0;i<3;i=i+1) begin 
+        ……  //循环中的 i 最高可到 2
+  end
+
+  for(初始化表达式1; 布尔表达式2; 步进表达式4){
+           循环体3
+  }//执行顺序：1234-->234-->234-->不满足为止。
+</code></pre>
+</li>
 <li></li>
+</ul>
+<h3 id="仿真时的文件操作"><a href="#仿真时的文件操作" class="headerlink" title="仿真时的文件操作"></a>仿真时的文件操作</h3><ul>
+<li><pre class=" language-lang-verilog"><code class="language-lang-verilog">  //下面进行文件读操作
+  integer file;
+  initial begin   
+      file = $fopen("../data/tof.txt","r");//只读方式打开文件
+      if (!file)
+          $display("Could not open file!");
+      else begin
+          $display("Open file success!");
+      end
+  end
+  -------------------------------------------
+  always @(posedge clk or negedge rstn) begin
+      if(~rstn)begin
+          ……
+      end
+      else begin
+          $fscanf(file,"%d",data_i);//将file文件按行读取至data_i,每个时钟读取一次
+      end
+  end
+  -------------------------------------------
+  //下面进行文件写操作
+  wire [DW-1:0] data_o;
+  integer file_out;
+
+  initial begin
+      file_out = $fopen("data_out.txt", "w");
+      if (!file)
+          $display("Could not open file_out!");
+      else begin
+          $display("Open file_out success!");
+      end
+  end
+  always @(posedge clk) begin
+      if (……) begin
+          $fwrite(file_out, "%d\n", data_o);//将data_o逐行写入
+      end    
+      else if (……) begin
+          $fclose(file_out);//关闭文件
+          $finish;//关闭仿真
+      end
+  end
+</code></pre>
+</li>
 </ul>
 
     </div>
@@ -417,7 +498,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Modelsim%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">Modelsim使用技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">基本操作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">图形界面操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.2.</span> <span class="nav-text">命令行操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#verilog%E8%AF%AD%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">verilog语法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E8%BF%9E%E6%8E%A5%E8%A7%84%E5%88%99"><span class="nav-number">2.0.0.0.1.</span> <span class="nav-text">端口连接规则:</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Modelsim%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">Modelsim使用技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">基本操作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">图形界面操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.2.</span> <span class="nav-text">命令行操作</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86vlog-rtl-list%E6%96%87%E4%BB%B6%E4%B8%AD%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E7%BC%96%E8%AF%91"><span class="nav-number"></span> <span class="nav-text">将vlog-rtl.list文件中所有文件编译</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E6%97%B6%E4%BC%98%E5%8C%96tb-top%E8%BE%93%E5%87%BAtb-top-opt"><span class="nav-number"></span> <span class="nav-text">仿真时优化tb_top输出tb_top_opt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9Ftb-top-opt"><span class="nav-number"></span> <span class="nav-text">仿真tb_top_opt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8Cwave-do%EF%BC%8C%E6%B7%BB%E5%8A%A0wave%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="nav-number"></span> <span class="nav-text">运行wave.do，添加wave的信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C20ms-%EF%BC%88run-all%EF%BC%9A%E8%BF%90%E8%A1%8C%E5%85%A8%E8%BF%87%E7%A8%8B%EF%BC%89"><span class="nav-number"></span> <span class="nav-text">运行20ms （run -all：运行全过程）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E7%BA%A7%E6%96%87%E4%BB%B6%E5%A4%B9rtl%E7%9A%84%E6%89%80%E6%9C%89v%E6%96%87%E4%BB%B6"><span class="nav-number"></span> <span class="nav-text">上级文件夹rtl的所有v文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8A%E7%BA%A7%E6%96%87%E4%BB%B6%E5%A4%B9calc-engine%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E6%89%80%E6%9C%89v%E6%96%87%E4%BB%B6"><span class="nav-number"></span> <span class="nav-text">上上级文件夹calc_engine文件夹的所有v文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#verilog%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">verilog语法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E8%BF%9E%E6%8E%A5%E8%A7%84%E5%88%99"><span class="nav-number">1.0.0.0.1.</span> <span class="nav-text">端口连接规则:</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BF%E7%9C%9F%E6%97%B6%E7%9A%84%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">仿真时的文件操作</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -432,7 +513,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
