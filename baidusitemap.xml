@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://youngyyp.github.io/2021/08/23/%E9%9A%8F%E7%AC%94/%E7%BA%AA%E5%BF%B5%E6%88%91%E7%9A%84%E5%A4%96%E5%A9%86%E4%B8%8E%E6%88%91%E7%9A%8422%E5%B2%81%E7%94%9F%E6%97%A5/</loc>
+    <lastmod>2021-08-23</lastmod>
+  </url>
+  <url>
+    <loc>https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E5%BE%85%E5%AD%A6%E7%9F%A5%E8%AF%86/</loc>
+    <lastmod>2021-08-20</lastmod>
+  </url>
+  <url>
+    <loc>https://youngyyp.github.io/2021/08/04/FPGA/ZYNQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-08-19</lastmod>
+  </url>
+  <url>
+    <loc>https://youngyyp.github.io/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-08-19</lastmod>
+  </url>
+  <url>
+    <loc>https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E8%8D%89%E7%A8%BF/</loc>
+    <lastmod>2021-08-04</lastmod>
+  </url>
+  <url>
     <loc>https://youngyyp.github.io/2021/07/30/FPGA/HLS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2021-08-03</lastmod>
+    <lastmod>2021-08-04</lastmod>
   </url>
   <url>
     <loc>https://youngyyp.github.io/2021/05/30/%E7%BC%96%E7%A8%8B/cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
@@ -13,10 +33,6 @@
     <lastmod>2021-07-30</lastmod>
   </url>
   <url>
-    <loc>https://youngyyp.github.io/2021/07/16/FPGA/verilog%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2021-07-29</lastmod>
-  </url>
-  <url>
     <loc>https://youngyyp.github.io/2021/02/12/%E6%8A%80%E6%9C%AF/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/</loc>
     <lastmod>2021-07-27</lastmod>
   </url>
@@ -25,7 +41,7 @@
     <lastmod>2021-07-27</lastmod>
   </url>
   <url>
-    <loc>https://youngyyp.github.io/2021/07/25/%E9%9A%8F%E7%AC%94/%E3%80%90%E4%B9%A0%E6%83%AF%E5%85%BB%E6%88%90%E3%80%91%E8%AF%B7%E5%90%84%E4%BD%8D%E7%9B%91%E7%9D%A3%EF%BC%81/</loc>
+    <loc>https://youngyyp.github.io/2021/07/25/%E5%BE%85%E5%8A%9E/%E3%80%90%E4%B9%A0%E6%83%AF%E5%85%BB%E6%88%90%E3%80%91%E8%AF%B7%E5%90%84%E4%BD%8D%E7%9B%91%E7%9D%A3%EF%BC%81/</loc>
     <lastmod>2021-07-25</lastmod>
   </url>
   <url>
