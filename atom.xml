@@ -63,56 +63,6 @@
   </entry>
   
   <entry>
-    <title></title>
-    <link href="https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E5%BE%85%E5%AD%A6%E7%9F%A5%E8%AF%86/"/>
-    <id>https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E5%BE%85%E5%AD%A6%E7%9F%A5%E8%AF%86/</id>
-    <published>2021-08-04T08:12:21.054Z</published>
-    <updated>2021-08-20T03:35:34.920Z</updated>
-    
-    <content type="html"><![CDATA[<ul><li>神经网络！</li><li>深入理解计算机系统 第三版</li><li>在服务器上跑viviado</li></ul><p>提高效率  不要发呆摸鱼！！！！！！</p><h1 id="假期总体目标"><a href="#假期总体目标" class="headerlink" title="假期总体目标"></a>假期总体目标</h1><ol><li>玩转zynq ：verilog熟练，hls熟练，zynq熟练，完成zynq教程的例程以及看完FPGA数字图像采集与处理的书。 （这一条是核心，务必完成）</li><li>神经网络编程实战 ：直接找一个框架教程进行实战，体验过程</li><li>计算机系统相关知识。</li></ol><p>每天白天认真学习，晚上锻炼＋玩儿</p><h2 id="第一周计划（8月22日截止）"><a href="#第一周计划（8月22日截止）" class="headerlink" title="第一周计划（8月22日截止）"></a>第一周计划（8月22日截止）</h2><ol><li>完成hls sobel算子的板上实验</li><li>看完SDK的实验</li></ol><h3 id="815计划"><a href="#815计划" class="headerlink" title="815计划"></a>815计划</h3><ol><li>hdmi显示图像  配合FIFO 和ram   ————完成</li><li>加入sobel算子       ————并非这么简单，还涉及很多知识，慢慢来，先把教程学完，最后来实现这个功能</li></ol><h3 id="817计划"><a href="#817计划" class="headerlink" title="817计划"></a>817计划</h3><ol><li>看zynq ps端的实验</li></ol><h3 id="820计划"><a href="#820计划" class="headerlink" title="820计划"></a>820计划</h3><p>完成zynq sdk端基础篇实验</p><h2 id="第二周计划（8月29日截止）"><a href="#第二周计划（8月29日截止）" class="headerlink" title="第二周计划（8月29日截止）"></a>第二周计划（8月29日截止）</h2><ol><li>看完hls的实验</li><li>看fpga数字图像处理的书</li></ol><h2 id="第三周计划（9月5日截止）"><a href="#第三周计划（9月5日截止）" class="headerlink" title="第三周计划（9月5日截止）"></a>第三周计划（9月5日截止）</h2><ol><li>神经网络编程实战</li></ol>]]></content>
-    
-    
-    <summary type="html">&lt;ul&gt;
-&lt;li&gt;神经网络！&lt;/li&gt;
-&lt;li&gt;深入理解计算机系统 第三版&lt;/li&gt;
-&lt;li&gt;在服务器上跑viviado&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;提高效率  不要发呆摸鱼！！！！！！&lt;/p&gt;
-&lt;h1 id=&quot;假期总体目标&quot;&gt;&lt;a href=&quot;#假期总体目标&quot; class=&quot;headerlink&quot; title=&quot;假期总体目标&quot;&gt;&lt;/a&gt;假期总体目标&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;玩转zynq ：verilog熟练，hls熟练，zynq熟练，完成zynq教程的例程以及看完FPGA数字图像采集与处理的书。 （这一条是核心，务必完成）&lt;/li&gt;
-&lt;li&gt;神经网络编程实战 ：直接找一个框架教程进行实战，体验过程&lt;/li&gt;
-&lt;li&gt;计算机系统相关知识。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;每天白天认真学习，晚上锻炼＋玩儿&lt;/p&gt;
-&lt;h2 id=&quot;第一周计划（8月22日截止）&quot;&gt;&lt;a href=&quot;#第一周计划（8月22日截止）&quot; class=&quot;headerlink&quot; title=&quot;第一周计划（8月22日截止）&quot;&gt;&lt;/a&gt;第一周计划（8月22日截止）&lt;/h2&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E8%8D%89%E7%A8%BF/"/>
-    <id>https://youngyyp.github.io/2021/08/04/%E5%BE%85%E5%8A%9E/%E8%8D%89%E7%A8%BF/</id>
-    <published>2021-08-04T01:49:38.979Z</published>
-    <updated>2021-08-04T02:08:39.249Z</updated>
-    
-    <content type="html"><![CDATA[<p>书中涉及许多复杂计算，由于时间关系没有仔细推算（因为同时在学HLS相关的知识），只是大致把全书浏览了一遍。</p><p>总的来说，这本书是一本很好的拓宽知识面的书，书中出现大量的与神经网络有关的专业术语，有很多只是听说过，甚至有些完全没有听说过（不过书中对这些专业名词的出处均标注了出处）。对于初学者来说确实是有一定的难度，不过也可以让初学者快速地对神经网络的知识有一个概览，能够很好地知道自己知识的薄弱之处，从而进行查缺补漏。</p><p>我之前主要是觉得FPGA/硬件相关的知识太多太杂，担心我能力有限学不会。不过老师既然安排我进了这个组，一定是相信我的能力，我也不想让老师失望，对于相关知识的学习有什么建议，以及未来发展方向的建议。</p>]]></content>
-    
-    
-    <summary type="html">书中涉及许多复杂计算，由于时间关系没有仔细推算（因为同时在学HLS相关的知识），只是大致把全书浏览了一遍。
-
-总的来说，这本书是一本很好的拓宽知识面的书，书中出现大量的与神经网络有关的专业术语，有很多只是听说过，甚至有些完全没有听说过（不过书中对这些专业名词的出处均标注了出处）。对于初学者来说确实是有一定的难度，不过也可以让初学者快速地对神经网络的知识有一个概览，能够很好地知道自己知识的薄弱之处，从而进行查缺补漏。
-
-我之前主要是觉得FPGA/硬件相关的知识太多太杂，担心我能力有限学不会。不过老师既然安排我进了这个组，一定是相信我的能力，我也不想让老师失望，对于相关知识的学习有什么建议，以及未</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>HLS学习笔记</title>
     <link href="https://youngyyp.github.io/2021/07/30/FPGA/HLS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>https://youngyyp.github.io/2021/07/30/FPGA/HLS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
@@ -474,9 +424,9 @@ void sobel(int input_image[256][256],int output_image[256][256])
     <link href="https://youngyyp.github.io/2021/02/12/%E6%8A%80%E6%9C%AF/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/"/>
     <id>https://youngyyp.github.io/2021/02/12/%E6%8A%80%E6%9C%AF/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/</id>
     <published>2021-02-12T05:14:45.000Z</published>
-    <updated>2021-07-27T07:37:32.651Z</updated>
+    <updated>2021-09-04T02:55:12.040Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="常用hexo指令"><a href="#常用hexo指令" class="headerlink" title="常用hexo指令"></a>常用hexo指令</h3><p><strong>hexo s</strong> (hexo server) : 启动本地服务器，用于预览主题。默认地址： <a href="http://localhost:4000/">http://localhost:4000/</a></p><p><strong>hexo g</strong> (hexo generate) : 生成网站静态文件到默认设置的 public 文件夹。</p><p><strong>hexo d</strong> (hexo deploy) : 自动生成网站静态文件，并部署到设定的仓库。</p><p><strong>hexo clean</strong> : 清除缓存文件 db.json 和已生成的静态文件 public。</p><p><strong>hexo new</strong> + md文件名称 ：会在/source/__posts目录下生成md文件以及创建同名的文件夹。</p><p><strong>hexo new page</strong> + 页面名称 ：新建一个页面，默认地址为 主页地址/页面名称。</p><a id="more"></a><h3 id="设置hexo首页只显示部分摘要（不显示全文）"><a href="#设置hexo首页只显示部分摘要（不显示全文）" class="headerlink" title="设置hexo首页只显示部分摘要（不显示全文）"></a>设置hexo首页只显示部分摘要（不显示全文）</h3><p>法一：在文章的<code>front-matter</code>中添加<code>description</code>，其中<code>description</code>中的内容就会被显示在首页上，其余一律不显示。</p><pre><code>---title: 让首页显示部分内容date: 2020-02-23 22:55:10description: 这是显示在首页的概述，正文内容均会被隐藏。---</code></pre><p>法二：在需要截断的地方加入：</p><pre><code>&lt;!--more--&gt;</code></pre><p>首页就会显示这条以上的所有内容，隐藏接下来的所有内容。</p><h3 id="好用的插件"><a href="#好用的插件" class="headerlink" title="好用的插件"></a>好用的插件</h3><p>隐藏文章的插件<a href="https://github.com/printempw/hexo-hide-posts">https://github.com/printempw/hexo-hide-posts</a></p><p>hexo显示pdf<a href="https://blog.csdn.net/qq_43701912/article/details/107291518">https://blog.csdn.net/qq_43701912/article/details/107291518</a>  ——我试了很久都无效</p><h3 id="hexo博客中提供文件下载链接"><a href="#hexo博客中提供文件下载链接" class="headerlink" title="hexo博客中提供文件下载链接"></a>hexo博客中提供文件下载链接</h3><p>在博客的suorce文件夹下放入文件，路径为主页路径+文件在suorce文件夹中的路径。</p><p><img src="/2021/02/12/%E6%8A%80%E6%9C%AF/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/image-20210314002727138.png" alt="image-20210314002727138"></p><p>如这样的路径就是<a href="https://youngyyp.github.io/download/test1.doc">https://youngyyp.github.io/download/test1.doc</a></p><h3 id="修改文章front-matter模板"><a href="#修改文章front-matter模板" class="headerlink" title="修改文章front-matter模板"></a>修改文章<code>front-matter</code>模板</h3><p>修改blog/scaffolds/post.md文件即可</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="常用hexo指令"><a href="#常用hexo指令" class="headerlink" title="常用hexo指令"></a>常用hexo指令</h3><p><strong>hexo s</strong> (hexo server) : 启动本地服务器，用于预览主题。默认地址： <a href="http://localhost:4000/">http://localhost:4000/</a></p><p><strong>hexo g</strong> (hexo generate) : 生成网站静态文件到默认设置的 public 文件夹。</p><p><strong>hexo d</strong> (hexo deploy) : 自动生成网站静态文件，并部署到设定的仓库。</p><p><strong>hexo clean</strong> : 清除缓存文件 db.json 和已生成的静态文件 public。</p><p><strong>hexo new</strong> + md文件名称 ：会在/source/__posts目录下生成md文件以及创建同名的文件夹。</p><p><strong>hexo new page</strong> + 页面名称 ：新建一个页面，默认地址为 主页地址/页面名称。</p><a id="more"></a><h3 id="设置hexo首页只显示部分摘要（不显示全文）"><a href="#设置hexo首页只显示部分摘要（不显示全文）" class="headerlink" title="设置hexo首页只显示部分摘要（不显示全文）"></a>设置hexo首页只显示部分摘要（不显示全文）</h3><p>法一：在文章的<code>front-matter</code>中添加<code>description</code>，其中<code>description</code>中的内容就会被显示在首页上，其余一律不显示。</p><pre><code>---title: 让首页显示部分内容date: 2020-02-23 22:55:10description: 这是显示在首页的概述，正文内容均会被隐藏。---</code></pre><p>法二：在需要截断的地方加入：</p><pre><code>&lt;!--more--&gt;</code></pre><p>首页就会显示这条以上的所有内容，隐藏接下来的所有内容。</p><h3 id="好用的插件"><a href="#好用的插件" class="headerlink" title="好用的插件"></a>好用的插件</h3><p>隐藏文章的插件<a href="https://github.com/printempw/hexo-hide-posts">https://github.com/printempw/hexo-hide-posts</a></p><p>hexo显示pdf<a href="https://blog.csdn.net/qq_43701912/article/details/107291518">https://blog.csdn.net/qq_43701912/article/details/107291518</a>  ——我试了很久都无效</p><h3 id="hexo博客中提供文件下载链接"><a href="#hexo博客中提供文件下载链接" class="headerlink" title="hexo博客中提供文件下载链接"></a>hexo博客中提供文件下载链接</h3><p>在博客的suorce文件夹下放入文件，路径为主页路径+文件在suorce文件夹中的路径。</p><p><img src="/2021/02/12/%E6%8A%80%E6%9C%AF/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/image-20210314002727138.png" alt="image-20210314002727138"></p><p>如这样的路径就是<a href="https://youngyyp.github.io/download/test1.doc">https://youngyyp.github.io/download/test1.doc</a></p><h3 id="修改文章front-matter模板"><a href="#修改文章front-matter模板" class="headerlink" title="修改文章front-matter模板"></a>修改文章<code>front-matter</code>模板</h3><p>修改blog/scaffolds/post.md文件即可</p><h2 id="博客迁移"><a href="#博客迁移" class="headerlink" title="博客迁移"></a>博客迁移</h2><p>由于本人最近换了电脑，需要将之前的hexo博客迁移至新电脑，故记录下操作流程。最终结果令人震惊。</p><h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><p>第一步先在新电脑搭建好环境。</p><p>环境搭建参考博客<a href="https://blog.csdn.net/victoryxa/article/details/103733655?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control">hexo+github搭建博客(超级详细版，精细入微)_过客~励む-CSDN博客</a></p><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p><a href="https://blog.csdn.net/qq_42009500/article/details/118788129">使用Hexo-asset-image插件导致静态图片路径出错-Hexo采坑(二)_Java Developer Blog-CSDN博客</a></p><h3 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h3><p>我晕，弄了好久图片显示还是有bug，一气之下就想着能不能<strong>直接把原来电脑的blog文件夹整个复制过来，然后hexo g -d</strong>（当然是在搭建好环境的基础上），居然成功上传，而且不用再重新安装插件，而且没有bug！阿哲！这么简单的流程为什么csdn上的大佬们搞这么复杂呢？</p>]]></content>
     
     
     <summary type="html">常用hexo指令
