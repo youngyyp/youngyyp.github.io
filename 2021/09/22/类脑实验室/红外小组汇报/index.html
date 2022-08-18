@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="2021&#x2F;9&#x2F;22 本周工作：   1. 学习Pytorch的使用；            2. 学习Cifar10网络的使用，整理完成笔记，并实现相关代码            下周计划：   1. 学习实现VGG网络，进行手写数字识别或者基于cifar10数据集目标识别。要理解模型的原理。  2. 阅读去雨去雾相关论文，形成阅读笔记。找综述型的文章，整理文章中所用的方法和效果，进行对比。  记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红外小组汇报">
+<meta property="og:url" content="https://youngyyp.github.io/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="2021&#x2F;9&#x2F;22 本周工作：   1. 学习Pytorch的使用；            2. 学习Cifar10网络的使用，整理完成笔记，并实现相关代码            下周计划：   1. 学习实现VGG网络，进行手写数字识别或者基于cifar10数据集目标识别。要理解模型的原理。  2. 阅读去雨去雾相关论文，形成阅读笔记。找综述型的文章，整理文章中所用的方法和效果，进行对比。  记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-22T04:55:19.000Z">
+<meta property="article:modified_time" content="2021-11-23T10:34:38.826Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://youngyyp.github.io/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>红外小组汇报 | young's blog</title><meta name="robots" content="noindex">
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          红外小组汇报
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-22 12:55:19" itemprop="dateCreated datePublished" datetime="2021-09-22T12:55:19+08:00">2021-09-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-23 18:34:38" itemprop="dateModified" datetime="2021-11-23T18:34:38+08:00">2021-11-23</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="2021-9-22"><a href="#2021-9-22" class="headerlink" title="2021/9/22"></a>2021/9/22</h2><p>本周工作：</p>
+<ol>
+<li><p>学习Pytorch的使用；</p>
+</li>
+<li><p>学习Cifar10网络的使用，整理完成笔记，并实现相关代码</p>
+</li>
+</ol>
+<p>下周计划：</p>
+<ol>
+<li>学习实现VGG网络，进行手写数字识别或者基于cifar10数据集目标识别。要理解模型的原理。</li>
+<li>阅读去雨去雾相关论文，形成阅读笔记。找综述型的文章，整理文章中所用的方法和效果，进行对比。</li>
+</ol>
+<p>记录：</p>
+<p><strong>每周2上午开红外小组会</strong></p>
+<p>红外目标识别（八院）：1.去雾去雨算法  2.基于零次学习的目标检测算法</p>
+<p>红外小目标检测（天津）</p>
+<p>vgg resnet alexnet lenet</p>
+<p>项目、论文、展示结果</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/gaoyu1253401563/article/details/86484851">深度学习中的IoU概念理解_鬼刀-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/53405779">目标检测中的mAP是什么含义？ - 知乎 (zhihu.com)</a></p>
+<h2 id="2021-9-29"><a href="#2021-9-29" class="headerlink" title="2021/9/29"></a>2021/9/29</h2><p>本周工作：</p>
+<ol>
+<li><p>阅读论文调研了图像去雾的不同算法，主要分为传统的去雾算法和基于深度学习的去雾算法  </p>
+</li>
+<li><p>选择了两种图像去雾算法——暗通道先验图像去雾算法和AOD-net图像去雾算法，并对其代码进行了复现。重点阅读了AODnet的论文。</p>
+</li>
+<li><p>学习《Dive Into Deep Learning》，并采用pyotch实现了vgg-11网络，使用fashion-mnist数据集进行训练和验证。</p>
+</li>
+</ol>
+<p>下周计划：</p>
+<ol>
+<li>阅读论文找去雾效果的评价指标并进行代码实现</li>
+<li>找最新的去雾方法并进行复现</li>
+<li>继续学习《Dive Into Deep Learning》，补充深度学习的知识。</li>
+<li>协助朱肖光学长完成试题的制作。</li>
+</ol>
+<p>记录：</p>
+<p>小目标识别 特色  调研论文  申请书</p>
+<p>去雾去雨零次学习</p>
+<p>RGB分布到红外图像迁移 gan</p>
+<p>rgb带雾图像的评价指标</p>
+<p>最新方法复现 找雾的评价指标</p>
+<p>gan 图像去雾</p>
+<h2 id="2021-10-14"><a href="#2021-10-14" class="headerlink" title="2021/10/14"></a>2021/10/14</h2><p>本周工作：</p>
+<ol>
+<li><p>阅读21年及20年的图像去雾相关论文，调研论文中用于评估图像去雾效果的指标。绝大多数论文采用的评估方法均为PSNR（峰值信噪比）和SSIM（结构相似性）。</p>
+</li>
+<li><p>复现了21年CVPR论文《PSD-Principled-Synthetic-to-Real-Dehazing-Guided-by-Physical-Priors》代码。同时，这篇文章采用了一些新的评估方法（Human Subjective Evaluation、No-Reference Image Quality Assessment、Task-Driven Evaluation）</p>
+</li>
+</ol>
+<p>下周计划：</p>
+<ol>
+<li>实现最新的去雾评估方法的算法，并对不同数据集下多种去雾算法的效果进行评测，整理形成表格。</li>
+<li>总结不同去雾论文，形成笔记。</li>
+</ol>
+<p>记录：</p>
+<p>姿态估计</p>
+<p><strong>RGB和红外的联系</strong>，红外相当于单通道图像</p>
+<p>零次学习</p>
+<p>小目标检测、中等目标识别，大目标姿态估计</p>
+<p>803红外识别项目，去雾、去雨</p>
+<p>红外空间飞行器姿态估计</p>
+<p>1篇论文、两个专利</p>
+<p>任务：</p>
+<p>成果：专利，零次学习，姿态估计（先了解，准备材料就行，国内外发展程度和方法）</p>
+<p>姿态估计输出专利</p>
+<h2 id="2021-10-19"><a href="#2021-10-19" class="headerlink" title="2021/10/19"></a>2021/10/19</h2><p>本周工作：</p>
+<ol>
+<li><p>阅读了21年及20年图像去雾相关论文，调研论文中所用的去雾效果评价指标。包括传统的评估方法，如psnr和ssim；以及新的评估方法，如无参考图像质量评估指标和任务驱动型的评价方法。</p>
+</li>
+<li><p>同时复现了PSNR,SSIM,FADE,BRISQUE评价 的代码，在o-haze数据集上对不同去雾算法进行测试。现已经完成psnr和ssim的测试。</p>
+</li>
+</ol>
+<p>下周计划：</p>
+<ol>
+<li>完成FADE,BRISQUE评估算法的测试，并将结果整理成表格。</li>
+<li>总结近几年来的去雾去雨论文，整理成文档</li>
+<li>调研卫星姿态估计近三年论文</li>
+</ol>
+<p>记录：</p>
+<p>姿态估计论文</p>
+<p>根据摄像头实时估计卫星姿态，（卫星有一个预估姿态）</p>
+<p>模板匹配</p>
+<p>调研卫星姿态估计，开源代码，数据集（不用跑结果）近3年论文</p>
+<h2 id="2021-10-26"><a href="#2021-10-26" class="headerlink" title="2021/10/26"></a>2021/10/26</h2><p>本周工作：</p>
+<ol>
+<li>在o-haze和sots数据集上对3种不同的去雾算法完成FADE,BRISQUE,PSNR,SSIM评估算法的测试,并将结果整理成表格</li>
+<li>将去雾论文进行整理，形成文档</li>
+<li>协助潘佳萌学长进行卫星姿态估计调研，复现了一篇论文代码，并导出了网络结构</li>
+</ol>
+<p>下周工作计划：</p>
+<ol>
+<li><p>调研去雨相关论文，并整理成文档</p>
+</li>
+<li><p>继续调研卫星姿态估计论文，用不同数据集测试效果</p>
+</li>
+</ol>
+<p>暂定主攻姿态估计方向</p>
+<p>换数据集试试卫星姿态估计论文</p>
+<p>多看论文</p>
+<h2 id="2021-11-2"><a href="#2021-11-2" class="headerlink" title="2021/11/2"></a>2021/11/2</h2><p>本周工作：</p>
+<ol>
+<li>系统整理了去雾去雨的论文，形成了五千余字的文档</li>
+<li>调研卫星姿态估计的比赛及数据集。</li>
+<li>学习CS231n的课程，并完成Assignment1的knn部分</li>
+</ol>
+<p>下周工作计划：</p>
+<ol>
+<li>阅读卫星姿态估计方面的论文，撰写申请书</li>
+<li>搜集日本公司培训题（简答形式）</li>
+<li>继续学习CS231n的课程</li>
+</ol>
+<h2 id="2021-11-9"><a href="#2021-11-9" class="headerlink" title="2021/11/9"></a>2021/11/9</h2><p>本周工作:</p>
+<p>1.本周主要在读卫星姿态估计的论文，为申请书的撰写做准备</p>
+<p>《Deep Learning for Spacecraft Pose Estimation from Photorealistic Rendering》第3名，提出URSO数据集</p>
+<p>《POSE ESTIMATION FOR NON-COOPERATIVE SPACECRAFT RENDEZVOUS USING NEURAL NETWORKS》提出SPEED数据集</p>
+<p>上面两篇都采用了软分类的方法</p>
+<p>《Satellite Pose Estimation with Deep Landmark Regression and Nonlinear Pose Refinement》第一名和第二名（EPFL_CVLAB）的论文都采用<strong>目标检测+关键点回归+PnP求解</strong>的方法</p>
+<p>《REAL-TIME, FLIGHT-READY, NON-COOPERATIVE SPACECRAFT POSE ESTIMATION USING MONOCULAR IMAGERY》也采用了上述方法，但是更为轻量化，参数量降了一个数量级</p>
+<p>2.确定申请书的大致结构，完成需求分析部分</p>
+<h2 id="2021-11-23"><a href="#2021-11-23" class="headerlink" title="2021/11/23"></a>2021/11/23</h2><p>星载  空间态势感知</p>
+<p>计划：姿态估计论文 阅读</p>
+<!-- flag of hidden posts -->
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2021/09/22/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E7%BA%A2%E5%A4%96%E5%B0%8F%E7%BB%84%E6%B1%87%E6%8A%A5/" title="红外小组汇报">https://youngyyp.github.io/2021/09/22/类脑实验室/红外小组汇报/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-9-22"><span class="nav-number">1.</span> <span class="nav-text">2021&#x2F;9&#x2F;22</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-9-29"><span class="nav-number">2.</span> <span class="nav-text">2021&#x2F;9&#x2F;29</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-10-14"><span class="nav-number">3.</span> <span class="nav-text">2021&#x2F;10&#x2F;14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-10-19"><span class="nav-number">4.</span> <span class="nav-text">2021&#x2F;10&#x2F;19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-10-26"><span class="nav-number">5.</span> <span class="nav-text">2021&#x2F;10&#x2F;26</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-11-2"><span class="nav-number">6.</span> <span class="nav-text">2021&#x2F;11&#x2F;2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-11-9"><span class="nav-number">7.</span> <span class="nav-text">2021&#x2F;11&#x2F;9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-11-23"><span class="nav-number">8.</span> <span class="nav-text">2021&#x2F;11&#x2F;23</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

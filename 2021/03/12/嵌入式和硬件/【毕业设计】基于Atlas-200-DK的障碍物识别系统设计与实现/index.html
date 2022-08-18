@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="开题答辩——2021&#x2F;3&#x2F;12 毕业设计的题目是《基于Atlas 200 DK的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）  这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现">
+<meta property="og:url" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="开题答辩——2021&#x2F;3&#x2F;12 毕业设计的题目是《基于Atlas 200 DK的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）  这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210401155249903.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210412101856080.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203242498.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203313368.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210414133624189.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210414230902559.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210419093448974.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210420114417098.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210420114546682.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210422091827753.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210428101449468.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516110020248.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516095559800.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516100236140.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516112012898.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516111952166.png">
+<meta property="article:published_time" content="2021-03-12T11:20:57.000Z">
+<meta property="article:modified_time" content="2022-08-18T07:15:29.597Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="Atlas">
+<meta property="article:tag" content="障碍物识别">
+<meta property="article:tag" content="目标识别">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210401155249903.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-12 19:20:57" itemprop="dateCreated datePublished" datetime="2021-03-12T19:20:57+08:00">2021-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:15:29" itemprop="dateModified" datetime="2022-08-18T15:15:29+08:00">2022-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">毕业设计</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="开题答辩——2021-3-12"><a href="#开题答辩——2021-3-12" class="headerlink" title="开题答辩——2021/3/12"></a>开题答辩——2021/3/12</h3><p>毕业设计的题目是《基于<strong>Atlas 200 DK</strong>的障碍物识别系统设计与实现》，今天进行了开题答辩，感觉还不错。（就算啥也不会，也要能说的很牛逼才行。只要抓住了评审的点就可以顺利通过）</p>
+<p>这个项目的创新点其实就是华为的Atlas 200 DK设备（Atlas 200 DK 开发者套件是一款高性能AI应用开发板，集成了昇腾310 AI处理器，方便用户快速开发、快速验证，可广泛应用于开发者方案验证、高校教育、科学研究等场景。）怎么说也卖3999元呢，希望后面不要有太多的坑。</p>
+<p>下一步的计划肯定是先拿到这个开发板，然后把一切环境都配置好。后面会再这里记录一下使用Atlas 200 DK的过程以及碰到的一些坑。</p>
+<a id="more"></a>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p>主机密码：Huawei@123</p>
+<p>连接atlas：ssh HwHiAiUser@192.168.1.2     atlas密码为：Mind@123        </p>
+<p>启动mindstudio（版本为2.0.0beta2）：~/program/MindStudio-ubuntu/bin/MindStudio.sh</p>
+<p>若连接不上atlas，则在命令行输入 rm -rf ~/.ssh/known_hosts 即可</p>
+<p>主从机文件传输：  <a target="_blank" rel="noopener" href="https://bbs.huaweicloud.com/blogs/168928">https://bbs.huaweicloud.com/blogs/168928</a></p>
+<pre class=" language-lang-javascript"><code class="language-lang-javascript">scp -r $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture HwHiAiUser@192.168.1.2:/home/HwHiAiUser/testfile
+</code></pre>
+<pre class=" language-lang-html"><code class="language-lang-html">scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/mask_detection/output ~/Pictures
+</code></pre>
+<p><strong>开发板断电后需要重新进行联网配置：</strong></p>
+<p>主机中：</p>
+<p>su root </p>
+<p>echo “1” &gt; /proc/sys/net/ipv4/ip_forward #允许报文转换</p>
+<p>iptables -t nat -A POSTROUTING -o enp0s3 -s 192.168.1.0/24 -j MASQUERADE</p>
+<p>iptables -A FORWARD -i enp0s12u2 -o enp0s3 -m state —state RELATED,ESTABLISHED -j ACCEPT</p>
+<p>iptables -A FORWARD -i enp0s12u2 -o enp0s3 -j ACCEPT</p>
+<p>ssh HwHiAiUser@192.168.1.2</p>
+<p>su root</p>
+<p>route add default gw 192.168.1.223 dev usb0</p>
+<p>ping e.huawei.com</p>
+<p>install_path 请根据实际情况修改:     /home/Ascend/Ascend/ascend-toolkit/20.1.rc1/x86_64-linux</p>
+<p>scp -r /home/Ascend/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture </p>
+<h3 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h3><p>我的cann版本为<strong>3.1.0</strong>：   export DDK_PATH=/home/Ascend/Ascend/ascend-toolkit/latest/arm64-linux</p>
+<p>Firmware and Drivers版本为<strong>1.0.8 alpha</strong></p>
+<p>主板型号是<strong>IT21VDMB</strong></p>
+<p>atc${install_path}：   /home/Ascend/Ascend/ascend-toolkit/latest</p>
+<pre><code>export PATH=/home/Ascend/Ascend/ascend-toolkit/latest/atc/ccec_compiler/bin:/home/Ascend/Ascend/ascend-toolkit/latest/atc/bin:$PATH
+export ASCEND_OPP_PATH=/home/Ascend/Ascend/ascend-toolkit/latest/opp
+export ASCEND_AICPU_PATH=/home/Ascend/Ascend/ascend-toolkit/latest
+</code></pre><p>/home/Ascend/Ascend/ascend-toolkit/20.1.rc1/atc/bin/atc</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210401155249903.png" alt="image-20210401155249903"></p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210412101856080.png" alt="image-20210412101856080"></p>
+<p>上述命令的含义： <a target="_blank" rel="noopener" href="https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0033.html">https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0033.html</a></p>
+<h3 id="具体案例"><a href="#具体案例" class="headerlink" title="具体案例"></a>具体案例</h3><h4 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a><strong>摄像头</strong></h4><p><a target="_blank" rel="noopener" href="https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera">https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera</a>  （我的树莓派摄像头版本为V2）</p>
+<p>cd $HOME/ascendcamera/out</p>
+<p>./main -i -c 1 -o ./output/filename.jpg —overwrite</p>
+<p><strong>presenterserver：</strong> </p>
+<p>cd $HOME/ascendcamera/out</p>
+<p>./main -v -c 1 -t 60 —fps 20 -w 704 -h 576 -s ip:192.168.1.223:7002/youngyep        (命令行输7002，浏览器输7003)</p>
+<p>若要使用presenter server进行实时显示，则需要在开发环境修改ascendcamera中的script/.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为虚拟网卡的ip地址：</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203242498.png" alt="image-20210405203242498"></p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210405203313368.png" alt="image-20210405203313368"></p>
+<p>将口罩检测和摄像头的代码通过shell脚本结合：</p>
+<p>运行环境：cd ~/mask_detection             ./start_detection.sh</p>
+<p>开发环境：scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUsr/mask_detection/output ~/Pictures</p>
+<h4 id="网线连接"><a href="#网线连接" class="headerlink" title="网线连接"></a>网线连接</h4><p>参考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44527435/article/details/110441603">https://blog.csdn.net/qq_44527435/article/details/110441603</a>    我的从机端口号为enp0s3</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210414133624189.png" alt="image-20210414133624189"></p>
+<p><strong>socket通信</strong>：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/fnlingnzb-learner/p/8523242.html">https://www.cnblogs.com/fnlingnzb-learner/p/8523242.html</a></p>
+<p>在client的代码中填写server的ip地址（我这里是192.168.1.223）</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210414230902559.png" alt="image-20210414230902559"></p>
+<p>c++网络编程中socket函数：<a target="_blank" rel="noopener" href="https://blog.csdn.net/bian_qing_quan11/article/details/71713647">https://blog.csdn.net/bian_qing_quan11/article/details/71713647</a></p>
+<h4 id="交叉编译程序"><a href="#交叉编译程序" class="headerlink" title="交叉编译程序"></a>交叉编译程序</h4><p>交叉编译c++：aarch64-linux-gnu-gcc 后接cpp文件</p>
+<p>编译c++：g++ hello.cpp -o hello</p>
+<h4 id="uart和目标检测二合一"><a href="#uart和目标检测二合一" class="headerlink" title="uart和目标检测二合一"></a>uart和目标检测二合一</h4><p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210419093448974.png" alt="image-20210419093448974"></p>
+<p>加入框位置和人的判断后结果（停止1表示目标框在图中间三分之一位置，停止2加上了目标是人的限制条件）</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210420114417098.png" alt="image-20210420114417098"></p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210420114546682.png" alt="image-20210420114546682"></p>
+<p>目标检测总共可识别的类别：</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210422091827753.png" alt="image-20210422091827753"></p>
+<h4 id="python调用uart接口"><a href="#python调用uart接口" class="headerlink" title="python调用uart接口"></a>python调用uart接口</h4><pre class=" language-lang-python"><code class="language-lang-python">from periphery import Serial
+
+def main():
+    print("uart connection test")
+
+    # Open /dev/ttyAMA1 with baudrate 115200
+    ser = Serial("/dev/ttyAMA1", 115200)
+
+    while 1:
+        print("Write to UART")
+        ser.write(b"Hello from Atlas 200 DK\n")
+
+    # Read up to 32 bytes, with timeout of 2 seconds
+    readdata = ser.read(32, 2).decode('utf-8')
+    print(f'Received reply: {readdata}')
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+<p>Atlas开发板联网后输入 pip install python-periphery ，然后运行 python3 uart.py 即可。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dongxiaodong/p/9992083.html">Python的串口通信（pyserial） - 东小东 - 博客园 (cnblogs.com)</a></p>
+<h5 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h5><ol>
+<li>Atlas 200 DK 外设接口样例 <a target="_blank" rel="noopener" href="https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral">https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/5_200dk_peripheral</a> uart案例可参考该链接，将STM32串口和单板串口对接，TXD接RXD，串口波特率配置成一致，可以通讯。16-白-RX 18-绿-TX 20-黑-GND（即外侧那排的第8个引脚为白，第9个为绿，第10个为黑）</li>
+</ol>
+<h5 id="发送格式"><a href="#发送格式" class="headerlink" title="发送格式"></a>发送格式</h5><p>0xAE 0xEA {len} {cmd} {x0} {x1} {y0} {y1} {w0} {w1} 0xEF 0xFE<br>len = total - 4 (例如该情况len=0x08)<br>cmd = 0x11<br>x0 = (x + speed_offset)<em>100 / 256<br>x1 = (x + speed_offset)</em>100 &amp; 0xff</p>
+<p>speed_offset = 200<br>(x典型取值50)</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210428101449468.png" alt="image-20210428101449468"></p>
+<p>![image-20210516110157569](【毕业设计】基于Atlas-200-DK的障碍物识别系统设计与实现/image-20210516110157569.png</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516110020248.png" alt="image-20210516110020248"></p>
+<h3 id="避障算法设计"><a href="#避障算法设计" class="headerlink" title="避障算法设计"></a>避障算法设计</h3><h5 id="检测区域划分"><a href="#检测区域划分" class="headerlink" title="检测区域划分"></a>检测区域划分</h5><p>思路一：只取车前方的检测结果（如只取图像中央三分之一处的检测结果）</p>
+<p>思路二：和车道线检测结合到一起，只将车道线范围内的目标识别为障碍物</p>
+<h3 id="项目总体定位"><a href="#项目总体定位" class="headerlink" title="项目总体定位"></a>项目总体定位</h3><p>重点在于识别出目标障碍物，而不是躲避障碍物。系统的输出为目标的类型及目标框的位置，优点是采用了搭载华为昇腾处理器的开发板Atlas 200 DK，识别速度非常快，可达几十ms一次。为了方便演示，选用人作为目标障碍物，假定人高度为175，通过拟合来测距，当距离小于设定值时发出停止信号。</p>
+<h2 id="总体测试"><a href="#总体测试" class="headerlink" title="总体测试"></a>总体测试</h2><p>摄像头正向</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516095559800.png" alt="image-20210516095559800"></p>
+<p>运行程序：</p>
+<pre><code>ssh HwHiAiUser@192.168.1.2
+cd /home/HwHiAiUser/testfile/xuezhang_test/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/src
+python3 object_detect.py
+</code></pre><p>程序运行截图</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516100236140.png" alt="image-20210516100236140"></p>
+<p>uart传输的数据</p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516112012898.png" alt="image-20210516112012898"></p>
+<p><img src="/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20210516111952166.png" alt="image-20210516111952166"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2021/03/12/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1%E3%80%91%E5%9F%BA%E4%BA%8EAtlas-200-DK%E7%9A%84%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="【毕业设计】基于Atlas_200_DK的障碍物识别系统设计与实现">https://youngyyp.github.io/2021/03/12/嵌入式和硬件/【毕业设计】基于Atlas-200-DK的障碍物识别系统设计与实现/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 神经网络</a>
+              <a href="/tags/Atlas/" rel="tag"><i class="fa fa-tag"></i> Atlas</a>
+              <a href="/tags/%E9%9A%9C%E7%A2%8D%E7%89%A9%E8%AF%86%E5%88%AB/" rel="tag"><i class="fa fa-tag"></i> 障碍物识别</a>
+              <a href="/tags/%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB/" rel="tag"><i class="fa fa-tag"></i> 目标识别</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/02/%E9%9A%8F%E7%AC%94/%E8%80%83%E7%A0%94%E6%84%9F%E6%82%9F/" rel="prev" title="考研感悟">
+      <i class="fa fa-chevron-left"></i> 考研感悟
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/13/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/%E3%80%90%E7%94%B5%E8%B5%9B%E3%80%91%E7%BA%BF%E8%B7%AF%E8%B4%9F%E8%BD%BD%E5%8F%8A%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E8%A3%85%E7%BD%AE/" rel="next" title="【电赛】线路负载及故障检测装置">
+      【电赛】线路负载及故障检测装置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E9%A2%98%E7%AD%94%E8%BE%A9%E2%80%94%E2%80%942021-3-12"><span class="nav-number">1.</span> <span class="nav-text">开题答辩——2021&#x2F;3&#x2F;12</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-number">3.</span> <span class="nav-text">版本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%A1%88%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">具体案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%91%84%E5%83%8F%E5%A4%B4"><span class="nav-number">4.1.</span> <span class="nav-text">摄像头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BA%BF%E8%BF%9E%E6%8E%A5"><span class="nav-number">4.2.</span> <span class="nav-text">网线连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F"><span class="nav-number">4.3.</span> <span class="nav-text">交叉编译程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uart%E5%92%8C%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E4%BA%8C%E5%90%88%E4%B8%80"><span class="nav-number">4.4.</span> <span class="nav-text">uart和目标检测二合一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python%E8%B0%83%E7%94%A8uart%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.5.</span> <span class="nav-text">python调用uart接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">4.5.1.</span> <span class="nav-text">相关链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.5.2.</span> <span class="nav-text">发送格式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E9%9A%9C%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.</span> <span class="nav-text">避障算法设计</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B%E5%8C%BA%E5%9F%9F%E5%88%92%E5%88%86"><span class="nav-number">5.0.1.</span> <span class="nav-text">检测区域划分</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%80%BB%E4%BD%93%E5%AE%9A%E4%BD%8D"><span class="nav-number">6.</span> <span class="nav-text">项目总体定位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E6%B5%8B%E8%AF%95"><span class="nav-number"></span> <span class="nav-text">总体测试</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
