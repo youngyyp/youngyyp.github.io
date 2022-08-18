@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="3D旋转的表示 旋转矩阵  欧拉角  使用动态欧拉角会出现万向锁现象；静态欧拉角不存在万向锁的问题。通时还要注意不同的旋转顺序所得的结果是不同的。  3d旋转欧拉角与万向锁！Cocos Creator 3D!_哔哩哔哩_bilibili  四元数  四元数的可视化_哔哩哔哩_bilibili  Visualizing quaternions | 3blue1brown + Ben Eater交互式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="位姿估计基础及论文">
+<meta property="og:url" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="3D旋转的表示 旋转矩阵  欧拉角  使用动态欧拉角会出现万向锁现象；静态欧拉角不存在万向锁的问题。通时还要注意不同的旋转顺序所得的结果是不同的。  3d旋转欧拉角与万向锁！Cocos Creator 3D!_哔哩哔哩_bilibili  四元数  四元数的可视化_哔哩哔哩_bilibili  Visualizing quaternions | 3blue1brown + Ben Eater交互式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112131946.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112421258.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112437943.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211123085515345.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211123112129454.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/Screenshot%20from%202021-12-05%2020-02-59.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/data/blog/AI/姿态估计基础/image-20220308091537677.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/data/blog/AI/姿态估计基础/image-20220308170517455.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211125112415235.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220217110036174.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RiZHhudWxpYmE=,size_16,color_FFFFFF,t_70.png">
+<meta property="og:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220310162325247.png">
+<meta property="article:published_time" content="2021-10-20T01:49:41.000Z">
+<meta property="article:modified_time" content="2022-08-18T07:59:29.608Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="Pose Estimation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112131946.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>位姿估计基础及论文 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          位姿估计基础及论文
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-20 09:49:41" itemprop="dateCreated datePublished" datetime="2021-10-20T09:49:41+08:00">2021-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:59:29" itemprop="dateModified" datetime="2022-08-18T15:59:29+08:00">2022-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">位姿估计</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="3D旋转的表示"><a href="#3D旋转的表示" class="headerlink" title="3D旋转的表示"></a>3D旋转的表示</h2><ol>
+<li><p>旋转矩阵</p>
+</li>
+<li><p>欧拉角</p>
+<p> 使用动态欧拉角会出现万向锁现象；静态欧拉角不存在万向锁的问题。通时还要注意不同的旋转顺序所得的结果是不同的。</p>
+<p> <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Bt4y1v7R1?from=search&amp;seid=2218520216726804689&amp;spm_id_from=333.337.0.0">3d旋转欧拉角与万向锁！Cocos Creator 3D!_哔哩哔哩_bilibili</a></p>
+</li>
+<li><p>四元数</p>
+<p> <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1SW411y7W1/?spm_id_from=autoNext">四元数的可视化_哔哩哔哩_bilibili</a></p>
+<p> <a target="_blank" rel="noopener" href="https://eater.net/quaternions/video/intro">Visualizing quaternions | 3blue1brown + Ben Eater</a>交互式体验四元数</p>
+<p> <img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112131946.png" alt="image-20211104112131946"><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112421258.png" alt="image-20211104112421258"><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211104112437943.png" alt="image-20211104112437943"></p>
+<p> 四元数就相当于后三个数定义了一个单位向量作为旋转轴，第一个数代表旋转的角度</p>
+<p> 设旋转角为θ(从轴的正向箭头处看下去，θ为正则向逆时针旋转，为负则向顺时针旋转)，<strong>q = cos(θ/2) + sin(θ/2)(xi + yj + zk) = q0 + q1i + q2j +q3k</strong></p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lql0716/article/details/72597719">旋转矩阵、欧拉角、四元数理论及其转换关系<em>aibotlab的博客-CSDN博客</em>欧拉角转四元数</a></p>
+<h2 id="PnP"><a href="#PnP" class="headerlink" title="PnP"></a>PnP</h2><p>待</p>
+<h2 id="软分类和硬分类"><a href="#软分类和硬分类" class="headerlink" title="软分类和硬分类"></a>软分类和硬分类</h2><p>软分类：使用的是概率模型，输出不同类对应的概率，最后的分类结果取概率最大的类，如多SVM组合分类；</p>
+<p>硬分类：使用的是非概率模型，分类结果就是决策函数的决策结果；</p>
+<h2 id="BOP-Challenge-2020-on-6D-Object-Localization"><a href="#BOP-Challenge-2020-on-6D-Object-Localization" class="headerlink" title="BOP Challenge 2020 on 6D Object Localization"></a>BOP Challenge 2020 on 6D Object Localization</h2><p>In the BOP Challenge 2019, methods using the <strong>depth image channel</strong>, whichwere mostly based on the <strong>point pair features (PPF’s)</strong> [10], clearly outperformed methods relying <strong>only on the RGB channels</strong>, all of which were based on deep neural networks (DNN’s).  （19年及以前PPF方法优于深度学习方法）</p>
+<p>20年的比赛中有五个DNN方法超过了19年的冠军(采用PPF)，第三名的方法只使用了RGB通道，完全没用深度通道。</p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211123085515345.png" alt="image-20211123085515345"></p>
+<p>BOP数据集说明：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u014712806/article/details/112339410">BOP数据集格式说明_屠龙之术-CSDN博客_bop文件</a></p>
+<p>PBR全称(Physicallly-Based Rendering)</p>
+<h2 id="CosyPose-Consistent-multi-view-multi-object-6D-pose-estimation"><a href="#CosyPose-Consistent-multi-view-multi-object-6D-pose-estimation" class="headerlink" title="CosyPose: Consistent multi-view multi-object 6D pose estimation"></a>CosyPose: Consistent multi-view multi-object 6D pose estimation</h2><p>这个代码没跑出来<a target="_blank" rel="noopener" href="https://github.com/ylabbe/cosypose">ylabbe/cosypose: Code for “CosyPose: Consistent multi-view multi-object 6D pose estimation”, ECCV 2020. (github.com)</a></p>
+<h2 id="HybridPose-6D-Object-Pose-Estimation-under-Hybrid-Representations（CVPR-2020）"><a href="#HybridPose-6D-Object-Pose-Estimation-under-Hybrid-Representations（CVPR-2020）" class="headerlink" title="HybridPose: 6D Object Pose Estimation under Hybrid Representations（CVPR 2020）"></a>HybridPose: 6D Object Pose Estimation under Hybrid Representations（<strong>CVPR 2020</strong>）</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/john_bh/article/details/103998704">6D位姿估计 HybridPose: 6D Object Pose Estimation under Hybrid Representations_不忘初心~-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/chensong1995/HybridPose">chensong1995/HybridPose: HybridPose: 6D Object Pose Estimation under Hybrid Representation (CVPR 2020) (github.com)</a>这个star多，正在跑</p>
+<p>复现遇到的bug：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15158911/article/details/107887490">(25条消息) win10安装visual studio C++ build tools 提示安装包丢失或毁坏_与君共勉-CSDN博客_buildtools_msbuild.msi</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211123112129454.png" alt="image-20211123112129454"></p>
+<h2 id="DPOD-6D-Pose-Object-Detector-and-Refiner"><a href="#DPOD-6D-Pose-Object-Detector-and-Refiner" class="headerlink" title="DPOD: 6D Pose Object Detector and Refiner"></a>DPOD: 6D Pose Object Detector and Refiner</h2><p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/Screenshot from 2021-12-05 20-02-59.png" alt="Screenshot from 2021-12-05 20-02-59"></p>
+<p>这个bug解决不了，放弃了</p>
+<h2 id="CDPN-Coordinates-based-Disentangled-Pose-Network-for-Real-time-RGB-based-6-DoF-Object-Pose-Estimation"><a href="#CDPN-Coordinates-based-Disentangled-Pose-Network-for-Real-time-RGB-based-6-DoF-Object-Pose-Estimation" class="headerlink" title="CDPN: Coordinates-based Disentangled Pose Network for Real-time RGB-based 6-DoF Object Pose Estimation"></a>CDPN: Coordinates-based Disentangled Pose Network for Real-time RGB-based 6-DoF Object Pose Estimation</h2><p><a target="_blank" rel="noopener" href="https://github.com/LZGMatrix/CDPN_ICCV2019_ZhigangLi">https://github.com/LZGMatrix/CDPN_ICCV2019_ZhigangLi</a></p>
+<p>正在尝试</p>
+<h2 id="Pix2Pose-Pixel-Wise-Coordinate-Regression-of-Objects-for-6D-Pose-Estimation（ICCV2019）"><a href="#Pix2Pose-Pixel-Wise-Coordinate-Regression-of-Objects-for-6D-Pose-Estimation（ICCV2019）" class="headerlink" title="Pix2Pose: Pixel-Wise Coordinate Regression of Objects for 6D Pose Estimation（ICCV2019）"></a>Pix2Pose: Pixel-Wise Coordinate Regression of Objects for 6D Pose Estimation（ICCV2019）</h2><p>由于遮挡和对称性等问题，仅使用<strong>RGB图像</strong>估计物体的6D姿态仍然具有挑战性。如果没有专家知识或专业的扫描设备，也<strong>很难构建具有精确纹理的三维模型</strong>。为了解决这些问题，我们提出了一种新的位姿估计方法Pix2Pose，它可以在没有纹理模型的情况下预测每个目标像素的三维坐标。设计了一种自动编码器结构来估计三维坐标和每个像素的期望误差。然后将这些像素级预测用于多个阶段，形成2D-3D对应关系，用RANSAC迭代的PnP算法直接计算姿态。我们的方法通过利用最近在生成性对抗训练中的成果来精确地恢复被遮挡的部分，从而对遮挡具有鲁棒性。此外，提出了一种新的损耗函数变压器损耗，通过将预测引导到最接近的对称姿态来处理对称目标，对包含对称和遮挡目标的三个不同基准数据集的计算表明，我们的方法优于仅使用RGB图像的最新方法。</p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/data/blog/AI/姿态估计基础/image-20220308091537677.png" alt="image-20220308091537677" style="zoom:50%;"></p>
+<p>tensorflow  &amp;  训练步骤复杂<a target="_blank" rel="noopener" href="https://github.com/kirumang/Pix2Pose">https://github.com/kirumang/Pix2Pose</a></p>
+<h2 id="Real-Time-Seamless-Single-Shot-6D-Object-Pose-Prediction（CVPR2018）"><a href="#Real-Time-Seamless-Single-Shot-6D-Object-Pose-Prediction（CVPR2018）" class="headerlink" title="Real-Time Seamless Single Shot 6D Object Pose Prediction（CVPR2018）"></a>Real-Time Seamless Single Shot 6D Object Pose Prediction（CVPR2018）</h2><p>论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.08848">https://arxiv.org/abs/1711.08848</a><br>代码链接：<a target="_blank" rel="noopener" href="https://github.com/Microsoft/singleshotpose">https://github.com/Microsoft/singleshotpose</a></p>
+<p><strong>主要思想</strong>：我们提出了一种单阶段方法来同时检测RGB图像中的一个物体并预测其6D姿态，不需要多个阶段或检查多个假设。不像最近提出的一些单阶段技术，它只预测一个近似6D的姿势，然后必须细化，我们是足够精确的，不需要额外的后处理。它的速度非常快，在Titan X（帕斯卡）GPU上每秒50帧，因此更适合实时处理。我们的方法的关键部分是一个新的CNN架构，直接预测对象的3D边界框的投影顶点的2D图像位置，然后用PnP算法估计物体的6D姿态。我们的单目标和多目标姿态估计方法在LINEMOD和OCCLUSION数据集上明显优于其他最近基于CNN的方法。</p>
+<p>主要贡献： 论文的主要贡献是一个新的网络架构，即一个快速和准确的单阶段6D姿势预测网络，不需要任何后处理。它以无缝和自然的方式扩展了用于二维检测的单阶段CNN结构去执行6D检测任务。实现基于YOLO，但该方法适用于其他单阶段检测器，如SSD及其变体。</p>
+<p>代码环境太老了</p>
+<p>新版代码  <a target="_blank" rel="noopener" href="https://github.com/a2824256/singleshotpose_imp">https://github.com/a2824256/singleshotpose_imp</a>   （据说自制模型位姿估计异常） </p>
+<p>Single Shot 6D Object Pose Prediction代码复现—测试<a target="_blank" rel="noopener" href="https://codeantenna.com/a/nuYk97dWkZ">https://codeantenna.com/a/nuYk97dWkZ</a></p>
+<h2 id="SSD-6D-Making-RGB-Based-3D-Detection-and-6D-Pose-Estimation-Great-Again"><a href="#SSD-6D-Making-RGB-Based-3D-Detection-and-6D-Pose-Estimation-Great-Again" class="headerlink" title="SSD-6D: Making RGB-Based 3D Detection and 6D Pose Estimation Great Again"></a>SSD-6D: Making RGB-Based 3D Detection and 6D Pose Estimation Great Again</h2><p>主要思想：提出了一种新的基于RGB数据的三维模型实例检测和6D姿态估计方法。为此，我们扩展了流行的SSD范式，以覆盖完整的6D姿势空间，并仅对合成模型数据进行训练。我们的方法可以与当前最先进的方法在多个具有挑战性的RGBD数据集上竞争或超越。此外，我们的方法在10Hz左右，要比相关的其它方法快很多倍。</p>
+<p>主要贡献：</p>
+<p>（1） 一个仅利用合成三维模型信息的训练阶段<br>（2） 模型位姿空间的分解，便于对称性的训练和处理<br>（3） SSD的一种扩展，产生2D检测并推断出正确的6D姿势</p>
+<p>论文链接：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1711.10006v1">https://arxiv.org/abs/1711.10006v1</a><br>代码链接：<a target="_blank" rel="noopener" href="https://github.com/wadimkehl/ssd-6d">https://github.com/wadimkehl/ssd-6d</a>    没有提供训练代码</p>
+<h2 id="BundleTrack-6D-Pose-Tracking-for-Novel-Objects-without-Instance-or-Category-Level-3D-Models"><a href="#BundleTrack-6D-Pose-Tracking-for-Novel-Objects-without-Instance-or-Category-Level-3D-Models" class="headerlink" title="BundleTrack: 6D Pose Tracking for Novel Objects without Instance or Category-Level 3D Models"></a>BundleTrack: 6D Pose Tracking for Novel Objects without Instance or Category-Level 3D Models</h2><p>rgbd输入</p>
+<p><strong>特别之处</strong>：</p>
+<ul>
+<li>不需要被跟踪物体的3D模型</li>
+<li>稳定，不受明显遮挡的影响</li>
+<li>10Hz</li>
+<li>在NOCS上效果非常好，在YCBInEOAT上效果与se(3)-TrackNet类似（比se差一点）</li>
+</ul>
+<h2 id="GDR-Net-Geometry-Guided-Direct-Regression-Network-for-Monocular-6D-Object-Pose-Estimation（CVPR-2021）（基于几何信息指导的单目6D物体姿态直接回归算法）"><a href="#GDR-Net-Geometry-Guided-Direct-Regression-Network-for-Monocular-6D-Object-Pose-Estimation（CVPR-2021）（基于几何信息指导的单目6D物体姿态直接回归算法）" class="headerlink" title="GDR-Net: Geometry-Guided Direct Regression Network for Monocular 6D Object Pose Estimation（CVPR 2021）（基于几何信息指导的单目6D物体姿态直接回归算法）"></a>GDR-Net: Geometry-Guided Direct Regression Network for Monocular 6D Object Pose Estimation（CVPR 2021）（基于几何信息指导的单目6D物体姿态直接回归算法）</h2><h2 id="EfficientPose-An-efficient-accurate-and-scalable-end-to-end-6D-multi-object-pose-estimation-approach"><a href="#EfficientPose-An-efficient-accurate-and-scalable-end-to-end-6D-multi-object-pose-estimation-approach" class="headerlink" title="EfficientPose: An efficient, accurate and scalable end-to-end 6D multi object pose estimation approach"></a>EfficientPose: An efficient, accurate and scalable end-to-end 6D multi object pose estimation approach</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41707788/article/details/120832323">【6D Pose/论文阅读】EfficientPose_遗梦少年的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/rush9838465/article/details/112475562">https://blog.csdn.net/rush9838465/article/details/112475562</a></p>
+<p>代码： <a target="_blank" rel="noopener" href="https://github.com/ybkscht/EfficientPose">https://github.com/ybkscht/EfficientPose</a></p>
+<p>论文： <a target="_blank" rel="noopener" href="https://click.endnote.com/viewer?doi=10.48550%2Farxiv.2011.04307&amp;token=WzM0NTc1MTMsIjEwLjQ4NTUwL2FyeGl2LjIwMTEuMDQzMDciXQ.TMWGnTMXlvPuSUwFgmZJHcon4Ek">https://click.endnote.com/viewer?doi=10.48550%2Farxiv.2011.04307&amp;token=WzM0NTc1MTMsIjEwLjQ4NTUwL2FyeGl2LjIwMTEuMDQzMDciXQ.TMWGnTMXlvPuSUwFgmZJHcon4Ek</a></p>
+<p>测试失败</p>
+<h2 id="DOPE-在ros上跑的"><a href="#DOPE-在ros上跑的" class="headerlink" title="DOPE  在ros上跑的"></a>DOPE  在ros上跑的</h2><p><a target="_blank" rel="noopener" href="https://github.com/yehengchen/DOPE-ROS-D435">yehengchen/DOPE-ROS-D435: Object 6DoF Pose Estimation for Assembly Robots Trained on Synthetic Data - ROS Kinetic/Melodic Using Intel® RealSense D435 (github.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NVlabs/Deep_Object_Pose">NVlabs/Deep_Object_Pose: Deep Object Pose Estimation (DOPE) – ROS inference (CoRL 2018) (github.com)</a></p>
+<h2 id="PVNet-Pixel-wise-Voting-Network-for-6DoF-Pose-Estimation"><a href="#PVNet-Pixel-wise-Voting-Network-for-6DoF-Pose-Estimation" class="headerlink" title="PVNet: Pixel-wise Voting Network for 6DoF Pose Estimation"></a>PVNet: Pixel-wise Voting Network for 6DoF Pose Estimation</h2><p><a target="_blank" rel="noopener" href="https://github.com/zju3dv/pvnet">https://github.com/zju3dv/pvnet</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/zju3dv/clean-pvnet">https://github.com/zju3dv/clean-pvnet</a></p>
+<p>作者还开源了他们用<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=blender&amp;spm=1001.2101.3001.7020">blender</a>合成数据代码：<a target="_blank" rel="noopener" href="https://github.com/zju3dv/pvnet-rendering">https://github.com/zju3dv/pvnet-rendering</a></p>
+<p>其他博客：</p>
+<p>PVNET代码复现讲解<a target="_blank" rel="noopener" href="https://www.freesion.com/article/85511243426/">https://www.freesion.com/article/85511243426/</a></p>
+<p>pvnet——总结<a target="_blank" rel="noopener" href="https://blog.csdn.net/Marilynviolet/article/details/100747094">https://blog.csdn.net/Marilynviolet/article/details/100747094</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/data/blog/AI/姿态估计基础/image-20220308170517455.png" alt="image-20220308170517455"></p>
+<pre><code>ROOT=/home/young/code/clean-pvnet
+cd $ROOT/lib/csrc
+export CUDA_HOME="/usr/local/cuda-11.5"
+cd ransac_voting
+python setup.py build_ext --inplace
+cd ../nn
+python setup.py build_ext --inplace
+cd ../fps
+python setup.py build_ext --inplace
+
+# If you want to run PVNet with a detector
+cd ../dcn_v2
+python setup.py build_ext --inplace
+
+# If you want to use the uncertainty-driven PnP
+cd ../uncertainty_pnp
+sudo apt-get install libgoogle-glog-dev
+sudo apt-get install libsuitesparse-dev
+sudo apt-get install libatlas-base-dev
+python setup.py build_ext --inplace
+
+
+ROOT=/path/to/clean-pvnet
+cd $ROOT/data
+ln -s /media/young/young/dataset/LINEMOD/LINEMOD linemod
+ln -s /path/to/linemod_orig linemod_orig
+ln -s /path/to/occlusion_linemod occlusion_linemod
+
+# the following is used for tless
+ln -s /path/to/tless tless
+ln -s /path/to/cache cache
+ln -s /path/to/SUN2012pascalformat sun
+</code></pre><p>安装中遇到cuda版本问题</p>
+<pre><code>conda install pytorch==1.1.0 torchvision==0.3.0 cudatoolkit=10.0 -c pytorch
+</code></pre><p>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/young/code/pvnet/lib/utils/extend_utils/lib</p>
+<pre><code>ln -s /media/young/young/dataset/LINEMOD/LINEMOD $ROOT/data/LINEMOD
+</code></pre><p>本文解决了在严重遮挡或截断下从单个 RGB 图像进行 6DoF 姿态估计的挑战。 最近的许多工作表明，一种两阶段方法，首先检测关键点，然后解决用于姿势估计的 Perspective-n-Point (PnP) 问题，取得了显着的性能。 然而，这些方法中的大多数仅通过回归图像坐标或热图来定位一组稀疏关键点，这对遮挡和截断很敏感。 相反，我们引入了逐像素投票网络 (PVNet) 来回归指向关键点的逐像素单位向量，并使用这些向量使用 RANSAC 对关键点位置进行投票。 这为定位被遮挡或截断的关键点创建了灵活的表示。 这种表示的另一个重要特征是它提供了关键点位置的不确定性，PnP 求解器可以进一步利用这些不确定性。 实验表明，所提出的方法在 LINEMOD、Occlusion LINEMOD 和 YCBVideo 数据集上大大优于现有技术，同时对实时姿态估计也很有效。 我们进一步创建了一个截断 LINEMOD 数据集，以验证我们的方法对截断的鲁棒性。 该代码将在 <a target="_blank" rel="noopener" href="https://zju-3dv.github.io/pvnet/">https://zju-3dv.github.io/pvnet/</a> 上提供。</p>
+<p>传统方法依赖手工特征，对于图像变化和背景干扰不够鲁棒（why？）</p>
+<p>传统网络关键点回归+pnp，有遮挡问题</p>
+<p>我们提出了一种使用<strong>像素级投票网络</strong> (PVNet) 进行 6D 姿势估计的新框架。 基本思想如图 1 所示。PVNet 不是直接回归关键点的图像坐标，而是预测表示从对象的每个像素到关键点的方向的单位向量。 然后这些方向根据 RANSAC 对关键点位置进行投票。——关键点的<strong>向量场</strong>表示方法</p>
+<p>该思想的动机在于，刚体的特性——即我们看到其一部分就能推断出其他部分的相对方向。</p>
+<p>不确定性驱动的pnp</p>
+<h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><p>这篇博客的评论区贼强</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dsoftware/article/details/97955570?spm=1001.2101.3001.6650.9&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-9.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-9.no_search_link"> 刚体6D位姿估计方法综述_dsoftware的博客-CSDN博客_6d位姿估计</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20211125112415235.png" alt="image-20211125112415235" style="zoom:50%;"></p>
+<p>纹理特征和几何细节丰富的用对应点的方法、纹理特征和几何细节弱的用基于模板的方法、有遮挡的或者是类别级对象的用基于投票的方法</p>
+<p>当有遮挡时，基于模板的方法效果最差</p>
+<p>了解物体6Dpose的意义，多种表示李代数欧拉角四元数等，用PnP求解6Dpose的原理等；其次，阅读综述论文，看业界为了求解6D姿态用了哪些方法，传统的以及深度学习的，可以只看摘要和前沿；再次，挑选几篇代表性、前沿、开源的代码，实际复现测试，分析优缺点；最后，结合自身项目，确定输入数据是纯RGB，还是RGB-D，还是Lidar点云，有没有对应的3D模型，对于速度或者精度要求多高，是不是只针对实例级别物体等，选择最接近的某个算法，在其上面改进</p>
+<p>有很多基于RGB图像的6D位姿估计方法：</p>
+<p>PVNet: Pixel-wise Voting Network for 6DoF Pose Estimation；</p>
+<p>Pix2Pose: Pixel-Wise Coordinate Regression of Objects for 6D Pose Estimation；</p>
+<p>Implicit 3D Orientation Learning for 6D Object Detection from RGB Images；</p>
+<p>EPOS: Estimating 6D Pose of Objects with Symmetries；</p>
+<p>DPOD: 6D Pose Object Detector and Refiner；</p>
+<p>CDPN: Coordinates-Based Disentangled Pose Network for Real-Time RGB-Based 6-DoF Object Pose Estimation；</p>
+<p>Segmentation-driven 6D Object Pose Estimation等等</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yong_qi2015/article/details/117004423?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-1.pc_relevant_default&amp;spm=1001.2101.3001.4242.2&amp;utm_relevant_index=2">物体6-Dof pose estimation主流方法汇总_3D视觉工坊-CSDN博客</a></p>
+<p>Uncertainty-Driven 6D Pose Estimation of Objects and Scenes from a Single RGB Image</p>
+<h2 id="经典特征点检测算法"><a href="#经典特征点检测算法" class="headerlink" title="经典特征点检测算法"></a>经典特征点检测算法</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/multhree/p/11296945.html">sift、surf、orb 特征提取及最优特征点匹配 - 闽A2436 - 博客园 (cnblogs.com)</a></p>
+<p>如果对计算实时性要求非常高，可选用ORB算法，但基本要保证正对拍摄；如果对实行性要求稍高，可以选择SURF；基本不用SIFT。</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Qb411W7cK?p=4">6.SIFT(尺度不变特征变换)_哔哩哔哩_bilibili</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dcrmg/article/details/52601010">Surf算法特征点检测与匹配_牧野的博客-CSDN博客_surf算法</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zizi7/article/details/50379973/">最大稳定极值区域（MSER）检测_zizi7的专栏-CSDN博客_mser算法</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/261966288">图像特征算法(三)——ORB算法简述及Python中ORB特征匹配实践 - 知乎 (zhihu.com)</a></p>
+<p>使用传统的方法进行单目相机位姿估计：<a target="_blank" rel="noopener" href="https://github.com/nanfeng-dada/pose_estimation">GitHub - nanfeng-dada/pose_estimation: 单目位姿估计，传统机器视觉，opencv pnp算法</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/74597564"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangguchangqing/p/8287585.html">SLAM入门之视觉里程计(5)：单应矩阵 - Brook_icv - 博客园 (cnblogs.com)</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220217110036174.png" alt="image-20220217110036174"></p>
+<p>文博分享：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Awesome-Image-Registration-Organization">Awesome-Image-Registration-Organization · GitHub</a></p>
+<p>医学上的应用<a target="_blank" rel="noopener" href="https://github.com/fabio86d/HipHop_2D3Dregistration">https://github.com/fabio86d/HipHop_2D3Dregistration</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dbdxnuliba/article/details/108215073">高翔博士slam课程深度图像数据除以5000的含义<em>dbdxnuliba的博客-CSDN博客</em>高翔博士slam</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RiZHhudWxpYmE=,size_16,color_FFFFFF,t_70.png" alt="img"></p>
+<h3 id="位姿的刚体变换与坐标系转换-–-数值之刃-MathSword"><a href="#位姿的刚体变换与坐标系转换-–-数值之刃-MathSword" class="headerlink" title="位姿的刚体变换与坐标系转换 – 数值之刃 MathSword"></a><a target="_blank" rel="noopener" href="http://www.mathsword.com/rigidtrans_coordinatetrans/">位姿的刚体变换与坐标系转换 – 数值之刃 MathSword</a></h3><h3 id="经典的单目RGB视觉跟踪算法，没有深度学习各种网络"><a href="#经典的单目RGB视觉跟踪算法，没有深度学习各种网络" class="headerlink" title="经典的单目RGB视觉跟踪算法，没有深度学习各种网络"></a>经典的单目RGB视觉跟踪算法，没有深度学习各种网络</h3><p>输入一个包含目标物体的序列帧（offline的视频序列或相机输入视频流），然后还需要一个目标物体的三维模型。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/102024694?utm_source=wechat_timeline">啥是Region-based实时单目RGB三维(刚性)物体跟踪（一） - 知乎 (zhihu.com)</a></p>
+<h3 id="Sparse-Representation-for-3D-Shape-Estimation-A-Convex-Relaxation-Approach"><a href="#Sparse-Representation-for-3D-Shape-Estimation-A-Convex-Relaxation-Approach" class="headerlink" title="Sparse Representation for 3D Shape Estimation: A Convex Relaxation Approach"></a>Sparse Representation for 3D Shape Estimation: A Convex Relaxation Approach</h3><p>现有问题：</p>
+<p>large number of acquisitions from multiple views are often required in order to obtain a complete 3D model, which is not preferred in some real-time applications; the depth sensors in general cannot work outdoor and have a limited sensing range;</p>
+<h2 id="MediaPipe"><a href="#MediaPipe" class="headerlink" title="MediaPipe"></a>MediaPipe</h2><p><a target="_blank" rel="noopener" href="https://google.github.io/mediapipe/solutions/objectron#model_name">https://google.github.io/mediapipe/solutions/objectron#model_name</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=f-Ibri14KMY&amp;t=231s">https://www.youtube.com/watch?v=f-Ibri14KMY&amp;t=231s</a></p>
+<p><img src="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220310162325247.png" alt="image-20220310162325247"></p>
+<h2 id="大组会——刚体6D位姿估计"><a href="#大组会——刚体6D位姿估计" class="headerlink" title="大组会——刚体6D位姿估计"></a>大组会——刚体6D位姿估计</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fa411c7hc?spm_id_from=333.337.search-card.all.click">基于深度学习的特征匹配与位姿估计+端-云协同的AR技术与平台_哔哩哔哩_bilibili</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.xzhou.me/">Xiaowei Zhou’s Homepage (xzhou.me)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1C34y1S7ik/">基于深度学习的特征点提取，特征点检测的方法总结_哔哩哔哩_bilibili</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bA411E7Y9?p=6">【官方字幕】“3D几何与视觉技术”全球在线研讨会_哔哩哔哩_bilibili</a></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dsoftware/article/details/106101681">(21条消息) 物体6D位姿的含义<em>Guoguang Du的博客-CSDN博客</em>物体6d位姿</a></p>
+<h2 id="ORB-SLAM"><a href="#ORB-SLAM" class="headerlink" title="ORB-SLAM"></a>ORB-SLAM</h2><p>BA优化存在实时性问题</p>
+<p>要实时BA的话，需要提供以下条件：</p>
+<ol>
+<li>关键帧的关键点匹配</li>
+<li>关键帧的数量要尽可能少，避免冗余</li>
+<li>关键帧要具有显著的视差和大量的回环匹配</li>
+<li>关键帧位姿的初始化以及关键点位置的初始化</li>
+<li>A local map in exploration where optimization is focused to achieve scalability.</li>
+<li>The ability to perform fast global optimizations (e.g., pose graph) to close loops in real time</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1%E5%9F%BA%E7%A1%80(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/" title="位姿估计基础及论文">https://youngyyp.github.io/2021/10/20/计算机视觉/位姿估计/姿态估计基础(杨业鹏-20220310203222)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Pose-Estimation/" rel="tag"><i class="fa fa-tag"></i> Pose Estimation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/23/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/%E3%80%90FPGA%E3%80%91%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="prev" title="【FPGA】图像处理">
+      <i class="fa fa-chevron-left"></i> 【FPGA】图像处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1/" rel="next" title="卫星姿态估计">
+      卫星姿态估计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#3D%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">3D旋转的表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PnP"><span class="nav-number">2.</span> <span class="nav-text">PnP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E5%88%86%E7%B1%BB%E5%92%8C%E7%A1%AC%E5%88%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">软分类和硬分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOP-Challenge-2020-on-6D-Object-Localization"><span class="nav-number">4.</span> <span class="nav-text">BOP Challenge 2020 on 6D Object Localization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CosyPose-Consistent-multi-view-multi-object-6D-pose-estimation"><span class="nav-number">5.</span> <span class="nav-text">CosyPose: Consistent multi-view multi-object 6D pose estimation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HybridPose-6D-Object-Pose-Estimation-under-Hybrid-Representations%EF%BC%88CVPR-2020%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">HybridPose: 6D Object Pose Estimation under Hybrid Representations（CVPR 2020）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DPOD-6D-Pose-Object-Detector-and-Refiner"><span class="nav-number">7.</span> <span class="nav-text">DPOD: 6D Pose Object Detector and Refiner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CDPN-Coordinates-based-Disentangled-Pose-Network-for-Real-time-RGB-based-6-DoF-Object-Pose-Estimation"><span class="nav-number">8.</span> <span class="nav-text">CDPN: Coordinates-based Disentangled Pose Network for Real-time RGB-based 6-DoF Object Pose Estimation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pix2Pose-Pixel-Wise-Coordinate-Regression-of-Objects-for-6D-Pose-Estimation%EF%BC%88ICCV2019%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">Pix2Pose: Pixel-Wise Coordinate Regression of Objects for 6D Pose Estimation（ICCV2019）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Real-Time-Seamless-Single-Shot-6D-Object-Pose-Prediction%EF%BC%88CVPR2018%EF%BC%89"><span class="nav-number">10.</span> <span class="nav-text">Real-Time Seamless Single Shot 6D Object Pose Prediction（CVPR2018）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSD-6D-Making-RGB-Based-3D-Detection-and-6D-Pose-Estimation-Great-Again"><span class="nav-number">11.</span> <span class="nav-text">SSD-6D: Making RGB-Based 3D Detection and 6D Pose Estimation Great Again</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BundleTrack-6D-Pose-Tracking-for-Novel-Objects-without-Instance-or-Category-Level-3D-Models"><span class="nav-number">12.</span> <span class="nav-text">BundleTrack: 6D Pose Tracking for Novel Objects without Instance or Category-Level 3D Models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDR-Net-Geometry-Guided-Direct-Regression-Network-for-Monocular-6D-Object-Pose-Estimation%EF%BC%88CVPR-2021%EF%BC%89%EF%BC%88%E5%9F%BA%E4%BA%8E%E5%87%A0%E4%BD%95%E4%BF%A1%E6%81%AF%E6%8C%87%E5%AF%BC%E7%9A%84%E5%8D%95%E7%9B%AE6D%E7%89%A9%E4%BD%93%E5%A7%BF%E6%80%81%E7%9B%B4%E6%8E%A5%E5%9B%9E%E5%BD%92%E7%AE%97%E6%B3%95%EF%BC%89"><span class="nav-number">13.</span> <span class="nav-text">GDR-Net: Geometry-Guided Direct Regression Network for Monocular 6D Object Pose Estimation（CVPR 2021）（基于几何信息指导的单目6D物体姿态直接回归算法）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EfficientPose-An-efficient-accurate-and-scalable-end-to-end-6D-multi-object-pose-estimation-approach"><span class="nav-number">14.</span> <span class="nav-text">EfficientPose: An efficient, accurate and scalable end-to-end 6D multi object pose estimation approach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOPE-%E5%9C%A8ros%E4%B8%8A%E8%B7%91%E7%9A%84"><span class="nav-number">15.</span> <span class="nav-text">DOPE  在ros上跑的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PVNet-Pixel-wise-Voting-Network-for-6DoF-Pose-Estimation"><span class="nav-number">16.</span> <span class="nav-text">PVNet: Pixel-wise Voting Network for 6DoF Pose Estimation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="nav-number">17.</span> <span class="nav-text">学习路线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%89%B9%E5%BE%81%E7%82%B9%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="nav-number">18.</span> <span class="nav-text">经典特征点检测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E5%A7%BF%E7%9A%84%E5%88%9A%E4%BD%93%E5%8F%98%E6%8D%A2%E4%B8%8E%E5%9D%90%E6%A0%87%E7%B3%BB%E8%BD%AC%E6%8D%A2-%E2%80%93-%E6%95%B0%E5%80%BC%E4%B9%8B%E5%88%83-MathSword"><span class="nav-number">18.1.</span> <span class="nav-text">位姿的刚体变换与坐标系转换 – 数值之刃 MathSword</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%9A%84%E5%8D%95%E7%9B%AERGB%E8%A7%86%E8%A7%89%E8%B7%9F%E8%B8%AA%E7%AE%97%E6%B3%95%EF%BC%8C%E6%B2%A1%E6%9C%89%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%90%84%E7%A7%8D%E7%BD%91%E7%BB%9C"><span class="nav-number">18.2.</span> <span class="nav-text">经典的单目RGB视觉跟踪算法，没有深度学习各种网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sparse-Representation-for-3D-Shape-Estimation-A-Convex-Relaxation-Approach"><span class="nav-number">18.3.</span> <span class="nav-text">Sparse Representation for 3D Shape Estimation: A Convex Relaxation Approach</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MediaPipe"><span class="nav-number">19.</span> <span class="nav-text">MediaPipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E7%BB%84%E4%BC%9A%E2%80%94%E2%80%94%E5%88%9A%E4%BD%936D%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1"><span class="nav-number">20.</span> <span class="nav-text">大组会——刚体6D位姿估计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">20.1.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ORB-SLAM"><span class="nav-number">21.</span> <span class="nav-text">ORB-SLAM</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="A Review on Satellite 6D Pose Estimation with Deep LearningAbstract准确可靠地获取目标卫星相对于服务航天器的6D位姿是执行在轨飞行任务的关键。然而，很多目标卫星（包括报废的卫星和碎片）是非合作的，并不能主动提供其状态信息或者特殊标记来协助服务航天器，即使其状态信息可用，也无法确保该数据的准确性。由于深度学习的发展，基于单目视觉的6D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卫星姿态估计综述">
+<meta property="og:url" content="https://youngyyp.github.io/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="A Review on Satellite 6D Pose Estimation with Deep LearningAbstract准确可靠地获取目标卫星相对于服务航天器的6D位姿是执行在轨飞行任务的关键。然而，很多目标卫星（包括报废的卫星和碎片）是非合作的，并不能主动提供其状态信息或者特殊标记来协助服务航天器，即使其状态信息可用，也无法确保该数据的准确性。由于深度学习的发展，基于单目视觉的6D">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-16T02:42:41.000Z">
+<meta property="article:modified_time" content="2022-08-18T07:59:00.685Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="Satellite">
+<meta property="article:tag" content="Pose Estimation">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://youngyyp.github.io/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>卫星姿态估计综述 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卫星姿态估计综述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-16 10:42:41" itemprop="dateCreated datePublished" datetime="2021-01-16T10:42:41+08:00">2021-01-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:59:00" itemprop="dateModified" datetime="2022-08-18T15:59:00+08:00">2022-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">位姿估计</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="A-Review-on-Satellite-6D-Pose-Estimation-with-Deep-Learning"><a href="#A-Review-on-Satellite-6D-Pose-Estimation-with-Deep-Learning" class="headerlink" title="A Review on Satellite 6D Pose Estimation with Deep Learning"></a>A Review on Satellite 6D Pose Estimation with Deep Learning</h1><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>准确可靠地获取目标卫星相对于服务航天器的6D位姿是执行在轨飞行任务的关键。然而，很多目标卫星（包括报废的卫星和碎片）是非合作的，并不能主动提供其状态信息或者特殊标记来协助服务航天器，即使其状态信息可用，也无法确保该数据的准确性。由于深度学习的发展，基于单目视觉的6D姿态估计方法受到重视，因此，本文分析了近几年来基于深度学习的6D姿态估计在卫星等太空中的目标上的应用，并比较了不同方法的性能，揭示了哪些因素使得卫星姿态估计具有挑战性。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>近年来，为了解决地球轨道拥挤问题并延长地球静止卫星的寿命，诸如碎片清除、在轨维修和对接操作等在轨飞行任务概念越来越受到学术界和工业界的关注。执行这些任务的关键是要能准确可靠地获取目标卫星相对于服务航天器的位置和姿态（即6D位姿）。然而，太空中很多目标卫星（包括报废的卫星和碎片）是非合作的，并不能主动提供其状态信息或者特殊标记来协助服务航天器，即使其状态信息可用，也无法确保该数据的准确性。因此，建立一个准确而稳定的卫星姿态估计系统尤为重要，该系统需要能够在无人工干预的情况下自动检测出目标卫星的位姿，从而实时监测卫星状态，以便进行碎片清除、在轨维修和对接等操作。</p>
+<p>出于对航天器处理器性质和功率的考虑，使用视觉传感器（如摄像机）进行卫星姿态估计的优先级将大于激光雷达、雷达等其他有源传感器，因为视觉传感器的质量更小且功率要求更低。在小型航天器上，低功耗的单目相机将是实现卫星姿态估计的理想传感器。</p>
+<p>为了实现卫星姿态估计，必须利用快速而准确的计算机视觉算法，从一个或一组单目图像计算出目标的相对位置和姿态。早期的姿态估计技术主要集中在手工设计的特征匹配，这些方法的鲁棒性和泛化性较差。此外，太空的环境带来了更为严峻的挑战，例如太空中物体深度变化范围大、缺乏大气散射、信噪比低、照明条件恶劣以及动态的地球背景等。近年来，随着深度卷积神经网络的出现，计算机视觉算法取得了重大突破，与先前的技术相比，基于卷积神经网络(CNN)的深度学习方法取得了更好的效果。</p>
+<p>然而，基于CNN的深度学习方法有两个主要的缺点：一是深度学习依赖于大量带标签的数据集，二是其运算量较大。在各种地面应用中，有大量的公开数据集来用于姿态估计，进而训练出最先进的深度学习模型，但是在卫星的姿态估计领域，则缺少真实的带标签的公开数据集。此前大多数单目姿态估计的工作都是在合成图像上进行训练和评估，但在有限的合成图像上表现良好的模型不一定能有效地转移到真实环境中。同时，目前相关的研究对于在卫星所搭载硬件上运行的可行性的讨论较少，大多数CNN需要图形处理器(GPU)来加速运算。然而，由于辐射暴露的问题，GPU在太空领域的应用仍然是一个较新的领域。在许多卫星上，只搭载有低功耗的传统处理器，无法实时运行大型的、最先进的CNN模型。</p>
+<p>为了解决以上的问题，欧洲航天局的先进概念小组和斯坦福大学的空间会合实验室举办了卫星姿态估计挑战赛，并在2019年2月发布了第一个公开的可用于航天器姿态估计的机器学习数据集。比赛的结果显示，基于PnP姿态解算的方法更为精确，且单独的目标检测步骤对于提升姿态估计的精度有利。但是这次比赛的数据集主要是合成图像，测试结果也是以合成图像为依据。为了弥补真实和合成图像之间的差距，欧洲航天局的先进概念小组和斯坦福大学的空间会合实验室在2021年11月再次举办了卫星姿态估计挑战赛，同时发布了有更多真实图像的数据集。</p>
+<p>本文在第二节回顾了卫星姿态估计相关研究后，在第三节介绍了相关的数据集，最后在第四节对未来进行了展望。</p>
+<h2 id="METHODS-ON-SATELLITE-POSE-ESTIMATION"><a href="#METHODS-ON-SATELLITE-POSE-ESTIMATION" class="headerlink" title="METHODS ON SATELLITE POSE ESTIMATION"></a>METHODS ON SATELLITE POSE ESTIMATION</h2><p>本节我们首先讨论了卫星姿态估计所面临的挑战，并回顾了近三年来卫星姿态估计的主要方法，这些方法可以大致分为两类，即单阶段和两阶段方法。两阶段方法首先识别出目标卫星在图像中的位置，然后将图片裁剪并缩放至固定大小后进行姿态估计，而单阶段方法则不区分目标检测和姿态估计，使用端到端的网络来进行卫星姿态估计。</p>
+<h3 id="Difficulties"><a href="#Difficulties" class="headerlink" title="Difficulties"></a>Difficulties</h3><p>卫星姿态估计系统设计中遇到的主要困难包括：</p>
+<ul>
+<li>物体深度变化范围大：虽然6D位姿估计是CV中的热点领域，但是以往的研究并没有重点关注物体的尺度变化问题，大多集中于研究较近物体的姿态，而在太空中，由于缺乏大气散射，使得目标可以从很远的距离被看到，从而需要充分考虑物体的尺度变化情况。</li>
+<li>大气散射的缺乏：太空中缺乏大气散射，这会导致高对比度、欠曝光/过曝光、显著的镜面反射等问题，从而对单目相机所拍图片的质量产生较大影响。(可插图)</li>
+<li>数据集的缺乏：由于卫星的真实照片难以获取，目前可用的基准数据集大都采用电脑合成或者在实验室人工环境下使用卫星模型进行拍摄，没有充分强调缺乏大气散射的影响，并且大多描述的是距离非常近的目标</li>
+<li>实时性和轻量化要求高：在许多卫星上，只搭载有低功耗的传统处理器，无法实时运行大型的的CNN模型，需要设计轻量化的网络。</li>
+</ul>
+<h3 id="Two-stage-methods"><a href="#Two-stage-methods" class="headerlink" title="Two-stage methods"></a>Two-stage methods</h3><p>两阶段指的是将卫星目标的检测和姿态估计看成两个独立的步骤，先由目标检测网络检测出目标卫星在图像中的位置，在将目标卫星所在区域进行裁剪并缩放至统一大小，然后将缩放后的图片作为姿态估计模板的输入。通过独立的目标检测步骤，能够很好地适应目标在图像不同位置以及不同距离的情况，进而获得较高的精度。</p>
+<ol>
+<li>UniAdelaide：这个队伍获得了2019年卫星姿态估计比赛的第一名，该团队首先通过多视角三角测量重建卫星模型，并选取了卫星模型上的11个关键点。然后训练了一个CNN目标检测网络用于框选出目标卫星边界，以裁剪卫星所在区域。他们还使用了HRNet架构来对裁剪后的图像进行预定义关键点的回归，在得到关键点的2D-3D对应后，使用稳健的非线性优化来解算目标姿态。（这里可以插图）</li>
+<li>Real-time spacecraft pose estimation: 虽然UniAdelaide所设计的两阶段系统能够很准确的识别出卫星的姿态，但是其运行速度较慢，无法满足实时性的要求。为此，The University of Texas at Austin 的研究人员提出了一个轻量化的系统，在保持最先进精度的情况下，大大降低了计算的成本，其网络参数量降为了UniAdelaide的十分之一。与UniAdelaide类似，该系统是一个由目标检测CNN、关键点回归CNN和PNP解算器组成的。它还包括最后的误差预测步骤，该步骤识别不良姿势估计，并用“未检测”来代替它们。此外，整个体系结构使用一种新的合成数据生成方案进行训练，该方案生成具有真实空间图像中存在的许多降级的照片级真实感图像。</li>
+</ol>
+<h3 id="Single-stage-methods"><a href="#Single-stage-methods" class="headerlink" title="Single-stage methods"></a>Single-stage methods</h3><p>单阶段指的是将目标检测和关键点回归看成统一的步骤，用一个端到端的网络来输出预测的关键点位置，这样的联合训练减少了许多不必要的重复计算，使得网络结构更为简单和轻量化。不过也有一些单阶段网络跳过了关键点的回归，直接输出目标的位置和姿态，如UrsoNet。</p>
+<ol>
+<li>UrsoNet：</li>
+<li>EPFL_cvlab：该系统采用单阶段的端到端网络将目标检测和关键点回归看成统一的步骤，用一个端到端的网络来输出预测的关键点位置，鲁棒性更强；采用编码器-解码器体系结构，并在解码器的每一级，建立3D到2D的对应关系；使用了YOLOv3中的Darknet-53作为主干，并采用了特征金字塔网络（FPN）的结构，但与大多数依赖此类网络的方法不同，本系统将每个训练实例分配到多个金字塔级别，以促进多尺度信息的联合使用。最后，使用基于RANSAC的PnP策略从这些对应集合中推断出一个可靠的位姿。同时在训练时，为了解决2D重投影误差方法的缺陷，采用基于3D位置而不是2D投影来最小化训练损失</li>
+</ol>
+<h3 id="（方法比较？）"><a href="#（方法比较？）" class="headerlink" title="（方法比较？）"></a>（方法比较？）</h3><h2 id="DATASET"><a href="#DATASET" class="headerlink" title="DATASET"></a>DATASET</h2><p>在本节中，我们列举了卫星姿态估计领域目前公开的且质量较高的数据集，包括SPEED,URSO,SPEED+和SwissCube。</p>
+<ol>
+<li><p>SPEED:</p>
+</li>
+<li><p>SPEED+:与来自旧SPEED数据集的真实图像相比，姿势的数量、姿势标签的保真度和光线条件的变化都得到了显著改善。（SPEED数据集和SPEED+的具体结构如图所示）</p>
+</li>
+<li>URSO:URSO利用虚幻引擎4(UE4)的功能来渲染逼真的图像，例如基于物理的材质、光晕和镜头光斑。环境中的照明由平行光和聚光灯组成，分别模拟太阳光和地球反照率。为了模拟太阳，我们使用了带有UE4光晕散射卷积的发射材质。地球被模拟成一个高度多边形的球体，纹理上有来自蓝色大理石下一代系列的21600,10800张地球和云图。这将进一步遮罩以从海洋表面获得镜面反射。此外，还使用第三方资源对大气散射进行建模。<br> 我们的场景包括联盟号和龙号航天器模型，几何图形从3D模型存储库导入。</li>
+<li>SwissCube</li>
+</ol>
+<p>该团队利用虚幻的引擎4（UE4）功能来渲染逼真的图像，例如基于物理的材料，水华和镜头耀斑。他们环境中的照明只是由定向光和聚光灯组成，分别模拟太阳光和地球反照率。环境照明被禁用，为了模拟太阳，他们使用了具有UE4开花散射卷积的发射材料体。地球被建模为高多边形球体，纹理为21600×10800地球。这进一步被掩盖以获得来自海面的镜面反射。另外，第三方资产用于模拟大气散射。他们的场景包括Soyuz和Dragon航天器模型，其几何结构从3D模型库导入</p>
+<h2 id="CONCLUSION-AND-FUTURE-WORK"><a href="#CONCLUSION-AND-FUTURE-WORK" class="headerlink" title="CONCLUSION AND FUTURE WORK"></a>CONCLUSION AND FUTURE WORK</h2><p>在本文中，我们对于卫星姿态估计的背景做了详细的介绍，指出了卫星姿态估计面临的问题和挑战，整理了最新的卫星姿态估计方法，并从中选出了4个最具代表性的方法，将它们分为了两阶段和单阶段两种类型，同时回顾了每种方法的特点。然后对于目前卫星姿态估计领域公开且高质量的数据集做出了简要的介绍，这将为未来的研究者提供很大的便利。</p>
+<p>总体而言，各种DNN架构能够很好地估计不合作的航天器的姿态，前提是已知目标的3D模型或预定的3D关键点坐标。然而，同样的网络结构在真实图像上的性能相对较差，因为真实图像与用于训练DNN的合成图像具有不同的统计分布。由于在未来的空间任务中部署的任何DNN无疑都将利用合成图像作为主要的训练来源，因此未来必须找到合适的方法来缩小合成图像与真实图像之间的差距。</p>
+<h2 id="Acknowledgment"><a href="#Acknowledgment" class="headerlink" title="Acknowledgment"></a>Acknowledgment</h2><p>作者们想要感谢钱久超老师的指导以及潘佳萌学长的帮助</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/" title="卫星姿态估计综述">https://youngyyp.github.io/2021/01/16/计算机视觉/位姿估计/卫星姿态估计review/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Satellite/" rel="tag"><i class="fa fa-tag"></i> Satellite</a>
+              <a href="/tags/Pose-Estimation/" rel="tag"><i class="fa fa-tag"></i> Pose Estimation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/12/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/%E5%B8%B8%E7%94%A8hexo%E5%8D%9A%E5%AE%A2%E6%93%8D%E4%BD%9C/" rel="next" title="常用hexo博客操作">
+      常用hexo博客操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-Review-on-Satellite-6D-Pose-Estimation-with-Deep-Learning"><span class="nav-number">1.</span> <span class="nav-text">A Review on Satellite 6D Pose Estimation with Deep Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#METHODS-ON-SATELLITE-POSE-ESTIMATION"><span class="nav-number">1.3.</span> <span class="nav-text">METHODS ON SATELLITE POSE ESTIMATION</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Difficulties"><span class="nav-number">1.3.1.</span> <span class="nav-text">Difficulties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-stage-methods"><span class="nav-number">1.3.2.</span> <span class="nav-text">Two-stage methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Single-stage-methods"><span class="nav-number">1.3.3.</span> <span class="nav-text">Single-stage methods</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83%EF%BC%9F%EF%BC%89"><span class="nav-number">1.3.4.</span> <span class="nav-text">（方法比较？）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DATASET"><span class="nav-number">1.4.</span> <span class="nav-text">DATASET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CONCLUSION-AND-FUTURE-WORK"><span class="nav-number">1.5.</span> <span class="nav-text">CONCLUSION AND FUTURE WORK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Acknowledgment"><span class="nav-number">1.6.</span> <span class="nav-text">Acknowledgment</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="第三章编译报错：error: ‘decay_t’ is not a member of ‘std’; did you mean ‘decay’? https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_15987811&#x2F;article&#x2F;details&#x2F;122937722 修改编译的C++版本为c++14 set(CMAKE_CXX_FLAGS &quot;-std&#x3D;c++14&quot;) 第四章安装Sophus报错err">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SLAM十四讲代码bug及解决">
+<meta property="og:url" content="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="第三章编译报错：error: ‘decay_t’ is not a member of ‘std’; did you mean ‘decay’? https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_15987811&#x2F;article&#x2F;details&#x2F;122937722 修改编译的C++版本为c++14 set(CMAKE_CXX_FLAGS &quot;-std&#x3D;c++14&quot;) 第四章安装Sophus报错err">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/data/blog/AI/SLAM十四讲.assets/2022-02-23%2018-38-54%20的屏幕截图.png">
+<meta property="article:published_time" content="2021-11-24T10:50:44.000Z">
+<meta property="article:modified_time" content="2022-08-18T07:59:34.710Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/data/blog/AI/SLAM十四讲.assets/2022-02-23%2018-38-54%20的屏幕截图.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SLAM十四讲代码bug及解决 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SLAM十四讲代码bug及解决
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-24 18:50:44" itemprop="dateCreated datePublished" datetime="2021-11-24T18:50:44+08:00">2021-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-18 15:59:34" itemprop="dateModified" datetime="2022-08-18T15:59:34+08:00">2022-08-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SLAM/" itemprop="url" rel="index"><span itemprop="name">SLAM</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="第三章编译报错："><a href="#第三章编译报错：" class="headerlink" title="第三章编译报错："></a>第三章编译报错：</h3><p>error: ‘decay_t’ is not a member of ‘std’; did you mean ‘decay’?</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_15987811/article/details/122937722">https://blog.csdn.net/qq_15987811/article/details/122937722</a> 修改编译的C++版本为c++14</p>
+<pre><code>set(CMAKE_CXX_FLAGS "-std=c++14")
+</code></pre><h3 id="第四章安装Sophus报错"><a href="#第四章安装Sophus报错" class="headerlink" title="第四章安装Sophus报错"></a>第四章安装Sophus报错</h3><p>error: implicitly-declared ‘Eigen::Map<sophus::so2<double> &gt;::Map(const Eig</sophus::so2<double></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41698305/article/details/116547361">https://blog.csdn.net/weixin_41698305/article/details/116547361</a></p>
+<h3 id="第五章"><a href="#第五章" class="headerlink" title="第五章"></a>第五章</h3><p>安装opencv</p>
+<p>直接通过apt-get一键安装<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43909881/article/details/94013882">https://blog.csdn.net/weixin_43909881/article/details/94013882</a></p>
+<pre><code>sudo apt-get update
+sudo apt-get install libcv-dev
+sudo apt-get install libopencv-dev
+</code></pre><h3 id="视觉SLAM十四讲（第二版）环境安装心得体会https-blog-csdn-net-weixin-43863574-article-details-107080443"><a href="#视觉SLAM十四讲（第二版）环境安装心得体会https-blog-csdn-net-weixin-43863574-article-details-107080443" class="headerlink" title="视觉SLAM十四讲（第二版）环境安装心得体会https://blog.csdn.net/weixin_43863574/article/details/107080443"></a>视觉SLAM十四讲（第二版）环境安装心得体会<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43863574/article/details/107080443">https://blog.csdn.net/weixin_43863574/article/details/107080443</a></h3><h3 id="编译基本过程"><a href="#编译基本过程" class="headerlink" title="编译基本过程"></a>编译基本过程</h3><pre><code>mkdir build 
+
+cd build
+
+cmake -D CMAKE_BUILD_TYPE=Release .. #此处的参数是为了带调试信息
+
+make -j20  #10核cpu最高设置20
+
+sudo make install  #将程序安装至系统中。如果原始码编译无误，且执行结果正确，便可以把程序安装至系统预设的可执行文件存放路径。默认/usr/local/bin
+</code></pre><h3 id="第6章"><a href="#第6章" class="headerlink" title="第6章"></a>第6章</h3><h4 id="安装-Ceres"><a href="#安装-Ceres" class="headerlink" title="安装 Ceres"></a>安装 Ceres</h4><p>安装前需要安装以下依赖:</p>
+<pre class=" language-lang-bash"><code class="language-lang-bash">sudo apt install -y \
+    liblapack-dev \
+    libsuitesparse-dev \
+    libcxsparse3 \
+    libgflags-dev \
+    libgoogle-glog-dev \
+    libgtest-dev
+</code></pre>
+<p>之后即可正常安装：</p>
+<pre class=" language-lang-bash"><code class="language-lang-bash">git clone https://github.com/ceres-solver/ceres-solver.git
+cd ceres-solver
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j2
+sudo make install
+</code></pre>
+<h4 id="安装-G2O"><a href="#安装-G2O" class="headerlink" title="安装 G2O"></a>安装 G2O</h4><p>安装前需要安装以下依赖:</p>
+<pre class=" language-lang-bash"><code class="language-lang-bash">sudo apt install -y \
+    qt5-qmake \
+    qt5-default \
+    libqglviewer-dev-qt5\
+    libsuitesparse-dev \
+    libcxsparse3 \
+    libcholmod3
+</code></pre>
+<p>在安装G2O前，ubuntu20.04如果安装了anaconda可能会有qt5的版本冲突，我在g2o的github issue上找到了解决办法<a target="_blank" rel="noopener" href="https://github.com/Shubodh/MR-project1-pgo/issues/5">https://github.com/Shubodh/MR-project1-pgo/issues/5</a></p>
+<ul>
+<li><p>Make sure to do <code>conda deactivate</code> before starting anything. Remove any environment, even <code>base</code>.</p>
+</li>
+<li><p>Type <code>export NO_CONDA_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</code></p>
+</li>
+<li><p>Now go to your g2o repository, make a folder <code>build</code> and do <code>cd build</code></p>
+</li>
+<li><p>Instead of the <code>cmake ../</code> mentioned by <a target="_blank" rel="noopener" href="https://github.com/Shubodh">@Shubodh</a> sir, use <code>PATH=$NO_CONDA_PATH cmake ../</code></p>
+</li>
+<li><p>Instead of the command <code>make</code> mentioned by <a target="_blank" rel="noopener" href="https://github.com/Shubodh">@Shubodh</a> sir, use <code>make -j8</code> to use threading for building. It is faster</p>
+</li>
+</ul>
+<p>安装 G2O：</p>
+<pre class=" language-lang-bash"><code class="language-lang-bash">git clone https://github.com/RainerKuemmerle/g2o.git
+cd g2o
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j2
+sudo make install
+</code></pre>
+<h3 id="第7章"><a href="#第7章" class="headerlink" title="第7章"></a>第7章</h3><p>SLAM十四讲，第七章程序ch7报错， error: ‘CV_LOAD_IMAGE_COLOR’ was not declared in this scope</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/CxC2333/article/details/107848500">https://blog.csdn.net/CxC2333/article/details/107848500</a></p>
+<p>error while loading shared libraries: libg2o_core.so: cannot open shared object file: No such file or directory</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/LittleEmperor/article/details/80840198">https://blog.csdn.net/LittleEmperor/article/details/80840198</a></p>
+<p><img src="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/data/blog/AI/SLAM十四讲.assets/2022-02-23 18-38-54 的屏幕截图.png" alt="2022-02-23 18-38-54 的屏幕截图"></p>
+<h3 id="射影变换"><a href="#射影变换" class="headerlink" title="射影变换"></a>射影变换</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/frozenspring/article/details/77132296?spm=1001.2101.3001.6650.3&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-3-77132296-blog-100829246.pc_relevant_paycolumn_v3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-3-77132296-blog-100829246.pc_relevant_paycolumn_v3&amp;utm_relevant_index=4">MVG读书笔记——三维空间中的射影几何(一）_炽霜的博客-CSDN博客</a><em>**</em></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/" title="SLAM十四讲代码bug及解决">https://youngyyp.github.io/2021/11/24/计算机视觉/SLAM十四讲/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1/" rel="prev" title="卫星姿态估计">
+      <i class="fa fa-chevron-left"></i> 卫星姿态估计
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E9%A3%9E%E6%9C%BA%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/" rel="next" title="飞机6D位姿估计">
+      飞机6D位姿估计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E7%BC%96%E8%AF%91%E6%8A%A5%E9%94%99%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">第三章编译报错：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0%E5%AE%89%E8%A3%85Sophus%E6%8A%A5%E9%94%99"><span class="nav-number">2.</span> <span class="nav-text">第四章安装Sophus报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0"><span class="nav-number">3.</span> <span class="nav-text">第五章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E8%A7%89SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2%EF%BC%88%E7%AC%AC%E4%BA%8C%E7%89%88%EF%BC%89%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85%E5%BF%83%E5%BE%97%E4%BD%93%E4%BC%9Ahttps-blog-csdn-net-weixin-43863574-article-details-107080443"><span class="nav-number">4.</span> <span class="nav-text">视觉SLAM十四讲（第二版）环境安装心得体会https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_43863574&#x2F;article&#x2F;details&#x2F;107080443</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%9F%BA%E6%9C%AC%E8%BF%87%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">编译基本过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC6%E7%AB%A0"><span class="nav-number">6.</span> <span class="nav-text">第6章</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Ceres"><span class="nav-number">6.1.</span> <span class="nav-text">安装 Ceres</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-G2O"><span class="nav-number">6.2.</span> <span class="nav-text">安装 G2O</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC7%E7%AB%A0"><span class="nav-number">7.</span> <span class="nav-text">第7章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%84%E5%BD%B1%E5%8F%98%E6%8D%A2"><span class="nav-number">8.</span> <span class="nav-text">射影变换</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
