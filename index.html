@@ -484,20 +484,7 @@ class Solutio
       
         
           二分查找
- * 坚持左闭右闭or左闭又开 * while(left &lt;= right) or while(left &lt; right)
-   
-   
- * 比较left、middle和right三个值
-
-移除元素
-数组的元素在内存地址中是连续的，不能单独删除数组中的某个元素，只能覆盖。
-
-双指针法（快慢指针法）：通过一个快指针和慢指针在一个for循环下完成两个for循环的工作
-
- * 快指针：寻找不等于有目标元素的值 （通常快指针就是for循环里面的索引）
- * 慢指针：指向新数组最后一个下标的位置
-
-        for (int fast=0;fast
+ * 坚持左闭右闭or左闭又开 * while(left 
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/01/cpp/%E6%95%B0%E7%BB%84/#more" rel="contents">
@@ -1311,109 +1298,6 @@ optimizer
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="你的征途当是星辰大海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="young's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">UAV和卫星图像配准论文阅读</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-08 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-08T09:49:41+08:00">2022-11-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-11 14:21:01" itemprop="dateModified" datetime="2023-03-11T14:21:01+08:00">2023-03-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        
-          UAV Geolocalization Using Satellite Imagery
-Motivation
-无人机通常靠GPS来获得全局姿态估计，然而为了使用GPS进行精确的地理定位，无人机必须能够从四个或更多的GPS卫星接收直接的视线。这可能是一个问题，如果存在高楼大厦，山脉或干扰器，可以阻碍来自卫星的信号。
-那么我们能在没有GPS的情况下推断出无人机的全局姿态吗?
-答案是肯定的，我们可以使用无人机下面附加的相机传感器来比较场景和卫星图像，并推断出无人机的位置。
-
-Geolocalization as an Image Matching Problem
-考虑这样一个场景，您有一个卫星图像数
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1496,6 +1380,109 @@ Geolocalization as an Image Matching Problem
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">UAV和卫星图像配准论文阅读</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-08 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-08T09:49:41+08:00">2022-11-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-11 14:21:01" itemprop="dateModified" datetime="2023-03-11T14:21:01+08:00">2023-03-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        
+          UAV Geolocalization Using Satellite Imagery
+Motivation
+无人机通常靠GPS来获得全局姿态估计，然而为了使用GPS进行精确的地理定位，无人机必须能够从四个或更多的GPS卫星接收直接的视线。这可能是一个问题，如果存在高楼大厦，山脉或干扰器，可以阻碍来自卫星的信号。
+那么我们能在没有GPS的情况下推断出无人机的全局姿态吗?
+答案是肯定的，我们可以使用无人机下面附加的相机传感器来比较场景和卫星图像，并推断出无人机的位置。
+
+Geolocalization as an Image Matching Problem
+考虑这样一个场景，您有一个卫星图像数
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
