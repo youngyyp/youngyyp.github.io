@@ -28,10 +28,9 @@
 <meta property="og:description" content="A Review on Satellite 6D Pose Estimation with Deep LearningAbstract准确可靠地获取目标卫星相对于服务航天器的6D位姿是执行在轨飞行任务的关键。然而，很多目标卫星（包括报废的卫星和碎片）是非合作的，并不能主动提供其状态信息或者特殊标记来协助服务航天器，即使其状态信息可用，也无法确保该数据的准确性。由于深度学习的发展，基于单目视觉的6D">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-16T02:42:41.000Z">
-<meta property="article:modified_time" content="2022-08-18T07:59:00.685Z">
+<meta property="article:modified_time" content="2023-03-11T06:09:37.758Z">
 <meta property="article:author" content="young">
-<meta property="article:tag" content="Satellite">
-<meta property="article:tag" content="Pose Estimation">
+<meta property="article:tag" content="位姿估计">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://youngyyp.github.io/2021/01/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E5%8D%AB%E6%98%9F%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1review/">
@@ -78,9 +77,9 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -126,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">30</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -224,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-18 15:59:00" itemprop="dateModified" datetime="2022-08-18T15:59:00+08:00">2022-08-18</time>
+                <time title="修改时间：2023-03-11 14:09:37" itemprop="dateModified" datetime="2023-03-11T14:09:37+08:00">2023-03-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,7 +231,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">位姿估计</span></a>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
                 </span>
             </span>
 
@@ -333,8 +332,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Satellite/" rel="tag"><i class="fa fa-tag"></i> Satellite</a>
-              <a href="/tags/Pose-Estimation/" rel="tag"><i class="fa fa-tag"></i> Pose Estimation</a>
+              <a href="/tags/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 位姿估计</a>
           </div>
 
         
@@ -424,20 +422,20 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

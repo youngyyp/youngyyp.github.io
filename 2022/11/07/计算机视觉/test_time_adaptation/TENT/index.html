@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATIONINTRODUCTION在测试过程中，模型必须适应新的和不同的数据。在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。 深度网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TENT论文阅读">
+<meta property="og:url" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATIONINTRODUCTION在测试过程中，模型必须适应新的和不同的数据。在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。 深度网">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117152108373.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154043795.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117160701962.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154513119.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117162250401.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221118152903397.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221118153002103.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117171421188.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221204190413618.png">
+<meta property="article:published_time" content="2022-11-07T01:49:41.000Z">
+<meta property="article:modified_time" content="2023-03-11T06:21:00.538Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="test time adaptation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117152108373.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TENT论文阅读 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">30</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">6</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TENT论文阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-07 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-07T09:49:41+08:00">2022-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-11 14:21:00" itemprop="dateModified" datetime="2023-03-11T14:21:00+08:00">2023-03-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="TENT-FULLY-TEST-TIME-ADAPTATION-BY-ENTROPY-MINIMIZATION"><a href="#TENT-FULLY-TEST-TIME-ADAPTATION-BY-ENTROPY-MINIMIZATION" class="headerlink" title="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION"></a>TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION</h2><h3 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h3><p>在测试过程中，模型必须适应新的和不同的数据。<br>在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（<strong>test entropy minimization - tent</strong>）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。</p>
+<p>深度网络可以在相同分布的训练和测试数据上实现高精度，然而，对新的和不同的数据的概括是有限的。当训练（源）数据与测试（目标）数据不同时，准确性会受到影响，这种情况被称为<strong>数据集偏移</strong>。模型在测试过程中可能对训练过程中未知的变化敏感，无论是自然变化还是腐蚀，如意外天气或传感器退化。然而，可能需要在不同的数据分布上部署模型，因此需要进行调整（<strong>adaptation</strong>）。<br>在测试期间，模型必须仅根据其参数和目标数据进行调整。这种完全测试时间自适应设置不能依赖于源数据或监督。因为源数据可能很庞大且无法及时获取当前测试数据的标签信息。</p>
+<p>数据量、计算量和任务需求这些实际问题引出了测试时间适应性的重要性：</p>
+<p>1.可用性。为了带宽、隐私或利润，模型可能在没有源数据的情况下分发。<br>2.效率。在测试期间（重新）处理源数据在计算上可能不实用。<br>3.准确性。如果不进行调整，模型可能太不准确，无法达到其目的。</p>
+<p>为了在测试期间进行调整，我们将模型预测的熵最小化。我们将这个目标称为测试熵，并以其命名我们的方法tent。我们选择熵作为它与误差和偏移（domain shift）的联系。熵与误差有关，因为更有信心的预测更准确（图1）。<br>熵与损坏导致的变化有关，因为损坏越多，熵就越多，随着损坏程度的增加，熵与图像分类的损失有很强的等级相关性（图2）。</p>
+<p><strong>我们的贡献：</strong></p>
+<p>•我们强调了只使用目标数据而不使用源数据的完全测试时间自适应设置。为了强调推理过程中的实际适应性，我们使用离线和在线更新进行基准测试。<br>•我们将熵作为自适应目标，并提出了tent：一种测试时间熵最小化方案，通过减少测试数据上模型预测的熵来减少泛化误差。<br>•对于损坏的鲁棒性，在ImageNet-C上，tent达到44:0%的错误，优于鲁棒训练的现状（50:2%）和测试时间标准化的强大基线（49:9%）。<br>•对于领域适应，tent能够在线和无源地适应数字分类和语义分割，甚至可以与使用源数据和更多优化的方法相媲美。</p>
+<h3 id="SETTING-FULLY-TEST-TIME-ADAPTATION"><a href="#SETTING-FULLY-TEST-TIME-ADAPTATION" class="headerlink" title="SETTING: FULLY TEST-TIME ADAPTATION"></a>SETTING: FULLY TEST-TIME ADAPTATION</h3><p>适应解决了从源到目标的泛化问题。具有在源数据和标签xs上训练的参数的模型f（x）；当对移位的目标数据xt进行测试时，ys可能不会泛化。表1总结了自适应设置、所需数据和损失类型。<strong>我们的完全测试时间自适应设置仅需要模型参数f和未标记的目标数据xt</strong>，以便在推理过程中进行自适应。</p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117152108373.png" alt="image-20221117152108373"></p>
+<p>现有的适应设置扩展了训练过程，使用了更多的数据和监督。通过微调进行转移学习（Donahue等人，2014；Yosinski等人，2014）需要目标标签来（重新）训练监督损失L（xt；yt）。如果没有目标标签，就无法进行这种有监督的训练。域自适应（DA）（Quionero Candela等人，2009年；Saenko等人，2010年；Ganin&amp;Lempitsky，2015年；Tzeng等人，2015年）需要源数据和目标数据来训练跨域损失L（xs；xt）。<br>测试时间训练（TTT）（Sun等人，2019b）在测试期间进行调整，但首先改变训练以联合优化其监督损失L（xs；ys）和自我监督损失L（xs）。如果没有source data，将无法使用跨域联合训练（DA）或损失（TTT）。<br>测试期间意外的目标数据需要测试时间调整（TTA）。TTT和我们的设置通过<strong>优化测试L（xt）期间的无监督损失</strong>来调整模型。在训练期间，TTT<strong>联合优化了源数据L（xs）上的无监督损失和监督损失L（xs；ys），以确保在损失之间共享参数</strong>，以与L（xt）的自适应兼容。）（测试时间训练（TTT）联合训练目标上的受监督和自监督任务，然后在测试过程中继续训练目标上自监督任务）。</p>
+<p>完全测试时间自适应与给定参数的训练数据和训练损失无关。通过不改变训练，我们的设置有可能需要更少的数据和计算来适应。</p>
+<h3 id="METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION"><a href="#METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION" class="headerlink" title="METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION"></a>METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION</h3><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154043795.png" alt="image-20221117154043795"></p>
+<p><em>方法概述。Tent不改变训练阶段（a），但在给定参数和目标数据xt的约束调制下，在测试（b）期间最小化预测的熵</em></p>
+<p>模型要求：针对的是监督任务，所以模型需要经过有监督的训练；模型必须是概率模型，因为需要计算预测的熵；快速迭代优化需要梯度，所以模型必须可微。</p>
+<h4 id="ENTROPY-OBJECTIVE"><a href="#ENTROPY-OBJECTIVE" class="headerlink" title="ENTROPY OBJECTIVE"></a>ENTROPY OBJECTIVE</h4><p>我们的测试时间目标L（xt）是最小化模型预测的熵H（^y）^y=f（xt）。特别地，我们测量了香农熵（香农，1948），<img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117160701962.png" alt="image-20221117160701962" style="zoom: 33%;">。注意，优化单个预测有一个退化解：即将所有概率分配给最可能的类。我们通过在批处理中共享的参数上联合优化批处理预测来防止这种情况。<strong>（优化单个预测会得到退化解，因此联合优化一个批的预测概率）</strong><br><strong>熵是一个无监督的目标，因为它只依赖于预测而不是注释。然而，作为预测的度量，它与监督任务和模型直接相关</strong>。<br>相比之下，用于自我监督学习的代理任务与监督任务没有直接关系。<br>代理任务从没有任务标签y的输入xt导出自监督标签y0。这些代理的示例包括旋转预测（Gidaris等人，2018）、上下文预测（Doersch等人，2015）和跨信道自动编码（Zhang等人，2017）。代理任务上的过多进展可能会干扰受监督任务的性能，自我监督的自适应方法必须相应地限制或混合更新（Sun等人，2019b；a）。因此，需要谨慎地选择与域和任务兼容的代理，为代理模型设计架构，并平衡任务和代理目标之间的优化。我们的熵目标不需要这样的努力<strong>（自监督方法选择一个域与任务相兼容的proxy很重要）</strong></p>
+<h4 id="MODULATION-PARAMETERS"><a href="#MODULATION-PARAMETERS" class="headerlink" title="MODULATION PARAMETERS"></a>MODULATION PARAMETERS</h4><p>模型参数是测试时间优化的自然选择，这些是列车时间熵最小化的先前工作的选择（Grand代客和Bengio，2005；Dhillon等人，2020；Carlucci等人，2017）。然而，模型参数是我们设置中训练/源数据的唯一表示，改变可能会导致模型偏离其训练。此外，f可以是非线性的，并且可以是高维的，使得优化对于测试时间的使用过于<strong>敏感</strong>和低效。</p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154513119.png" alt="image-20221117154513119"></p>
+<p><em>图4：Tent通过估计归一化统计数据来调制测试期间的特征；优化变换参数；. 标准化和变换将按通道缩放和移动应用于特征。在不使用源数据的情况下，根据目标数据更新统计信息和参数。在实践中，适应；是有效的，因为它们占模型参数的&lt;1%</em></p>
+<p>为了稳定性和效率，我们只更新线性（尺度和位移）和低维（信道方向）的特征调制。图4显示了我们调制的两个步骤：统计归一化和参数转换。标准化将输入x集中并标准化</p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117162250401.png" alt="image-20221117162250401"></p>
+<p>为了实现，我们只需重新调整源模型的<strong>normalization layers</strong>的用途。我们在测试期间更新了所有层和通道的归一化统计和仿射参数。</p>
+<h4 id="ALGORITHM"><a href="#ALGORITHM" class="headerlink" title="ALGORITHM"></a>ALGORITHM</h4><p><strong>初始化</strong> 优化器收集源模型中每个归一化层l和通道k的仿射变换参数{γl，k，βl，k}。其余参数θ｛γl，k，βl，k｝是固定的。源数据的归一化统计{μl，k，σl，k}被丢弃。<br><strong>迭代 </strong>每个步骤都会更新一批数据的规范化统计信息和转换参数。在正向过程中，依次估计每个层的归一化统计。在反向传播过程中，通过预测熵的梯度更新变换参数γ、β。变换参数更新遵循当前批次的预测，因此它只影响下一批次（除非重复正向）。这只需要每个额外计算点一个梯度，因此我们默认使用此方案以提高效率。<br><strong>终止 </strong>对于在线适应，不需要终止，只要有测试数据，迭代就会继续。对于离线适应，首先更新模型，然后重复推理。<br>当然，适应可以通过多个时期的更新来继续</p>
+<h3 id="EXPERIMENTS"><a href="#EXPERIMENTS" class="headerlink" title="EXPERIMENTS"></a>EXPERIMENTS</h3><h4 id="ROBUSTNESS-TO-CORRUPTIONS"><a href="#ROBUSTNESS-TO-CORRUPTIONS" class="headerlink" title="ROBUSTNESS TO CORRUPTIONS"></a>ROBUSTNESS TO CORRUPTIONS</h4><p>为了对损坏的健壮性进行基准测试，我们使用了常见的图像损坏（示例参见附录A）。通过复制CIFAR-10\/100和ImageNet数据集的<strong>测试/验证集</strong>，并在五个严重级别应用15种类型的损坏，将CIFAR-10/100-C和ImageNet-C数据集转换为CIFAR-10/10-C和ImageNet C损坏基准。</p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221118152903397.png" alt="image-20221118152903397" style="zoom:43%;"></p>
+<p>Tent在不增加原始数据错误的情况下达到了大多数损坏类型的最小错误。（original的错误率基本没变）</p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221118153002103.png" alt="image-20221118153002103" style="zoom:50%;"></p>
+<p>我们的网络配备了批量标准化（Ioffe&amp;Szegedy，2015）。<strong>对于没有自适应的源模型，在对源数据进行训练期间估计归一化统计</strong>。对于所有测试时间自适应方法，我们在对目标数据进行测试期间估计这些统计数据，正如在标准化自适应的并行工作中所做的那样（Schneider等人，2020；Nado等人，2020）。</p>
+<p>测试时间归一化（BN）更新测试期间目标数据的批次归一化统计</p>
+<p>（BN) updates batch normalization statistics </p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117171421188.png" alt="image-20221117171421188" style="zoom: 50%;"></p>
+<h3 id="RELATED-WORK"><a href="#RELATED-WORK" class="headerlink" title="RELATED WORK"></a>RELATED WORK</h3><p>我们涉及现有的自适应、熵最小化和特征调制方法。<br>训练时间自适应域自适应通过跨域损失L（xs；xt）在源和目标上联合优化，以减轻偏移。这些损失优化了特征对齐（Gretton等人，2009；Sun等人，2017）、对抗不变性（Ganin&amp;Lempitsky，2015；Tzeng等人，2017年）或共享代理任务（Sun等人，2019a）。转导（Gammerman等人，1998年；Joachims，1999年；Zhou等人，2004年）联合优化列车和测试，以更好地适应特定测试实例。尽管在其设置中有效，但当源/训练和目标/测试的联合使用被拒绝时，两者都不适用。帐篷只能适应目标。<br>最近的“无源”方法（Li等人，2020；Kundu等人，2020年；Liang等人，2020）也适用于无源数据的情况。Li等人（2020）；Kundu等人（2020）依赖于生成建模，并优化具有多重损失的多个模型。Kundu等人（2020）；Liang等人（2020）也改变了训练。Tent不需要生成建模，也不改变训练，因此它可以更广泛地部署，以更高的计算效率在线适应。SHOT（Liang等人，2020）通过信息最大化（熵最小化和多样性正则化）进行调整，但在其他损失和参数化方面有所不同。这些无源方法在多个时间段内以多个损失离线优化，这需要比帐篷更多的调整和计算，但可以通过更多的计算实现更高的精度。Tent在线优化，仅需一次损失和有效的调制参数化，以强调推理过程中的充分测试时间自适应。我们鼓励在没有原始数据的情况下，在适应的前沿对这些作品进行审查。<br>Chidlovskii等人（2016）是第一个出<strong>于法律、商业或技术考虑</strong>而在没有源数据的情况下激励适应的人。他们通过应用去噪自动编码器来调整预测，而我们通过熵最小化来调整模型。我们分享他们的动机，但方法和实验不同。<br>测试时间适配帐篷通过测试时间优化和标准化进行适配以更新模型。<br>预测的测试时间适应，通过这种适应，基于更简单和特定的情况来调整更困难和不确定的情况（Jain&amp;Learned Miller，2011），为我们自己的基于确定性的模型适应方案提供了灵感。<br>测试时间训练（TTT）（Sun等人，2019b）也在测试期间优化，但其损失不同，必须改变训练。TTT依赖于代理任务，例如识别图像的旋转，因此其损失取决于代理的选择。（事实上，其作者警告说，代理必须“在新域中既定义明确又不平凡”）。TTT改变训练以在适应目标之前优化源上的代理丢失。帐篷无需代理任务，也无需改变训练即可适应。<br>标准化特征统计对于域自适应是常见的（Gretton等人，2009；Sun等人，2017）。<br>对于批量归一化，Li等人（2017）；Carlucci等人（2017）在培训期间分离了来源和目标统计数据。Schneider等人（2020）；Nado等人（2020）在测试期间估计目标统计，以提高泛化能力。Tent建立在测试时间标准化的基础上，以进一步减少泛化误差。<br>熵最小化熵最小化是域自适应（Carlucci等人，2017；Shu等人，2018；Saito等人，2019；Roy等人，2019）、半监督学习（Grand代客和Bengio，2005；Lee，2013；Berhelot等人，2019年）和少镜头学习（Dhillon等人，2020）的关键正则化器。<br>正则化熵惩罚数据分布中高密度的决策，以提高不同类别的准确性（Grand代客和Bengio，2005）。这些方法将训练期间的熵与其他有监督和无监督的额外数据损失协调起来。帐篷是第一个将8</p>
+<h3 id="DISCUSSION"><a href="#DISCUSSION" class="headerlink" title="DISCUSSION"></a>DISCUSSION</h3><p>Tent通过测试时间熵最小化来减少移位数据的泛化误差。在最小化熵的过程中，模型会根据自身预测的反馈进行调整。这是真正自我监督的自我提升。这种类型的自我监督完全由受监督的任务定义，与设计用于从数据中提取更多监督的代理任务不同，但它仍然显著地减少了错误。<br>尽管如此，由于腐败和其他变化导致的错误仍然存在，因此需要进行更多的调整。下一步应通过更有效和更有效的损失，在更一般的参数上，对更多更难的换档类型进行测试时间调整。<br>Shifts Tent减少了各种移位的误差，包括图像损坏、数字外观的简单变化以及模拟真实差异。这些变化作为标准化基准很受欢迎，但其他现实世界的变化也存在。例如，通过复制数据集收集过程制作的CIFAR 10.1和ImageNetV2测试集（Recht等人，2018；2019）包含自然但未知的变化。尽管这两个集合的误差都较高，表明存在移位，但帐篷并不能改善泛化。对抗性转变（Szegedy等人，2014）也威胁着现实世界的使用，攻击者不断适应防御。尽管对抗性训练（Madry et al.，2018）有所不同，但测试时间适应可以帮助对抗此类测试时间攻击。<br>参数Tent通过标准化和变换来调节模型，但大部分模型保持不变。测试时间调整可能会更新更多的模型，但问题是要确定既有表现力又可靠的参数，这可能会与损失的选择相互影响。TTT适应受监督和自我监督模型共享的多个特征层，SHOT适应模型的除最后一层以外的所有层。这些选择取决于模型架构、损失和调优。对于帐篷调制是可靠的，但通过SHOT参数化可以更好地解决VisDA上的较大偏移。联合调整投入可能是一种更普遍的选择。如果一个模型能够适应目标，那么它的输入梯度可能会优化空间转换或图像转换，以减少没有源数据的移动。<br>损失帐篷使熵最小化。对于更多的适应，一般的但不定期的测试时间优化是否存在有效的损失？熵在任务中是通用的，但范围有限。<strong>它需要批量优化，并且不能一次在一个点上偶尔更新</strong>。TTT可以这样做，但必须使用正确的代理任务。对于较少的计算，是否存在更多局部优化的有效损失？Tent和TTT都需要对模型进行完整（重新）计算以进行更新，因为它们依赖于模型的预测。如果损失是在表示上定义的，那么更新将需要更少的正向和反向计算。具体回到熵，这种损失可能与校准相互作用（Guo等人，2017），因为更好的不确定性估计可以推动更好的适应。<br>我们希望，完全测试时间自适应设置可以促进新的方法，使模型能够自适应，就像帐篷每次更新都会生成新模型一样</p>
+<h2 id="实验设置"><a href="#实验设置" class="headerlink" title="实验设置"></a>实验设置</h2><p>We evaluate tent for <strong>corruption robustness on CIFAR-10/CIFAR-100 and ImageNet</strong>, and for <strong>domain adaptation on digit adaptation from SVHN to MNIST/MNIST-M/USPS</strong></p>
+<p>For <strong>corruption</strong> we use residual networks (He et al., 2016) with 26 layers (<strong>R-26</strong>) on CIFAR10/100 and 50 layers (<strong>R-50</strong>) on ImageNet. For domain adaptation we use the <strong>R-26</strong> architecture. For fair comparison, all methods in each experimental condition share the same architecture.</p>
+<p>On ImageNet we optimize by SGD with momentum; on other datasets we optimize by Adam</p>
+<p>On ImageNet, we set BS = 64 and LR = 0.00025, and on other datasets we set BS = 128 and LR = 0.001.</p>
+<p>Baselines We compare to <strong>domain adaptation, self-supervision, normalization, and pseudo-labeling</strong>:</p>
+<ul>
+<li><p>source</p>
+</li>
+<li><p>adversarial domain adaptation (RG):</p>
+<ul>
+<li>论文题目：Unsupervised Domain Adaptation by Backpropagation（2015）</li>
+<li><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221204190413618.png" alt="image-20221204190413618"></li>
+<li>需要修改训练流程且无法在测试时更新</li>
+</ul>
+</li>
+<li><p>self-supervised domain adaptation (UDA-SS):</p>
+<ul>
+<li>联合训练源和目标上的自监督旋转和定位任务，以优化共享表示，需要<strong>同时有源数据和测试数据</strong></li>
+<li>论文题目：Unsupervised domain adaptation through self-supervision（2019）</li>
+<li>本文讨论了无监督域自适应，即源域上有标记的训练数据，但目标是在目标域上只有未标记数据，希望能够通过一些方法将源域上分类器迁移到目标域上，并能在目标域上有良好的性能。与之前的许多工作一样，我们试图在保持可辨别性的同时，对源域和目标域的学习表示进行对齐。我们实现对齐的方法是同时在两个领域学习<strong>辅助自监督任务</strong>。每一个自监督的任务都使这两个领域沿着与该任务相关的方向走得更近。在源域上与主任务分类器联合训练，可以成功地推广到未标记的目标域。</li>
+<li>代理任务的选择：<ul>
+<li>旋转预测：输入图像依次旋转90，180，270度，该任务是该任务是预测旋转角度作为一个四维分类问题。<br>  翻转预测：输入图像垂直随机翻转;任务是预测它是否翻转。<br>  贴片位置预测：从输入图像中随机裁剪出小块;任务是预测这些补丁来自哪里。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>test-time training（TTT）:</p>
+<ul>
+<li>在源端对有监督和自监督任务进行联合训练，在测试时继续对目标端自监督任务进行训练</li>
+<li>论文题目：Test-Time Training with Self-Supervision for Generalization under Distribution Shifts（2020）</li>
+<li>无监督域自适应研究的是当训练时除了来自训练分布(源域)的有标签数据集外，还有来自测试分布(目标域)的无标签数据集时，分布偏移的问题。然而，<strong>问题设置的局限性在于，泛化性可能只针对这个特定的测试分布而得到改善</strong>，这可能很难提前预料。Test-Time Training不预期任何测试分布，通过改变无监督域适应的设置，同时从其算法中得到启发。我们的论文是对Sun et al . ( 2019 )的一个后续，我们对此进行了解释和实证</li>
+</ul>
+</li>
+<li><p>test-time normalization (BN)（2020）：</p>
+<ul>
+<li>根据测试数据的分布，动量式的更新BN层的统计数据（均值和方差），能够实现单样本输入</li>
+</ul>
+</li>
+<li><p>pseudo-labeling (PL)（2013）：</p>
+<ul>
+<li>调整一个置信度阈值，将超过该阈值的预测赋值为标签，然后在测试之前将模型优化到这些伪标注。</li>
+<li>在给无标签样本添加标签后，然后选择置信度高的样本扩充到有标签的样本中，再训练模型，不断的更新模型</li>
+</ul>
+</li>
+</ul>
+<pre><code>注：**只有BN、PL、TENT算TTA**
+</code></pre><h3 id="ROBUSTNESS-TO-CORRUPTIONS-1"><a href="#ROBUSTNESS-TO-CORRUPTIONS-1" class="headerlink" title="ROBUSTNESS TO CORRUPTIONS"></a>ROBUSTNESS TO CORRUPTIONS</h3><p>为了衡量腐败的稳健性，我们使用常见的图像腐败(见附录A)。通过复制CIFAR - 10 / 100和ImageNet数据集的测试/验证集，并在5个严重等级( Hendrycks &amp; Dietterich , 2019)上应用15种腐败类型，将CIFAR - 10 / 100 - C和ImageNet - C数据集转换为腐败基准测试集。</p>
+<p>不同程度的不同类型的损坏  每次都会reset model</p>
+<p>model：resnet 26</p>
+<p>难以完全复现原论文数据，需要看看其他论文里面是如何是如何实现的</p>
+<h4 id="github-issue"><a href="#github-issue" class="headerlink" title="github issue"></a>github issue</h4><ul>
+<li>tent有时会随着训练epoch的轮数增加而效果下降<a target="_blank" rel="noopener" href="https://github.com/DequanWang/tent/issues/7">Performance on CIFAR-10-C deteriorates with more epochs · Issue #7 · DequanWang/tent (github.com)</a> <ul>
+<li>测试时间适应方法如何决定<strong>何时更新或不更新</strong>，特别是何时停止？Tent 在这方面很简单，并且总是在每批上更新，但也许更复杂的规则可以在结果恶化之前停止优化。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/" title="TENT论文阅读">https://youngyyp.github.io/2022/11/07/计算机视觉/test_time_adaptation/TENT/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/test-time-adaptation/" rel="tag"><i class="fa fa-tag"></i> test time adaptation</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/" rel="prev" title="TTA开题">
+      <i class="fa fa-chevron-left"></i> TTA开题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" rel="next" title="子空间论文阅读">
+      子空间论文阅读 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TENT-FULLY-TEST-TIME-ADAPTATION-BY-ENTROPY-MINIMIZATION"><span class="nav-number">1.</span> <span class="nav-text">TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#INTRODUCTION"><span class="nav-number">1.1.</span> <span class="nav-text">INTRODUCTION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SETTING-FULLY-TEST-TIME-ADAPTATION"><span class="nav-number">1.2.</span> <span class="nav-text">SETTING: FULLY TEST-TIME ADAPTATION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION"><span class="nav-number">1.3.</span> <span class="nav-text">METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ENTROPY-OBJECTIVE"><span class="nav-number">1.3.1.</span> <span class="nav-text">ENTROPY OBJECTIVE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MODULATION-PARAMETERS"><span class="nav-number">1.3.2.</span> <span class="nav-text">MODULATION PARAMETERS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ALGORITHM"><span class="nav-number">1.3.3.</span> <span class="nav-text">ALGORITHM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EXPERIMENTS"><span class="nav-number">1.4.</span> <span class="nav-text">EXPERIMENTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ROBUSTNESS-TO-CORRUPTIONS"><span class="nav-number">1.4.1.</span> <span class="nav-text">ROBUSTNESS TO CORRUPTIONS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RELATED-WORK"><span class="nav-number">1.5.</span> <span class="nav-text">RELATED WORK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DISCUSSION"><span class="nav-number">1.6.</span> <span class="nav-text">DISCUSSION</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%AE%BE%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">实验设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROBUSTNESS-TO-CORRUPTIONS-1"><span class="nav-number">2.1.</span> <span class="nav-text">ROBUSTNESS TO CORRUPTIONS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#github-issue"><span class="nav-number">2.1.1.</span> <span class="nav-text">github issue</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
