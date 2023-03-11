@@ -293,7 +293,7 @@
 <p>把样本图像分割为若干个像素的单元，把梯度方向平均划分为多个区间，在每个单元里面对所有像素的梯度方向在各个方向区间进行直方图统计。最后把这些直方图组合起来，就可以构成特征描述符。</p>
 <h3 id="传统方法的缺点"><a href="#传统方法的缺点" class="headerlink" title="传统方法的缺点"></a>传统方法的缺点</h3><p>1）基于滑动窗口的区域选择策略没有针对性,时间复杂度高,窗口冗余</p>
 <p>2）手工设计的特征对于多样性的变化没有很好的鲁棒性</p>
-<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h2 id="二阶段anchor-based-RCNN系列"><a href="#二阶段anchor-based-RCNN系列" class="headerlink" title="二阶段anchor based - RCNN系列"></a>二阶段anchor based - RCNN系列</h2><p>二阶段检测算法主要分为以下两个阶段<br><strong>Stage1</strong>：从图像中生成region proposals<br><strong>Stage2</strong>：从region proposals生成最终的物体边框。</p>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3><h2 id="二阶段anchor-based-RCNN系列"><a href="#二阶段anchor-based-RCNN系列" class="headerlink" title="二阶段anchor based - RCNN系列"></a>二阶段anchor based - RCNN系列</h2><p>二阶段检测算法主要分为以下两个阶段<br><strong>Stage1</strong>：从图像中生成region proposals<br><strong>Stage2</strong>：从region proposals生成最终的物体边框。</p>
 <p>[RCNN系列]<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/383167028">https://zhuanlan.zhihu.com/p/383167028</a></p>
 <h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><p><img src="/2022/10/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-2ebc675f93f886e008c222880200a274_1440w.webp" alt="img"></p>
 <p>RCNN首先通过选择性搜索算法Selective Search从一组对象候选框中选择可能出现的对象框，然后将这些选择出来的对象框中的图像resize到某一固定尺寸的图像，并喂入到CNN模型和svm模型</p>
