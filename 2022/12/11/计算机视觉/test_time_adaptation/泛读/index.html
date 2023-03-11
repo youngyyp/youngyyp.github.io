@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="SITA: Single Image Test-time AdaptationSITA协议： •不需要访问源训练数据。 •在推理过程中几乎和原始模型一样快。 •可以适应单个测试实例且不需要批处理。 •适应于一个测试实例的模型不应该在后续实例上使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="SITA: Single Image Test-time AdaptationSITA协议： •不需要访问源训练数据。 •在推理过程中几乎和原始模型一样快。 •可以适应单个测试实例且不需要批处理。 •适应于一个测试实例的模型不应该在后续实例上使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/image-20221205152155979.png">
+<meta property="article:published_time" content="2022-12-11T08:57:24.177Z">
+<meta property="article:modified_time" content="2022-12-11T08:57:24.212Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/image-20221205152155979.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-11 16:57:24" itemprop="dateCreated datePublished" datetime="2022-12-11T16:57:24+08:00">2022-12-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="SITA-Single-Image-Test-time-Adaptation"><a href="#SITA-Single-Image-Test-time-Adaptation" class="headerlink" title="SITA: Single Image Test-time Adaptation"></a>SITA: Single Image Test-time Adaptation</h2><p><strong>SITA协议：</strong></p>
+<p>•不需要访问源训练数据。</p>
+<p>•在推理过程中几乎和原始模型一样快。</p>
+<p>•可以适应单个测试实例且不需要批处理。</p>
+<p>•适应于一个测试实例的模型不应该在后续实例上使用。</p>
+<p>•在测试时不需要超参数调优。</p>
+<p>类似于BN [ 28 ]，我们的方法校准了批范数<strong>统计量</strong>。然而，由于从单个测试实例中估计它们是不可靠的(如[ 28 ]中所做的)，我们利用单个测试实例的某些<strong>增强</strong>来获得批范数统计量的稳健估计。此外，我们提出了一种基于<strong>熵</strong>的方法来估计每个测试实例的校准参数（无需像BN那样手动设置超参）</p>
+<p>与TENT [ 31 ]和TTT [ 30 ]需要至少一个后向通道不同，我们的自适应方法只使用一个前向通道，因此(与直接使用源模型相比具有可比性)非常快</p>
+<p><strong>方法：即对单张输入图像做数据增强，求多张图像的平均统计参数，然后再类似BN的方法动量式的更新</strong></p>
+<p>（SITA: Single Image Test-time Adaptation）</p>
+<p>最近的文献中出现了训练稳健模型[ 9,22,27]的工作。虽然这是一个可行的研究方向，但它需要修改培训过程。这可能并不总是可行的，因为出于隐私/存储方面的考虑，训练数据可能不再可用。所有可用的都是先前训练好的模型。因此，人们对测试时间自适应( Test Time Adaptive，TTA )产生了越来越大的兴趣，在不改变训练过程或要求访问原始训练数据的情况下，模型可以在测试时间进行自适应。</p>
+<p>TTT [ 30 ]和TENT [ 31 ]是最近的一些工作，在预测时适应模型方面非常有效。TTT [ 30 ]使用辅助的自监督任务来训练源模型。然后对每个测试实例微调(通过自监督子网络)，进行多次迭代。使用TTT来适应一个新的模型，需要修改训练过程(添加自监督子网络)，因此需要访问源训练数据，而这些数据可能并不总是可用的。此外，多次后退需要相当长的时间，在延迟不可接受的情况下可能无法使用。另一方面，TENT [ 31 ]在不访问源数据的情况下，适应给定的训练模型。TENT假设数据以批次形式出现，批次规模通常比一大很多。</p>
+<p>它考虑一个在线设置，其中适应当前实例(批处理)的模型用于适应后续实例(批处理)，这意味着模型具有关于直到某一点所看到的所有测试实例的信息。受TTT [ 30 ]和TENT [ 31 ]的成功和局限性的启发，我们列举了为现实的、具有挑战性的SITA协议所开发的算法的以下理想特性</p>
+<p>•不需要访问源训练数据。•在推理过程中几乎和原始模型一样快。•可以适应单个测试实例且不需要批处理。•适应于测试实例的模型不应该在后续实例上使用。•在测试时不需要超参数调优。</p>
+<p>第一个属性不仅与隐私/存储问题有关，还与速度有关，因为对源数据的任何重新训练都会使该方法变得缓慢。第三种属性背后的动机是潜伏期和隐私性。对于大批量的样本，我们不得不等待一定数量的样本，导致延迟，或者来自多个用户的俱乐部样本，这可能存在隐私问题。第四个特性是由于不同的测试实例/批次可能来自非常不同的分布，这会对模型的性能产生不利影响。图1比较了SITA设置与文献中其他TTA设置。进一步地，我们不能期望验证实例在测试时刻调整超参数。使用大批量的在线方法，如TENT [ 31 ]，通过一次评估一个腐败类型(单一分布)来提高性能，即重置下一个腐败类型的模型。通过混合CIFAR - 10 - C中的所有15种腐败类型进行评估[ 8 ]</p>
+<p>除了TTT和TENT之外，最近的另一项工作BN [ 28 ]分析了校准神经网络批归一化统计量的能力，以使预测对对抗腐败具有鲁棒性。虽然不是特别针对SITA设置而设计，但BN仍然可以应用于SITA设置。BN的工作方式是将源统计量替换为源和目标统计量的加权组合，其中SITA设置中的目标统计量将根据给定的单个测试实例进行估计。这有两个挑战- -第一，单一的图像统计可能不够可靠，第二，校准权重对性能有很大的影响，不同的测试样本可能会有所不同。在文献[ 28 ]中，参数是经验设定的，这对于SITA是不实际的。</p>
+<p>在这项工作中，我们提出了AugBN，它克服了上述限制，满足了单幅图像测试时间自适应( SITA )设置的各种需求。该方法不需要对源数据进行任何访问，一次适应一个测试实例，并将模型重置为给定的源模型以适应每一个新的测试实例。与BN [ 28 ]类似，我们的方法校准了批范数统计量。然而，由于从单个测试实例估计它们是不可靠的(如[ 28 ]中所做的)，我们利用单个测试实例的某些增强来获得批量范数统计量的稳健估计。此外，我们提出了一种基于熵的方法来估计每个测试实例的校准参数，而不是像文献[ 28 ]中那样将其视为一种设计选择。我们提出的无超参数方法在各种数据集的分类和分割中表现出一致的性能提升。</p>
+<p>与TENT [ 31 ]和TTT [ 30 ]需要至少一个后向通道不同，我们的自适应方法只使用一个前向通道，因此具有相当快的(与直接使用源模型相比具有可比性)。本文的主要贡献总结如下：1 .我们形式化了单幅图像测试时间自适应( SITA )设置。2 .本文提出的无超参数方法在稠密和稀疏预测任务中都表现出快速自适应，仅有一个前向传递。3 .我们在分类和分割任务上都取得了SITA的最新性能。</p>
+<p><strong>BatchNorm自适应。</strong>最近关于领域适应的文献提出，仅调整批次标准化层的统计信息，以适应测试分布。尽管这些工作并非针对TTA任务，但它们表明，调整标准化统计数据可以提供显著的性能提升，而不需要手工制作的损失函数。预测时间归一化（PTN）[21]使用当前测试批次的均值和方差作为批次规范层中的统计，而不是使用源数据的累积统计。如果测试批大小足够大，可以提供一个很好的估计值，那么这就相当有效。BN[28]使用了类似的方法，重点是提高对腐败的鲁棒性。源模型的累积统计信息与所有可用测试图像上累积的统计信息相结合，以在两种设置中达到可靠的估计：（i）在整个测试集可用的情况下完全自适应，以及（ii）在测试集的子集可用的情况下部分自适应。部分适配设置的特殊情况（一次只有一个图像可用）可被视为测试时间适配。我们的AugBN算法是对BN的显著改进。AugBN使用增强从单个图像获得批处理范数统计的鲁棒估计。此外，所提出的方法自动为每个单独的测试实例找到最佳校准参数，而无需任何验证数据集。这些改进使我们的方法更适用于具有挑战性的SITA设置，在各种数据集和任务中显示出一致的性能提高。最近在网上出现了一些与TTA相关的并行作品。You等人[34]使用具有CORE[13]损失的BN[28]来调整批次范数层的仿射参数。他们的方法需要反向传播和大批量，不符合SITA。Zhang等人[35]对每个测试样本使用32\/64个扩增样本来获得边际输出分布，并使用类似于TENT[31]的熵损失对其进行优化，这需要对每个样本进行昂贵的优化。Hu等人[11]对传入测试数据的统计数据以及扩增数据进行了在线估计。相比之下，我们的贡献是独一无二的，因为我们根据更难的SITA设置提出了一种轻量级的适应技术。此外，这些方法中的大多数都涉及超参数调整以获得最佳结果，而论文没有在测试时对其进行调整，因此在SITA设置中不现实。</p>
+<h2 id="Continual-Test-Time-Domain-Adaptation"><a href="#Continual-Test-Time-Domain-Adaptation" class="headerlink" title="Continual Test-Time Domain Adaptation"></a>Continual Test-Time Domain Adaptation</h2><p>现实世界中的机器感知系统运行在非平稳且不断变化的环境中，目标域分布会随时间发生变化。现有的方法大多基于自训练和熵正则化，这些方法会受到这些非平稳环境的影响。</p>
+<p>为了解决这些问题，我们提出了一种连续测试时间自适应方法( CoTTA )。首先，我们提出使用<strong>权重平均和增强平均</strong>的预测来减少误差累积，这两种方法往往更准确。另一方面，<strong>为了避免灾难性遗忘</strong>，我们提出在每次迭代过程中随机地将一小部分神经元恢复为源预训练的权重，以帮助长期保存源知识</p>
+<p><img src="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/image-20221205152155979.png" alt="image-20221205152155979" style="zoom:30%;"></p>
+<h2 id="Contrastive-Test-Time-Adaptation"><a href="#Contrastive-Test-Time-Adaptation" class="headerlink" title="Contrastive Test-Time Adaptation"></a>Contrastive Test-Time Adaptation</h2><p>我们提出了一种利用<strong>自监督对比学习</strong>来促进目标特征学习的新方法，以及一种具有显着去噪伪标签的改进的<strong>在线伪标签</strong>方案。对比学习任务与伪标签联合应用，对比与 MoCo 类似但使用源初始化编码器构造的正负对，并排除由伪标签指示的同类负对。同时，我们在线生成伪标签，并通过在目标特征空间中最近的邻居之间进行软投票来细化它们，这是通过维护内存队列来实现的。</p>
+<h2 id="Exploiting-the-Intrinsic-Neighborhood-Structure-for-Source-free-Domain-Adaptation"><a href="#Exploiting-the-Intrinsic-Neighborhood-Structure-for-Source-free-Domain-Adaptation" class="headerlink" title="Exploiting the Intrinsic Neighborhood Structure for Source-free Domain Adaptation"></a>Exploiting the Intrinsic Neighborhood Structure for Source-free Domain Adaptation</h2><p>域适应( DA )旨在缓解源域和目标域之间的域偏移。大多数DA方法需要访问源数据，但这往往是不可能的(例如,由于数据隐私或知识产权)。在本文中，我们解决了具有挑战性的<strong>无源域适应( SFDA )</strong>问题，在没有源数据的情况下，源预训练模型被适应到目标域。我们的方法是基于这样的观察：目标数据可能不再与源域分类器对齐，仍然形成清晰的簇。我们通过定义目标数据的局部亲和度来捕获这种内在结构，并鼓励具有高局部亲和度的数据之间的标签一致性。我们观察到应该为互惠邻居分配更高的亲和力，并提出一种自正则化损失来减少噪声邻居的负面影响。此外，为了聚合更多上下文的信息，我们考虑了具有较小亲和力值的扩展邻域。在实验结果中我们验证了目标特征的内在结构是领域自适应的重要信息来源。我们证明了这种局部结构可以通过考虑局部邻居、互惠邻居和扩展邻居来有效地捕获。最后，我们在多个2D图像和3D点云识别数据集上实现了最先进的性能。</p>
+<p>a source-free domain adaptation (SFDA) method 也就相当于TTA</p>
+<h2 id="Improving-robustness-against-common-corruptions-by-covariate-shift-adaptation（BN）"><a href="#Improving-robustness-against-common-corruptions-by-covariate-shift-adaptation（BN）" class="headerlink" title="Improving robustness against common corruptions by covariate shift adaptation（BN）"></a>Improving robustness against common corruptions by covariate shift adaptation（BN）</h2><p>当今最先进的机器视觉模型容易受到图像损坏（如模糊或压缩伪影）的影响，从而限制了其在许多现实应用中的性能。我们在这里认为，衡量模型对常见损坏的健壮性的流行基准（如ImageNet-C）低估了许多（但不是所有）应用场景中的模型健壮性。关键的见解是，在许多场景中，有多个未标记的腐败示例可用，可以用于无监督的在线适应。用损坏图像的统计信息替换通过训练集上的批量归一化估计的激活统计信息，一致地提高了25个不同流行计算机视觉模型的鲁棒性。使用校正后的统计数据，ResNet-50在ImageNet-C上达到62.2%的mCE，而在不进行调整的情况下达到76.7%。凭借更强大的DeepAugment+AugMix模型，我们将最新ResNet50模型的技术水平从53.6%mCE提高到45.4%mCE。即使对单个样本进行调整，也可以提高ResNet-50和AugMix模型的鲁棒性，32个样本足以改善ResNet50架构的现有技术水平。我们认为，无论何时报告腐败基准和其他分布外一般化设置中的分数，都应包括经过调整的统计结果</p>
+<p>已知当测试和训练数据从相同分布中采样时，深度神经网络（DNN）在独立和相同分布（i.i.d.）设置中表现良好。<br>然而，对于许多应用，这一假设并不成立。在医学成像中，如果使用不同的采集系统，X射线图像或组织切片将与训练数据不同。<br>在质量评估中，如果照明条件发生变化或相机上积聚了灰尘颗粒，则图像可能与训练数据不同。自动驾驶汽车可能面临罕见的天气条件，如沙尘暴或大冰雹。虽然人类视觉对这些偏差非常鲁棒[1]，但现代机器视觉模型通常对此类图像损坏敏感。<br>我们认为，当前对模型鲁棒性的评估低估了许多（但不是所有）真实场景中的性能。到目前为止，像ImageNet-C[IN-C；2]这样的流行图像损坏基准只关注临时场景，在这种场景中，测试模型对测试期间遇到的损坏没有任何先验知识，即使它多次遇到相同的损坏。在医学图像或质量保证的示例中，图像损坏不会随着样本而改变，而是在潜在的大量样本上持续存在。类似地，在相同的沙尘暴或冰雹期间，自动驾驶汽车将在连续的输入流中面临相同的天气条件。这些（未标记的）观察结果可以允许识别模型适应输入分布的变化。<br>这种无监督的自适应机制在域自适应（DA）领域进行了研究，该领域涉及将在一个域（源，这里是干净的图像）上训练的模型自适应到仅存在未标记样本的另一个域中（目标，这里是损坏的图像）。因此，来自域自适应的工具和方法可直接用于提高模型对常见损坏的鲁棒性，但迄今为止尚未报告关于流行基准的结果。这项工作的总体目标是鼓励当前不相交的领域适应和对常见腐败的鲁棒性之间的更强交互。<br>我们在此关注DA中的一种流行技术，即调整批处理归一化[BN；3]统计[4-6]。在计算机视觉中，BN是一种用于加速训练的流行技术，几乎存在于所有当前最先进的图像识别模型中。BN估计训练数据集的激活统计，并使用它们来规范网络中的中间激活。<br>通过设计，在训练时间期间获得的激活统计信息不反映在分布外设置（如损坏的图像）中测试时测试分布的统计信息。我们调查并证实了这样一个假设，即从干净图像到损坏图像的高水平分布变化在很大程度上表现为深度网络内部表示中的一阶矩和二阶矩的差异，这可以通过调整BN统计信息来缓解，即通过估计损坏图像上的BN统计信息。我们证明，这种简单的自适应可以大大提高对损坏图像的识别性能。</p>
+<p>我们的贡献可以总结如下：•我们建议使用两个额外的性能度量来增强常见损坏的当前基准，这两个性能度量在对损坏的图像进行部分和完全无监督的适应之后测量鲁棒性。<br>•我们得出了与域适应的联系，并表明即使适应单个损坏的样本，也可以将在IN上训练的ResNet-50模型的基线性能从76:7%mCE提高到71:4%。鲁棒性随着适应样本的增加而增加，并收敛到62:2%的mCE。<br>•我们表明，在ImageNet[IN；7，8]上训练的各种普通模型的鲁棒性在适应后显著提高，有时在不适应的情况下接近IN-C上的当前最先进性能。<br>•同样，我们表明，当使用经过调整的统计数据时，IN-C上最先进的ResNet-50模型的鲁棒性会不断提高。我们超越了最佳的非适应性模型（52:3%mCE）近7%。<br>•我们展示了几个流行图像数据集的结果，并讨论了我们方法的通用性和局限性。<br>•我们证明，根据源和目标统计数据之间的Wasserstein距离，可以很好地预测非自适应模型的性能退化。我们提出了一个简单的理论模型，用于基于自适应参数来界定Wasserstein距离。</p>
+<p><strong>纠正批量归一化统计数据，作为减少常见损坏引起的协变移位的有力基线</strong></p>
+<p>我们建议使用域自适应自适应批量归一化统计的一个众所周知的工具[5，6]-作为一个简单的基线，以提高自适应评估场景中对图像损坏的鲁棒性。IN训练的模型通常使用批归一化[BN；3]，以便在训练期间更快地收敛和提高稳定性。在BN层内，第一和第二阶统计量c；在每个特征图c的空间维度和样本上估计激活张量zc的2c。然后通过减去平均值c并除以2c来归一化激活。在训练期间，每个批次估计c和2c。在评估期间，通常使用指数平均法对整个训练数据集的c和2c进行估计[10]。<br>使用训练期间获得的BN统计数据进行测试使模型决策具有确定性，但如果输入分布发生变化，则也存在问题。如果激活统计c；对于来自测试域的样本，2c改变，则特征图c的激活不再归一化为零均值和单位方差，打破了所有下游层所依赖的关键假设。<br>数学上，这个协变移位2可以形式化如下：定义1（协变移位，参见12，13）。具有密度ps:X Y！R+和密度为pt:X Y！R+，写为ps（x；y）=ps（x）ps（yjx）和pt（x；y）=pt（x）pt（yjx），如果ps（yj x）=pt（yj x）和ps（x（x）6=pt（x），其中y 2 y表示类标签。<br>去除协变移位。如果协变移位（Def.1）仅导致特征激活z＝f（x）的一阶矩和二阶矩的差异，则可以通过应用归一化来去除：</p>
+<p>通过批处理归一化来减少模型中的协变移位特别简单：估计BN统计量t就足够了；从可用于自适应的测试数据中获取2 t（未标记）样本。如果可用样本的数量n太小，估计的统计数据将太不可靠。因此，我们利用统计数据；2s已经作为先验在训练数据集上计算，并且如下推断每个测试批次的测试统计，</p>
+<h2 id="Training-on-Test-Data-with-Bayesian-Adaptation-for-Covariate-Shift"><a href="#Training-on-Test-Data-with-Bayesian-Adaptation-for-Covariate-Shift" class="headerlink" title="Training on Test Data with Bayesian Adaptation for Covariate Shift"></a>Training on Test Data with Bayesian Adaptation for Covariate Shift</h2><p>熵最小化。熵最小化已被用作许多环境中的自我监督目标，包括领域适应[Saito等人，2019，Carlucci等人，2017]、半监督学习[Grand代客和Bengio，2004，Bertherot等人，2019年，Lee和Lee，2013]和小样本学习[Dhillon等人，2015]。格兰德代和Bengio【2004】提出了一种概率模型，该模型结合了半监督学习的熵最小化（无分布转移），但仅使用概率模型来激励熵最小化作为MAP解决方案的正则化器，以提高准确性，这不会捕获任何认识上的不确定性。相反，我们关注的是分布转移下的测试时间自适应，这需要引入单独的训练时间和测试时间输入分布模型，并提供可靠的认知不确定性估计，这是我们通过贝叶斯边缘化获得的。我们还设计了一种近似推理方案，以允许在不访问训练数据的情况下进行有效的自适应。测试时间熵最小化（TENT）[Wang等人，2020a]使用熵最小化作为适应测试数据时的唯一目标（尽管没有明确的贝叶斯解释），并在不进一步访问训练数据的情况下进行调整，但仅旨在提高准确性，而不是不确定性估计。与格兰德代和Bengio[2004]相似，TENT仅使用熵最小化学习单个模型，而我们表明，对多个模型显式执行贝叶斯推断和边缘化对于有效的不确定性估计至关重要。TENT还启发性地提出，出于稳定性原因，仅在测试时调整网络中的特定参数，而我们使用学习的后验密度来解释训练集，允许我们调整整个网络，提高某些设置中的性能，并消除启发式设计决策的需要。</p>
+<h2 id="Dataset-Shift类型"><a href="#Dataset-Shift类型" class="headerlink" title="Dataset Shift类型"></a><strong>Dataset Shift类型</strong></h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lihe4151021/article/details/123763402">(63条消息) Covariate Shift(协变量偏移)_lihe2021的博客-CSDN博客_covariate shift</a></p>
+<p>dataset shift的类型一般分为三种（以下的协变量因变量可以理解为数据中的x及对应标签y）：</p>
+<ul>
+<li>协变量偏移(Covariate Shift)</li>
+</ul>
+<p>协变量的变化，比如模型应用场景中环境、位置的变化等</p>
+<blockquote>
+<p>注：这里解释下此处的协变量，假设我们要拟合方程 y=wx，对于一个数据对（x，y）:<br>y为因变量，w为自变量，x为协变量。</p>
+</blockquote>
+<ul>
+<li>先验概率偏移(Prior probability shift)</li>
+</ul>
+<p>因变量的变化，比如根据月份预测销售额的模型，用平时月份训练的模型预测销售高峰月份的销售额。输入仍然为月份没有变化，但训练集和实际场景中的因变量完全不一样（一般月份和销售高峰月份的销售额本就不一样）。</p>
+<ul>
+<li>概念偏移</li>
+</ul>
+<p>字面理解就是自变量和因变量之间的关系发生了改变。</p>
+<p>21 </p>
+<p>REVISITING BATCH NORMALIZATION FOR</p>
+<p>PRACTICAL DOMAIN ADAPTATION</p>
+<p>28</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/" title="">https://youngyyp.github.io/2022/12/11/计算机视觉/test_time_adaptation/泛读/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20230207144511)/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/yolo/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SITA-Single-Image-Test-time-Adaptation"><span class="nav-number">1.</span> <span class="nav-text">SITA: Single Image Test-time Adaptation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Continual-Test-Time-Domain-Adaptation"><span class="nav-number">2.</span> <span class="nav-text">Continual Test-Time Domain Adaptation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Contrastive-Test-Time-Adaptation"><span class="nav-number">3.</span> <span class="nav-text">Contrastive Test-Time Adaptation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploiting-the-Intrinsic-Neighborhood-Structure-for-Source-free-Domain-Adaptation"><span class="nav-number">4.</span> <span class="nav-text">Exploiting the Intrinsic Neighborhood Structure for Source-free Domain Adaptation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Improving-robustness-against-common-corruptions-by-covariate-shift-adaptation%EF%BC%88BN%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">Improving robustness against common corruptions by covariate shift adaptation（BN）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-on-Test-Data-with-Bayesian-Adaptation-for-Covariate-Shift"><span class="nav-number">6.</span> <span class="nav-text">Training on Test Data with Bayesian Adaptation for Covariate Shift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dataset-Shift%E7%B1%BB%E5%9E%8B"><span class="nav-number">7.</span> <span class="nav-text">Dataset Shift类型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

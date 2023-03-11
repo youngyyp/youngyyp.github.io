@@ -27,17 +27,17 @@
 <meta property="og:site_name" content="young&#39;s blog">
 <meta property="og:description" content="pytorch环境搭建  1. Anaconda安装【Anaconda教程01】怎么安装Anaconda3 - 知乎 (zhihu.com)            2. 安装cpu版本的pytorchWIN10环境下配置pytorch_辞树-CSDN博客 （只用在anaconda里面装就行了）            3. python编辑器的安装——pycharm和jupyter  （详细过程可见">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220929101035242.png">
 <meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20211116101152566.png">
 <meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/Structure-of-CIFAR10-quick-model.png">
 <meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20210926093605597.png">
 <meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20210926165921945.png">
-<meta property="og:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220712205442574.png">
 <meta property="article:published_time" content="2021-09-16T00:45:41.000Z">
-<meta property="article:modified_time" content="2022-08-18T08:00:31.195Z">
+<meta property="article:modified_time" content="2023-01-04T14:46:48.417Z">
 <meta property="article:author" content="young">
 <meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20211116101152566.png">
+<meta name="twitter:image" content="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220929101035242.png">
 
 <link rel="canonical" href="https://youngyyp.github.io/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/">
 
@@ -83,9 +83,9 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -131,7 +131,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">16</span></a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-18 16:00:31" itemprop="dateModified" datetime="2022-08-18T16:00:31+08:00">2022-08-18</time>
+                <time title="修改时间：2023-01-04 22:46:48" itemprop="dateModified" datetime="2023-01-04T22:46:48+08:00">2023-01-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -281,6 +281,15 @@
 <li>python编辑器的安装——pycharm和jupyter</li>
 </ol>
 <p>（详细过程可见b站教程<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1hE411t7RN?from=search&amp;seid=17801151922772761290&amp;spm_id_from=333.337.0.0">PyTorch深度学习快速入门教程（绝对通俗易懂！）【小土堆】_哔哩哔哩_bilibili</a>）</p>
+<h2 id="CUDA相关"><a href="#CUDA相关" class="headerlink" title="CUDA相关"></a>CUDA相关</h2><p><em>nvcc</em> -<em>V</em> 显示的是本机<em>的cuda版本</em>(或者说在编译时会调这个), <em>torch.version.cuda</em> 显示的是该环境的版本</p>
+<pre class=" language-lang-text"><code class="language-lang-text">if torch.cuda.is_available()
+</code></pre>
+<pre class=" language-lang-text"><code class="language-lang-text">print(torch.__version__)  
+print(torch.version.cuda)
+</code></pre>
+<p>使用conda安装Pytorch时，所安装的cudatoolkit是阉割版的，所以并不包含nvcc等处理程序。此时编译时调用的是base环境下的nvcc</p>
+<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220929101035242.png" alt="image-20220929101035242"></p>
+<p>此时需要安装cudatoolkit-dev</p>
 <h2 id="anaconda命令"><a href="#anaconda命令" class="headerlink" title="anaconda命令"></a>anaconda命令</h2><p>注意创建新环境时记得关翻墙软件</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/z_dmsd/article/details/107394983?utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link">powershell激活conda失败；无法加载文件 C:\Users\user\Documents\WindowsPowerShell\profile.ps1，因为在此系统上禁止运行脚本_你可知外面的世界多大-CSDN博客</a></p>
 <p><code>conda create -n pytorch python=3.8</code></p>
@@ -289,6 +298,20 @@
 <p>这里conda-env2是新创建的Conda环境，conda-env1是被复制的Conda环境，<br>复制完成后，两个环境的Python配置是完全相同的</p>
 <p>查看所有已经安装的环境：conda info —env</p>
 <p>删除环境：conda remove -n myproject —all</p>
+<h3 id="打包conda环境到服务器："><a href="#打包conda环境到服务器：" class="headerlink" title="打包conda环境到服务器："></a>打包conda环境到服务器：</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/562302448">https://zhuanlan.zhihu.com/p/562302448</a></p>
+<p>安装conda pack：</p>
+<pre class=" language-lang-text"><code class="language-lang-text">pip install conda-pack
+</code></pre>
+<p>使用【conda-pack】【conda-forge】打包环境</p>
+<pre><code># 把 “my_env”打包，默认以环境名对压缩文件进行命名，保存到此时的运行路径下
+conda pack -n my_env
+
+# 把 “my_env”打包，以 “out_name.tar.gz” 进行命名
+conda pack -n my_env -o out_name.tar.gz
+</code></pre><p>通过scp把 xx.tar.gz上传到目标服务器的如下目录里面：</p>
+<pre class=" language-lang-text"><code class="language-lang-text">scp tta.tar.gz yyp@192.168.22.137:/home/yyp/copy_env
+tar -xzf tta.tar.gz -C /home/yyp/Workspace/anaconda3/envs/tta
+</code></pre>
 <h2 id="jupyter"><a href="#jupyter" class="headerlink" title="jupyter"></a>jupyter</h2><pre class=" language-lang-python"><code class="language-lang-python">conda install nb_conda #得现在环境中安装这个，才能让jupyter用虚拟环境
 pip install ipykernel
 python -m ipykernel install --user --name 虚拟环境名字 --display-name "显示的名字"
@@ -302,11 +325,25 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 <p>help():说明</p>
 <h2 id="TensorBoard的使用"><a href="#TensorBoard的使用" class="headerlink" title="TensorBoard的使用"></a>TensorBoard的使用</h2><p>TensorBoard用于图像显示</p>
 <p> <code>tensorboard --logdir logs --port 6007</code></p>
+<p>服务器上的log到本机查看</p>
+<p><code>tensorboard --logdir xxxx --bind_all</code></p>
+<p>然后在本机浏览器输入服务器ip加tensorboard端口</p>
 <h2 id="Transforms的使用"><a href="#Transforms的使用" class="headerlink" title="Transforms的使用"></a>Transforms的使用</h2><p>Transforms用于图像变换</p>
 <h2 id="pycharm使用技巧"><a href="#pycharm使用技巧" class="headerlink" title="pycharm使用技巧"></a>pycharm使用技巧</h2><p><code>ctrl+p</code>查看括号内该填什么参数</p>
 <h2 id="常用术语"><a href="#常用术语" class="headerlink" title="常用术语"></a>常用术语</h2><p>Epoch，Batchsize，Iterations：</p>
 <p>我们有2000个数据，分成4个batch，那么batch size就是500。运行所有的数据进行训练，完成1个epoch，需要进行4次iterations。</p>
 <h2 id="CIFAR10-模型结构"><a href="#CIFAR10-模型结构" class="headerlink" title="CIFAR10 模型结构"></a>CIFAR10 模型结构</h2><p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/Structure-of-CIFAR10-quick-model.png" alt="Structure of CIFAR10-quick model. | Download Scientific Diagram" style="zoom:100%;"></p>
+<h2 id="固定随机种子"><a href="#固定随机种子" class="headerlink" title="固定随机种子"></a>固定随机种子</h2><pre class=" language-lang-python"><code class="language-lang-python">def seed_torch(seed=1029):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed) # 为了禁止hash随机化，使得实验可复现
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed) # if you are using multi-GPU.
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+    #torch.use_deterministic_algorithms(True)  # 有检查操作，看下文区别
+</code></pre>
 <h2 id="完整的模型训练套路"><a href="#完整的模型训练套路" class="headerlink" title="完整的模型训练套路"></a>完整的模型训练套路</h2><ol>
 <li><p>准备数据集</p>
 </li>
@@ -399,11 +436,6 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
   print(f"tensor @ tensor.T \n {tensor @ tensor.T}")
 </code></pre></li>
 </ul>
-<h2 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h2><p>挂载程序：<code>nohup **command** &gt; out.txt 2&gt;&amp;1 &amp;</code></p>
-<p>查看运行结果：<code>tail -f out.txt</code></p>
-<p>查看运行的python程序<code>ps -ef|grep python</code></p>
-<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220712205442574.png" alt="image-20220712205442574"></p>
-<p>关闭程序<code>kill -9 2732481</code></p>
 <!-- flag of hidden posts -->
     </div>
 
@@ -499,7 +531,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">pytorch环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">anaconda命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter"><span class="nav-number">3.</span> <span class="nav-text">jupyter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E5%AD%A6%E4%B9%A0%E4%B8%A4%E5%A4%A7%E6%B3%95%E5%AE%9D%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">python学习两大法宝函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorBoard%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">TensorBoard的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transforms%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">Transforms的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pycharm%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">7.</span> <span class="nav-text">pycharm使用技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%9C%AF%E8%AF%AD"><span class="nav-number">8.</span> <span class="nav-text">常用术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CIFAR10-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">9.</span> <span class="nav-text">CIFAR10 模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%A5%97%E8%B7%AF"><span class="nav-number">10.</span> <span class="nav-text">完整的模型训练套路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82%E3%80%81%E6%B1%A0%E5%8C%96%E5%B1%82%E3%80%81%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82%EF%BC%88%E7%BA%BF%E6%80%A7%E5%B1%82%EF%BC%89"><span class="nav-number">11.</span> <span class="nav-text">卷积层、池化层、全连接层（线性层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">12.</span> <span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88argmax%E4%B8%8D%E5%8F%AF%E5%AF%BC%EF%BC%8C%E8%80%8Cmax%E5%8F%AF%E5%AF%BC"><span class="nav-number">13.</span> <span class="nav-text">为什么argmax不可导，而max可导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGG"><span class="nav-number">14.</span> <span class="nav-text">VGG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">14.0.1.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%EF%BC%88NiN%EF%BC%89"><span class="nav-number">14.1.</span> <span class="nav-text">网络中的网络（NiN）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">15.</span> <span class="nav-text">批量归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResNet"><span class="nav-number">16.</span> <span class="nav-text">ResNet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pytorch%E5%AE%98%E6%96%B960min%E5%85%A5%E9%97%A8"><span class="nav-number"></span> <span class="nav-text">pytorch官方60min入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">pytorch环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text">CUDA相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">anaconda命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85conda%E7%8E%AF%E5%A2%83%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">打包conda环境到服务器：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jupyter"><span class="nav-number">4.</span> <span class="nav-text">jupyter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python%E5%AD%A6%E4%B9%A0%E4%B8%A4%E5%A4%A7%E6%B3%95%E5%AE%9D%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">python学习两大法宝函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorBoard%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">TensorBoard的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transforms%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">Transforms的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pycharm%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">8.</span> <span class="nav-text">pycharm使用技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%9C%AF%E8%AF%AD"><span class="nav-number">9.</span> <span class="nav-text">常用术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CIFAR10-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">10.</span> <span class="nav-text">CIFAR10 模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E9%9A%8F%E6%9C%BA%E7%A7%8D%E5%AD%90"><span class="nav-number">11.</span> <span class="nav-text">固定随机种子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%A5%97%E8%B7%AF"><span class="nav-number">12.</span> <span class="nav-text">完整的模型训练套路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E5%B1%82%E3%80%81%E6%B1%A0%E5%8C%96%E5%B1%82%E3%80%81%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82%EF%BC%88%E7%BA%BF%E6%80%A7%E5%B1%82%EF%BC%89"><span class="nav-number">13.</span> <span class="nav-text">卷积层、池化层、全连接层（线性层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">常用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88argmax%E4%B8%8D%E5%8F%AF%E5%AF%BC%EF%BC%8C%E8%80%8Cmax%E5%8F%AF%E5%AF%BC"><span class="nav-number">15.</span> <span class="nav-text">为什么argmax不可导，而max可导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGG"><span class="nav-number">16.</span> <span class="nav-text">VGG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">16.0.1.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%EF%BC%88NiN%EF%BC%89"><span class="nav-number">16.1.</span> <span class="nav-text">网络中的网络（NiN）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">17.</span> <span class="nav-text">批量归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResNet"><span class="nav-number">18.</span> <span class="nav-text">ResNet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pytorch%E5%AE%98%E6%96%B960min%E5%85%A5%E9%97%A8"><span class="nav-number"></span> <span class="nav-text">pytorch官方60min入门</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -514,7 +546,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">54</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -527,7 +559,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -554,7 +586,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

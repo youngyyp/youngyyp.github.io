@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="#二叉树理论基础篇C++中map、set、multimap，multiset的底层实现都是平衡二叉搜索树，所以map、set的增删操作时间时间复杂度是logn unordered_map、unordered_set，unordered_map、unordered_map底层实现是哈希表 一棵树当中没有子结点（即度为0）的结点称为叶子结点，简称“叶子” 二叉树主要有两种遍历方式：  深度优先遍历：先">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="#二叉树理论基础篇C++中map、set、multimap，multiset的底层实现都是平衡二叉搜索树，所以map、set的增删操作时间时间复杂度是logn unordered_map、unordered_set，unordered_map、unordered_map底层实现是哈希表 一棵树当中没有子结点（即度为0）的结点称为叶子结点，简称“叶子” 二叉树主要有两种遍历方式：  深度优先遍历：先">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200806191109896.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/二叉树前序遍历（迭代法）-16766184074375.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200808200338924.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210203153031914.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021020315582586.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210203155800503.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200920221638903.png">
+<meta property="og:image" content="https://code-thinking-1253855093.file.myqcloud.com/pics/20220829163709.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210203155515650.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20210203154316774-16775032045302.png">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/12/24/tree1.jpg">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200812191501419.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/202102041512582.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/insertbst-16777246991064.jpg">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/trim2.jpg">
+<meta property="article:published_time" content="2023-03-11T04:34:54.245Z">
+<meta property="article:modified_time" content="2023-03-11T04:34:54.272Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200806191109896.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-11 12:34:54" itemprop="dateCreated datePublished" datetime="2023-03-11T12:34:54+08:00">2023-03-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="二叉树理论基础篇"><a href="#二叉树理论基础篇" class="headerlink" title="#二叉树理论基础篇"></a><a target="_blank" rel="noopener" href="https://www.programmercarl.com/二叉树理论基础.html#二叉树理论基础篇">#</a>二叉树理论基础篇</h2><p><strong>C++中map、set、multimap，multiset的底层实现都是平衡二叉搜索树</strong>，所以map、set的增删操作时间时间复杂度是logn</p>
+<p>unordered_map、unordered_set，unordered_map、unordered_map底层实现是哈希表</p>
+<p>一棵树当中没有子结点（即度为0）的结点称为<em>叶子</em>结点，简称“<em>叶子</em>”</p>
+<p><strong>二叉树主要有两种遍历方式：</strong></p>
+<ol>
+<li>深度优先遍历：先往深走，遇到叶子节点再往回走。</li>
+<li>广度优先遍历：一层一层的去遍历。</li>
+</ol>
+<ul>
+<li>深度优先遍历<ul>
+<li>前序遍历（递归法，迭代法）</li>
+<li>中序遍历（递归法，迭代法）</li>
+<li>后序遍历（递归法，迭代法）</li>
+</ul>
+</li>
+<li>广度优先遍历<ul>
+<li>层次遍历（迭代法）</li>
+</ul>
+</li>
+</ul>
+<p>前中后是针对中间的节点</p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200806191109896.png" alt="img" style="zoom:50%;"></p>
+<h3 id="二叉树的定义"><a href="#二叉树的定义" class="headerlink" title="#二叉树的定义"></a><a target="_blank" rel="noopener" href="https://www.programmercarl.com/二叉树理论基础.html#二叉树的定义">#</a>二叉树的定义</h3><p>刚刚我们说过了二叉树有两种存储方式顺序存储，和链式存储，顺序存储就是用数组来存，这个定义没啥可说的，我们来看看链式存储的二叉树节点的定义方式。</p>
+<p>C++代码如下：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+</code></pre>
+<h2 id="二叉树的递归遍历"><a href="#二叉树的递归遍历" class="headerlink" title="二叉树的递归遍历"></a>二叉树的递归遍历</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">144.二叉树的前序遍历(opens new window)</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">145.二叉树的后序遍历(opens new window)</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">94.二叉树的中序遍历</a></li>
+</ul>
+<h4 id="递归三要素："><a href="#递归三要素：" class="headerlink" title="递归三要素："></a>递归三要素：</h4><ol>
+<li><p><strong>确定递归函数的参数和返回值：</strong> 确定哪些参数是递归的过程中需要处理的，那么就在递归函数里加上这个参数， 并且还要明确每次递归的返回值是什么进而确定递归函数的返回类型。</p>
+</li>
+<li><p><strong>确定终止条件：</strong> 写完了递归算法, 运行的时候，经常会遇到栈溢出的错误，就是没写终止条件或者终止条件写的不对，操作系统也是用一个栈的结构来保存每一层递归的信息，如果递归没有终止，操作系统的内存栈必然就会溢出。</p>
+</li>
+<li><p><strong>确定单层递归的逻辑：</strong> 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。</p>
+</li>
+</ol>
+<p><strong>以下以前序遍历为例：</strong></p>
+<ol>
+<li><strong>确定递归函数的参数和返回值</strong>：因为要打印出前序遍历节点的数值，所以参数里需要传入vector来放节点的数值，除了这一点就不需要再处理什么数据了也不需要有返回值，所以递归函数返回类型就是void，代码如下：</li>
+</ol>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">void traversal(TreeNode* cur, vector<int>& vec)
+</code></pre>
+<ol>
+<li><strong>确定终止条件</strong>：在递归的过程中，如何算是递归结束了呢，当然是当前遍历的节点是空了，那么本层递归就要结束了，所以如果当前遍历的这个节点是空，就直接return，代码如下：</li>
+</ol>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">if (cur == NULL) return;
+</code></pre>
+<ol>
+<li><strong>确定单层递归的逻辑</strong>：前序遍历是中左右的循序，所以在单层递归的逻辑，是要先取中节点的数值，代码如下：</li>
+</ol>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">vec.push_back(cur->val);    // 中
+traversal(cur->left, vec);  // 左
+traversal(cur->right, vec); // 右
+</code></pre>
+<p>前序遍历：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    void traversal(TreeNode* cur, vector<int>& vec) {
+        if (cur == NULL) return;
+        vec.push_back(cur->val);    // 中
+        traversal(cur->left, vec);  // 左
+        traversal(cur->right, vec); // 右
+    }
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> result;
+        traversal(root, result);
+        return result;
+    }
+};
+</code></pre>
+<p>那么前序遍历写出来之后，中序和后序遍历就不难理解了，代码如下：</p>
+<p>中序遍历：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">void traversal(TreeNode* cur, vector<int>& vec) {
+    if (cur == NULL) return;
+    traversal(cur->left, vec);  // 左
+    vec.push_back(cur->val);    // 中
+    traversal(cur->right, vec); // 右
+}
+</code></pre>
+<p>后序遍历：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">void traversal(TreeNode* cur, vector<int>& vec) {
+    if (cur == NULL) return;
+    traversal(cur->left, vec);  // 左
+    traversal(cur->right, vec); // 右
+    vec.push_back(cur->val);    // 中
+}
+</code></pre>
+<h2 id="二叉树的迭代遍历"><a href="#二叉树的迭代遍历" class="headerlink" title="二叉树的迭代遍历"></a>二叉树的迭代遍历</h2><p><strong>递归的实现就是：每一次递归调用都会把函数的局部变量、参数值和返回地址等压入调用栈中</strong></p>
+<p>可以用<strong>栈</strong>实现二叉树的前后中序遍历</p>
+<h4 id="前序遍历（迭代法）"><a href="#前序遍历（迭代法）" class="headerlink" title="前序遍历（迭代法）"></a>前序遍历（迭代法）</h4><p>前序遍历是中左右，每次先处理的是中间节点，那么先将根节点放入栈中，然后将右孩子加入栈，再加入左孩子。</p>
+<p>为什么要先加入 右孩子，再加入左孩子呢？ 因为这样出栈的时候才是中左右的顺序。</p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/二叉树前序遍历（迭代法）-16766184074375.gif" alt="二叉树前序遍历（迭代法）" style="zoom: 67%;"></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        stack<TreeNode*> st;
+        vector<int> result;
+        if (root == NULL) return result;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();                       // 中
+            st.pop();
+            result.push_back(node->val);
+            if (node->right) st.push(node->right);           // 右（空节点不入栈）
+            if (node->left) st.push(node->left);             // 左（空节点不入栈）
+        }
+        return result;
+    }
+};
+</code></pre>
+<p><strong>中序遍历，可以写出如下代码：</strong></p>
+<p><strong>需要借用指针的遍历来帮助访问节点，栈则用来处理节点上的元素</strong></p>
+<p><strong>这是因为前序遍历中访问节点（遍历节点）和处理节点（将元素放进result数组中）可以同步处理，但是中序就无法做到同步！</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+        while (cur != NULL || !st.empty()) {
+            if (cur != NULL) { // 指针来访问节点，访问到最底层
+                st.push(cur); // 将访问的节点放进栈
+                cur = cur->left;                // 左
+            } else {
+                cur = st.top(); // 从栈里弹出的数据，就是放进result数组里的数据
+                st.pop();
+                result.push_back(cur->val);     // 中
+                cur = cur->right;               // 右
+            }
+        }
+        return result;
+    }
+};
+</code></pre>
+<p>后序：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200808200338924.png" alt="前序到后序" style="zoom:50%;"></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        stack<TreeNode*> st;
+        vector<int> result;
+        if (root == NULL) return result;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            st.pop();
+            result.push_back(node->val);
+            if (node->left) st.push(node->left); // 相对于前序遍历，这更改一下入栈顺序 （空节点不入栈）
+            if (node->right) st.push(node->right); // 空节点不入栈
+        }
+        reverse(result.begin(), result.end()); // 将结果反转之后就是左右中的顺序了
+        return result;
+    }
+};
+</code></pre>
+<h2 id="二叉树的统一迭代法"><a href="#二叉树的统一迭代法" class="headerlink" title="二叉树的统一迭代法"></a>二叉树的统一迭代法</h2><h4 id="迭代法中序遍历"><a href="#迭代法中序遍历" class="headerlink" title="迭代法中序遍历"></a>迭代法中序遍历</h4><p>中序遍历代码如下：（详细注释）</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        stack<TreeNode*> st;
+        if (root != NULL) st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            if (node != NULL) {
+                st.pop(); // 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中
+                if (node->right) st.push(node->right);  // 添加右节点（空节点不入栈）
+
+                st.push(node);                          // 添加中节点
+                st.push(NULL); // 中节点访问过，但是还没有处理，加入空节点做为标记。
+
+                if (node->left) st.push(node->left);    // 添加左节点（空节点不入栈）
+            } else { // 只有遇到空节点的时候，才将下一个节点放进结果集
+                st.pop();           // 将空节点弹出
+                node = st.top();    // 重新取出栈中元素
+                st.pop();
+                result.push_back(node->val); // 加入到结果集
+            }
+        }
+        return result;
+    }
+};
+</code></pre>
+<p><strong>中节点放入栈之后，紧接着放入一个空指针作为标记</strong></p>
+<h2 id="102-二叉树的层序遍历——广度优先"><a href="#102-二叉树的层序遍历——广度优先" class="headerlink" title="102.二叉树的层序遍历——广度优先"></a>102.二叉树的层序遍历——广度优先</h2><p>广度用队列，深度用栈</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//迭代法
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        if (root != NULL) que.push(root);
+        vector<vector<int>> result;
+        while (!que.empty()) {
+            int size = que.size();
+            vector<int> vec;
+            // 这里一定要使用固定大小size，不要使用que.size()，因为que.size是不断变化的
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                vec.push_back(node->val);
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+            result.push_back(vec);
+        }
+        return result;
+    }
+};
+</code></pre>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">// 递归法
+class Solution {
+public:
+    void order(TreeNode* cur, vector<vector<int>>& result, int depth)
+    {
+        if (cur == nullptr) return;
+        if (result.size() == depth) result.push_back(vector<int>());
+        result[depth].push_back(cur->val);
+        order(cur->left, result, depth + 1);
+        order(cur->right, result, depth + 1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        int depth = 0;
+        order(root, result, depth);
+        return result;
+    }
+};
+</code></pre>
+<h1 id="226-翻转二叉树"><a href="#226-翻转二叉树" class="headerlink" title="226.翻转二叉树"></a>226.翻转二叉树</h1><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/invert-binary-tree/">力扣题目链接(opens new window)</a></p>
+<p>翻转一棵二叉树。</p>
+<p>思路：</p>
+<p>采用递归前序的方法。</p>
+<p><a target="_blank" rel="noopener" href="https://www.programmercarl.com/0226.%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91.html#%E6%8B%93%E5%B1%95">题解还有更多其他方法</a></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    void order(TreeNode* cur)
+    {
+        if (cur == nullptr) return;
+        TreeNode* temp = cur->left;
+        cur->left = cur->right;
+        cur->right = temp;
+        order(cur->left);
+        order(cur->right);
+    }
+
+    TreeNode* invertTree(TreeNode* root) {
+        order(root);
+        return root;
+    }
+};
+</code></pre>
+<h2 id="101-对称二叉树"><a href="#101-对称二叉树" class="headerlink" title="101. 对称二叉树"></a>101. 对称二叉树</h2><p>递归法：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    bool compare(TreeNode* left, TreeNode* right){
+        if (left == NULL && right != NULL) return false;
+        else if (left != NULL && right == NULL) return false;
+        else if (left == NULL && right == NULL) return true;
+        else if (left->val != right->val) return false; 
+        else{
+            bool outside = compare(left->left, right->right);
+            bool inside = compare(left->right, right->left);
+            bool isSame = outside && inside;
+            return isSame;
+        }
+    }
+
+    bool isSymmetric(TreeNode* root) {
+        if(root == NULL) return true;
+        return compare(root->left,root->right);
+    }
+};
+</code></pre>
+<p>迭代法的条件判断和递归的逻辑是一样的。</p>
+<p>代码如下：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (root == NULL) return true;
+        queue<TreeNode*> que;
+        que.push(root->left);   // 将左子树头结点加入队列
+        que.push(root->right);  // 将右子树头结点加入队列
+
+        while (!que.empty()) {  // 接下来就要判断这两个树是否相互翻转
+            TreeNode* leftNode = que.front(); que.pop();
+            TreeNode* rightNode = que.front(); que.pop();
+            if (!leftNode && !rightNode) {  // 左节点为空、右节点为空，此时说明是对称的
+                continue;
+            }
+
+            // 左右一个节点不为空，或者都不为空但数值不相同，返回false
+            if ((!leftNode || !rightNode || (leftNode->val != rightNode->val))) {
+                return false;
+            }
+            que.push(leftNode->left);   // 加入左节点左孩子
+            que.push(rightNode->right); // 加入右节点右孩子
+            que.push(leftNode->right);  // 加入左节点右孩子
+            que.push(rightNode->left);  // 加入右节点左孩子
+        }
+        return true;
+    }
+};
+</code></pre>
+<h2 id="104-二叉树的最大深度"><a href="#104-二叉树的最大深度" class="headerlink" title="104.二叉树的最大深度"></a>104.二叉树的最大深度</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，找出其最大深度。</p>
+<p>二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。</p>
+<p>说明: 叶子节点是指没有子节点的节点。</p>
+<p>示例： 给定二叉树 [3,9,20,null,null,15,7]，</p>
+<p><img src="https://img-blog.csdnimg.cn/20210203153031914.png" alt="104. 二叉树的最大深度"></p>
+<p>返回它的最大深度 3 。</p>
+<p><strong>我的代码：</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    //使用递归法
+    int order(TreeNode* cur, int depth){
+        if(cur == NULL) return depth;
+        depth++;
+        int d1 = order(cur->left,depth);
+        int d2 = order(cur->right,depth);
+        depth = max(d1,d2);
+        return depth;
+    }
+
+    int maxDepth(TreeNode* root) {
+        int depth = 0;
+        return order(root, depth);
+    }
+};
+</code></pre>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//迭代法 层序遍历
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(root == NULL) return 0;
+        int depth = 0;
+        queue<TreeNode*> que;
+        que.push(root);
+        while(!que.empty()){
+            int size = que.size();
+            for(int i = 0; i < size; i++){
+                TreeNode* node = que.front();
+                que.pop();
+                if(node->left) que.push(node->left);
+                if(node->right) que.push(node->right);
+            }
+            depth++;
+        }
+
+        return depth;
+    }
+};
+</code></pre>
+<p>我的n叉树求最大深度代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    //使用递归法
+    int order(Node* cur, int depth){
+        if(cur == NULL) return depth;
+        depth++;
+        int maxDepth = depth;
+        for(int i = 0; i < cur->children.size(); i++){
+            int d1 = order(cur->children[i],depth);
+            maxDepth = max(d1,maxDepth);
+        }
+        return maxDepth;
+    }
+
+    int maxDepth(Node* root) {
+        int depth = 0;
+        return order(root, depth);
+    }
+};
+</code></pre>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int maxDepth(Node* root) {
+        if (root == 0) return 0;
+        int depth = 0;
+        for (auto child : root->children){
+            depth = max(depth, maxDepth(child));
+        }
+        return depth + 1;
+    }
+};
+</code></pre>
+<h2 id="111-二叉树的最小深度"><a href="#111-二叉树的最小深度" class="headerlink" title="111.二叉树的最小深度"></a>111.二叉树的最小深度</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-depth-of-binary-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，找出其最小深度。</p>
+<p>最小深度是从<strong>根节点到最近叶子节点</strong>的最短路径上的节点数量。</p>
+<p>说明: 叶子节点是指没有子节点的节点。</p>
+<p>示例:</p>
+<p>给定二叉树 [3,9,20,null,null,15,7],</p>
+<p><img src="https://img-blog.csdnimg.cn/2021020315582586.png" alt="111.二叉树的最小深度1"></p>
+<p>返回它的最小深度 2</p>
+<p><img src="https://img-blog.csdnimg.cn/20210203155800503.png" alt="111.二叉树的最小深度" style="zoom:33%;"></p>
+<p>我的代码 ：</p>
+<p>本题核心就是找到根节点</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">// 后续遍历
+class Solution {
+public:
+// 如果左子树为空，右子树不为空，说明最小深度是 1 + 右子树的深度。
+// 反之，右子树为空，左子树不为空，最小深度是 1 + 左子树的深度。
+// 最后如果左右子树都不为空，返回左右子树深度最小值 + 1 
+    int getDepth(TreeNode* node){
+        int depth = 0;
+        if(node == NULL) return 0;
+        //上式不等价于node->left == NULL && node->right == NULL 的情况，而是表明这个节点为空，不会增加深度。
+        int leftDepth = getDepth(node->left);//左
+        int rightDepth = getDepth(node->right);//右
+        // 中  但是没有要处理的
+        if(node->left == NULL && node->right != NULL) return rightDepth + 1;
+        if(node->left != NULL && node->right == NULL) return leftDepth + 1;
+        // if(node->left != NULL && node->right != NULL) return min(leftDepth,rightDepth) + 1;
+        // if(node->left == NULL && node->right == NULL) return 0 + 1;  叶子节点 深度加1
+        return min(leftDepth,rightDepth) + 1;  //最好还是在所有分支都给返回值，防止编译器判断为无返回值
+    }
+
+    int minDepth(TreeNode* root) {
+        return getDepth(root);
+    }
+};
+</code></pre>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//题解：前序
+class Solution {
+private:
+    int result;
+    void getdepth(TreeNode* node, int depth) {
+        if (node->left == NULL && node->right == NULL) {
+            result = min(depth, result);  
+            return;
+        }
+        // 中 只不过中没有处理的逻辑
+        if (node->left) { // 左
+            getdepth(node->left, depth + 1);
+        }
+        if (node->right) { // 右
+            getdepth(node->right, depth + 1);
+        }
+        return ;
+    }
+
+public:
+    int minDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+        result = INT_MAX;
+        getdepth(root, 1);
+        return result;
+    }
+};
+</code></pre>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//用队列进行层序遍历，逻辑比较清晰
+class Solution {
+public:
+
+    int minDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+        int depth = 0;
+        queue<TreeNode*> que;
+        que.push(root);
+        while(!que.empty()) {
+            int size = que.size();
+            depth++; // 记录最小深度
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+                if (!node->left && !node->right) { // 当左右孩子都为空的时候，说明是最低点的一层了，退出
+                    return depth;
+                }
+            }
+        }
+        return depth;
+    }
+};
+</code></pre>
+<h2 id="222-完全二叉树的节点个数"><a href="#222-完全二叉树的节点个数" class="headerlink" title="222.完全二叉树的节点个数"></a>222.完全二叉树的节点个数</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-complete-tree-nodes/">力扣题目链接(opens new window)</a></p>
+<p>给出一个完全二叉树，求出该树的节点个数。</p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200920221638903.png" alt="img" style="zoom: 33%;"></p>
+<p>我的代码（没有针对完全二叉树做优化）：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        queue<TreeNode*> que;
+        if(root != NULL) que.push(root);
+        int num = 0;
+        while(!que.empty()){
+            int size = que.size();
+            for(int i = 0; i < size; i++){
+                TreeNode* node = que.front();
+                que.pop();
+                num++;
+                if(node->left) que.push(node->left);
+                if(node->right) que.push(node->right);
+            }
+        }
+        return num;
+    }
+};
+</code></pre>
+<p>题解：</p>
+<p>这个就不是满二叉树</p>
+<p><img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20220829163709.png" alt="img" style="zoom:33%;"></p>
+<p>判断其子树是不是满二叉树(一直向左遍历的深度==一直向右遍历的深度)，如果是则利用公式（2^树深度 - 1 ，注意这里根节点深度为1）计算这个子树（满二叉树）的节点数量，如果不是则继续递归</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (root == nullptr) return 0;
+        TreeNode* left = root->left;
+        TreeNode* right = root->right;
+        int leftDepth = 0, rightDepth = 0; // 这里初始为0是有目的的，为了下面求指数方便
+        while (left) {  // 求左子树深度
+            left = left->left;
+            leftDepth++;
+        }
+        while (right) { // 求右子树深度
+            right = right->right;
+            rightDepth++;
+        }
+        if (leftDepth == rightDepth) {
+            return (2 << leftDepth) - 1; // 注意(2<<1) 相当于2^2，所以leftDepth初始为0
+        }
+        //上面是返回条件
+        return countNodes(root->left) + countNodes(root->right) + 1;
+    }
+};
+</code></pre>
+<h2 id="110-平衡二叉树"><a href="#110-平衡二叉树" class="headerlink" title="110.平衡二叉树"></a>110.平衡二叉树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/balanced-binary-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，判断它是否是高度平衡的二叉树。</p>
+<p>本题中，一棵高度平衡二叉树定义为：一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过1。</p>
+<p>这里强调一波概念：</p>
+<ul>
+<li>二叉树节点的深度：指从根节点到该节点的最长简单路径边的条数。</li>
+<li>二叉树节点的高度：指从该节点到叶子节点的最长简单路径边的条数。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210203155515650.png" alt="110.平衡二叉树2" style="zoom:50%;"></p>
+<p>采用递归：</p>
+<p>分别求出其左右子树的高度，然后如果差值小于等于1，则返回当前二叉树的高度，否则返回-1，表示已经不是二叉平衡树了。</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int getHeight(TreeNode* node){
+        if(node == NULL) return 0;
+        int leftHeight = getHeight(node->left);
+        if(leftHeight == -1) return -1;
+        int rightHeight = getHeight(node->right);
+        if(rightHeight == -1) return -1;
+        if(abs(leftHeight-rightHeight)>1) return -1;
+        else return 1 + max(leftHeight, rightHeight); // 以当前节点为根节点的树的最大高度
+    }
+
+    bool isBalanced(TreeNode* root) {
+        int result = getHeight(root);
+        if(result != -1) return true;
+        else return false;
+    }
+};
+</code></pre>
+<h2 id="257-二叉树的所有路径"><a href="#257-二叉树的所有路径" class="headerlink" title="257. 二叉树的所有路径"></a>257. 二叉树的所有路径</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-paths/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，返回所有从根节点到叶子节点的路径。</p>
+<p>题解：</p>
+<p>to_string() 将数字转为string</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+
+    void traversal(TreeNode* cur, string path, vector<string>& result) {
+        path += to_string(cur->val); // 中
+        if (cur->left == NULL && cur->right == NULL) {
+            result.push_back(path);
+            return;
+        }
+        if (cur->left) traversal(cur->left, path + "->", result); // 左
+        if (cur->right) traversal(cur->right, path + "->", result); // 右
+    }
+
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> result;
+        string path;
+        if (root == NULL) return result;
+        traversal(root, path, result);
+        return result;
+
+    }
+};
+</code></pre>
+<h2 id="404-左叶子之和"><a href="#404-左叶子之和" class="headerlink" title="404.左叶子之和"></a>404.左叶子之和</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/sum-of-left-leaves/">力扣题目链接(opens new window)</a></p>
+<p>计算给定二叉树的所有左叶子之和。</p>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int sumleft(TreeNode* root , int leftfig, int sum){
+        // int leftfig = 0;
+        // int sum = 0;
+        if(root->left == NULL && root->right == NULL && leftfig == 1){
+            return sum + root->val;
+        }
+        int sum1 = 0;
+        int sum2 = 0;
+        if(root->left) sum1 = sumleft(root->left, 1 ,sum);
+        if(root->right) sum2 = sumleft(root->right, 0 ,sum);
+        return sum1 + sum2;
+    }
+    int sumOfLeftLeaves(TreeNode* root) {
+        int leftfig = 0;
+        int sum = 0;
+        if(root == NULL) return 0;
+        return sumleft(root, leftfig, sum);
+    }
+};
+</code></pre>
+<h2 id="513-找树左下角的值"><a href="#513-找树左下角的值" class="headerlink" title="513.找树左下角的值"></a>513.找树左下角的值</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-bottom-left-tree-value/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，在树的最后一行找到最左边的值。</p>
+<p>我的代码：</p>
+<p>层序遍历</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        queue <TreeNode*> que;
+        que.push(root);
+        int result;
+        while(!que.empty()){
+            int size = que.size();
+            for(int i = 0; i < size; i++){
+                TreeNode* node = que.front();
+                que.pop();
+                if(i == 0) result = node->val; //关键是这一行，记录最后一层的第一个元素
+                if(node->left) que.push(node->left);
+                if(node->right) que.push(node->right);
+            }
+        }
+        return result;
+    }
+};
+</code></pre>
+<h2 id="112-路径总和"><a href="#112-路径总和" class="headerlink" title="112. 路径总和"></a>112. 路径总和</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/path-sum/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。</p>
+<p>我的代码：参考<strong>257. 二叉树的所有路径</strong></p>
+<p>当不用遍历所有二叉树时，需要返回值，如本题，一旦找到路径就返回。</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    bool traversal(TreeNode* cur, int pathsum, int targetSum) {
+        pathsum += cur->val; // 中
+        if (cur->left == NULL && cur->right == NULL) {
+            if(pathsum == targetSum) return true;
+            else return false;
+        }
+        bool leftsig;
+        bool rightsig;
+        if (cur->left) leftsig = traversal(cur->left, pathsum, targetSum); // 左
+        if (cur->right) rightsig = traversal(cur->right, pathsum, targetSum); // 右
+        return leftsig || rightsig; //这里也可以优化一下，只要leftsig=1，就返回，right同理
+    }
+
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(root == NULL) return false;
+        return traversal(root, 0, targetSum);
+    }
+};
+</code></pre>
+<h2 id="113-路径总和ii"><a href="#113-路径总和ii" class="headerlink" title="113. 路径总和ii"></a>113. 路径总和ii</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/path-sum-ii/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。</p>
+<p>说明: 叶子节点是指没有子节点的节点。</p>
+<p>我的代码：参考<strong>257. 二叉树的所有路径</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    void traversal(TreeNode* cur, vector<int> path, int pathsum, int targetSum, vector<vector<int>>& path_results) {
+        path.push_back(cur->val);
+        pathsum += cur->val; // 中
+        if (cur->left == NULL && cur->right == NULL) {
+            if(pathsum == targetSum){
+                path_results.push_back(path);
+                return ;
+            } 
+            else return;
+        }
+        if (cur->left) traversal(cur->left, path, pathsum, targetSum, path_results); // 左
+        if (cur->right) traversal(cur->right, path, pathsum, targetSum, path_results); // 右
+        return ;
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> path_results;
+        vector<int> path;
+        if(root == NULL) return path_results;
+        traversal(root, path, 0, targetSum, path_results);
+        return path_results;
+    }
+};
+</code></pre>
+<h2 id="106-从中序与后序遍历序列构造二叉树"><a href="#106-从中序与后序遍历序列构造二叉树" class="headerlink" title="106.从中序与后序遍历序列构造二叉树*"></a>106.从中序与后序遍历序列构造二叉树*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/">力扣题目链接(opens new window)</a></p>
+<p>根据一棵树的中序遍历与后序遍历构造二叉树。</p>
+<p>注意: 你可以假设树中没有重复的元素。</p>
+<p>例如，给出</p>
+<p>中序遍历 inorder = [9,3,15,20,7] 后序遍历 postorder = [9,15,7,20,3] 返回如下的二叉树：</p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20210203154316774-16775032045302.png" alt="106. 从中序与后序遍历序列构造二叉树1" style="zoom:100%;"></p>
+<p>思路：</p>
+<p>以 后序数组的最后一个元素为切割点，先切中序数组，根据中序数组，反过来再切后序数组。一层一层切下去，每次后序数组最后一个元素就是节点元素</p>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* traversal(vector<int>& inorder, vector<int>& postorder) {    
+        // 第一步 终止条件
+        if (postorder.size() == 0) return NULL;
+        int rootValue = postorder[postorder.size() - 1];
+        TreeNode* root = new TreeNode(rootValue);
+        if (postorder.size() == 1) return root;// 叶子节点
+
+        // 找到中序遍历的切割点
+        int delimiterIndex;
+        for (delimiterIndex = 0; delimiterIndex < inorder.size(); delimiterIndex++) {
+            if (inorder[delimiterIndex] == rootValue) break;
+        }
+        // 切割中序数组  这题关键：这里切割的写法
+        // 左闭右开区间：[0, delimiterIndex)
+        vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiterIndex);
+        // [delimiterIndex + 1, end)
+        vector<int> rightInorder(inorder.begin() + delimiterIndex + 1, inorder.end() );
+        // 切割后序
+        vector<int> leftPostorder(postorder.begin(), postorder.begin() + leftInorder.size());
+        // [leftInorder.size(), end)
+        vector<int> rightPostorder(postorder.begin() + leftInorder.size(), postorder.end()- 1);
+
+        root->left = traversal(leftInorder, leftPostorder);
+        root->right = traversal(rightInorder, rightPostorder);
+
+        return root;    
+
+    }
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if (inorder.size() == 0 || postorder.size() == 0) return NULL;
+        return traversal(inorder, postorder);
+    }
+};
+</code></pre>
+<h2 id="654-最大二叉树"><a href="#654-最大二叉树" class="headerlink" title="654.最大二叉树"></a>654.最大二叉树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/maximum-binary-tree/">力扣题目地址(opens new window)</a></p>
+<p>给定一个不含重复元素的整数数组。一个以此数组构建的最大二叉树定义如下：</p>
+<ul>
+<li>二叉树的根是数组中的最大元素。</li>
+<li>左子树是通过数组中最大值左边部分构造出的最大二叉树。</li>
+<li>右子树是通过数组中最大值右边部分构造出的最大二叉树。</li>
+</ul>
+<p><img src="https://assets.leetcode.com/uploads/2020/12/24/tree1.jpg" alt="img" style="zoom:50%;"></p>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* recursion(vector<int> nums) {
+        if(nums.size() == 0) return NULL;
+        int rootValue = 0;
+        int rootValueIndex = 0;
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i]>rootValue){
+                rootValue = nums[i];
+                rootValueIndex = i;
+            }
+        }
+        TreeNode* root = new TreeNode(rootValue);
+        vector<int> leftnums(nums.begin(), nums.begin() + rootValueIndex);
+        vector<int> rightnums(nums.begin() + rootValueIndex + 1, nums.end());
+
+        root->left = recursion(leftnums);
+        root->right = recursion(rightnums);
+        return root;
+    }
+
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        return recursion(nums);
+    }
+};
+</code></pre>
+<h2 id="617-合并二叉树"><a href="#617-合并二叉树" class="headerlink" title="617.合并二叉树"></a>617.合并二叉树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/merge-two-binary-trees/">力扣题目链接(opens new window)</a></p>
+<p>给定两个二叉树，想象当你将它们中的一个覆盖到另一个上时，两个二叉树的一些节点便会重叠。</p>
+<p>你需要将他们合并为一个新的二叉树。合并的规则是如果两个节点重叠，那么将他们的值相加作为节点合并后的新值，否则不为 NULL 的节点将直接作为新二叉树的节点。</p>
+<p>我的代码：</p>
+<p>也可以不new，在root1上改</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        TreeNode* root = new TreeNode();
+        if(root1 == NULL) return root2;
+        if(root2 == NULL) return root1;
+        root->val = root1->val + root2->val;
+        root->left = mergeTrees(root1->left,root2->left);
+        root->right = mergeTrees(root1->right,root2->right);
+        return root; 
+    }
+};
+</code></pre>
+<h2 id="700-二叉搜索树中的搜索"><a href="#700-二叉搜索树中的搜索" class="headerlink" title="700.二叉搜索树中的搜索"></a>700.二叉搜索树中的搜索</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/search-in-a-binary-search-tree/">力扣题目地址(opens new window)</a></p>
+<p>给定二叉搜索树（BST）的根节点和一个值。 你需要在BST中找到节点值等于给定值的节点。 返回以该节点为根的子树。 如果节点不存在，则返回 NULL。</p>
+<p>思路：</p>
+<p>二叉搜索树是一个有序树：</p>
+<ul>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值；</li>
+<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值；</li>
+<li>它的左、右子树也分别为二叉搜索树</li>
+</ul>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if(root == NULL) return NULL;
+        if(root->val == val){
+            return root;
+        }
+        if(root->val < val){
+            return searchBST(root->right, val);
+        }
+        if(root->val > val){
+            return searchBST(root->left, val);
+        }
+        return NULL;
+    }
+};
+</code></pre>
+<h2 id="98-验证二叉搜索树"><a href="#98-验证二叉搜索树" class="headerlink" title="98.验证二叉搜索树*"></a>98.验证二叉搜索树*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/validate-binary-search-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树，判断其是否是一个有效的二叉搜索树。</p>
+<p>假设一个二叉搜索树具有如下特征：</p>
+<ul>
+<li>节点的左子树只包含小于当前节点的数。</li>
+<li>节点的右子树只包含大于当前节点的数。</li>
+<li>所有左子树和右子树自身必须也是二叉搜索树。</li>
+</ul>
+<p>思路：</p>
+<p>这道题目比较容易陷入两个陷阱：</p>
+<ul>
+<li>陷阱1</li>
+</ul>
+<p><strong>不能单纯的比较左节点小于中间节点，右节点大于中间节点就完事了</strong>。<strong>我们要比较的是 左子树所有节点小于中间节点，右子树所有节点大于中间节点</strong>。</p>
+<p>例如： [10,5,15,null,null,6,20] 这个case：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200812191501419.png" alt="二叉搜索树" style="zoom: 67%;"></p>
+<p>节点10大于左节点5，小于右节点15，但右子树里出现了一个6 这就不符合了！</p>
+<ul>
+<li>陷阱2</li>
+</ul>
+<p>样例中最小节点 可能是int的最小值，如果这样使用最小的int来比较也是不行的。</p>
+<p>此时可以初始化比较元素为longlong的最小值<code>long long maxVal = LONG_MIN;</code></p>
+<p><strong>核心思想：二叉搜索树如果按左中右（中序）顺序遍历，则数据是递增的</strong></p>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//先变成数组
+class Solution {
+private:
+    vector<int> vec;
+    void traversal(TreeNode* root) {
+        if (root == NULL) return;
+        traversal(root->left);
+        vec.push_back(root->val); // 将二叉搜索树转换为有序数组
+        traversal(root->right);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        vec.clear(); // 不加这句在leetcode上也可以过，但最好加上
+        traversal(root);
+        for (int i = 1; i < vec.size(); i++) {
+            // 注意要小于等于，搜索树里不能有相同元素
+            if (vec[i] <= vec[i - 1]) return false;
+        }
+        return true;
+    }
+};
+</code></pre>
+<h2 id="530-二叉搜索树的最小绝对差"><a href="#530-二叉搜索树的最小绝对差" class="headerlink" title="530.二叉搜索树的最小绝对差"></a>530.二叉搜索树的最小绝对差</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-absolute-difference-in-bst/">力扣题目链接(opens new window)</a></p>
+<p>给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。</p>
+<p>我的代码（参考98）：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> vec;
+    void traversal(TreeNode* root){
+        if(root == NULL) return;
+        traversal(root->left);
+        vec.push_back(root->val); // 将二叉搜索树转换为有序数组
+        traversal(root->right);
+    }
+
+    int getMinimumDifference(TreeNode* root) {
+        traversal(root);
+        int min_sub = 100000;
+        for (int i = 1; i < vec.size(); i++) {
+            min_sub = min(min_sub,vec[i] - vec[i - 1]);
+        }
+        return min_sub;
+    }
+};
+</code></pre>
+<h2 id="501-二叉搜索树中的众数"><a href="#501-二叉搜索树中的众数" class="headerlink" title="501.二叉搜索树中的众数"></a>501.二叉搜索树中的众数</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-mode-in-binary-search-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个有相同值的二叉搜索树（BST），找出 BST 中的所有众数（出现频率最高的元素）。</p>
+<p>假定 BST 有如下定义：</p>
+<ul>
+<li>结点左子树中所含结点的值小于等于当前结点的值</li>
+<li>结点右子树中所含结点的值大于等于当前结点的值</li>
+<li>左子树和右子树都是二叉搜索树</li>
+</ul>
+<p>思路：</p>
+<p>针对任意二叉树，可以使用map（有序，key是次数，value是节点值）</p>
+<p>这里是二叉搜索树，是递增的，可以只比较相邻元素</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<int> vec;
+    void traversal(TreeNode* root){
+        if(root == NULL) return;
+        traversal(root->left);
+        vec.push_back(root->val); // 将二叉搜索树转换为有序数组
+        traversal(root->right);
+    }
+
+    vector<int> findMode(TreeNode* root) {
+        traversal(root);
+        int left = 0;
+        int maxnum = 0;
+        vector<int> results;
+        for (int right = 0; right < vec.size(); right++) {
+            if(vec[left] != vec[right]) left = right;
+            if(maxnum < right - left){
+                maxnum = right - left;
+                results.clear(); //这里很关键
+                results.push_back(vec[right]);
+            }else if(maxnum == right - left){
+                results.push_back(vec[right]);
+            }
+
+        }
+        return results;
+    }
+};
+</code></pre>
+<h2 id="236-二叉树的最近公共祖先"><a href="#236-二叉树的最近公共祖先" class="headerlink" title="236. 二叉树的最近公共祖先"></a>236. 二叉树的最近公共祖先</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>我的代码：</p>
+<p>返回子树中找到目标值的个数</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* result = NULL;
+    int traversal(TreeNode* node, TreeNode* p, TreeNode* q) {
+        if(result != NULL) return 2;
+        int leftfig = 0;
+        int rightfig = 0;
+        if(node->left) leftfig = traversal(node->left, p, q);
+        else leftfig = 0;
+        if(node->right) rightfig = traversal(node->right, p, q);
+        else rightfig = 0;
+        if(leftfig == 1 && rightfig == 1) {
+            result = node;
+            return 2;
+
+        }else if((leftfig == 1 && rightfig == 0)or(leftfig == 0 && rightfig == 1)){
+            if(node == p || node == q) {
+                result = node;
+                return 2;
+            }
+            else return 1;
+        } 
+        else if(leftfig == 0 && rightfig == 0) {
+            if(node == p || node == q) return 1;
+            else return 0;
+        }
+        else return 2;
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        traversal(root, p, q);
+        return result;
+    }
+};
+</code></pre>
+<p>题解：</p>
+<p>主要是理清这张图的逻辑</p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/202102041512582.png" alt="236.二叉树的最近公共祖先2" style="zoom:50%;"></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == q || root == p || root == NULL) return root;
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if (left != NULL && right != NULL) return root;
+
+        if (left == NULL && right != NULL) return right;
+        else if (left != NULL && right == NULL) return left;
+        else  { //  (left == NULL && right == NULL)
+            return NULL;
+        }
+    }
+};
+</code></pre>
+<ol>
+<li>求最小公共祖先，需要<strong>从底向上遍历</strong>，那么二叉树，只能通过<strong>后序遍历（</strong>即：回溯）实现从底向上的遍历方式。</li>
+<li>在回溯的过程中，必然要遍历整棵二叉树，即使已经找到结果了，依然要把其他节点遍历完，因为要使用递归函数的返回值（也就是代码中的left和right）做逻辑判断。</li>
+<li>要理解如果返回值left为空，right不为空为什么要返回right，为什么可以用返回right传给上一层结果。</li>
+</ol>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//后序遍历
+left = 递归函数(root->left);  // 左
+right = 递归函数(root->right); // 右
+left与right的逻辑处理;         // 中
+</code></pre>
+<p>搜索一条边的写法（本题，下题）：</p>
+<pre class=" language-lang-text"><code class="language-lang-text">if (递归函数(root->left)) return ;
+if (递归函数(root->right)) return ;
+</code></pre>
+<p>搜索整个树写法：</p>
+<pre class=" language-lang-text"><code class="language-lang-text">left = 递归函数(root->left);
+right = 递归函数(root->right);
+left与right的逻辑处理;
+</code></pre>
+<h2 id="235-二叉搜索树的最近公共祖先"><a href="#235-二叉搜索树的最近公共祖先" class="headerlink" title="235. 二叉搜索树的最近公共祖先"></a>235. 二叉搜索树的最近公共祖先</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//对于二叉搜索树，从上向下去递归遍历，第一次遇到 cur节点是数值在[p, q]区间中，那么cur就是 p和q的最近公共祖先
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        while(root) {
+            if (root->val > p->val && root->val > q->val) {
+                root = root->left;
+            } else if (root->val < p->val && root->val < q->val) {
+                root = root->right;
+            } else return root;
+        }
+        return NULL;
+    }
+};
+</code></pre>
+<h2 id="701-二叉搜索树中的插入操作"><a href="#701-二叉搜索树中的插入操作" class="headerlink" title="701.二叉搜索树中的插入操作"></a>701.二叉搜索树中的插入操作</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/insert-into-a-binary-search-tree/">力扣题目链接</a></p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/insertbst-16777246991064.jpg" alt="img" style="zoom:50%;"></p>
+<p>我的代码：</p>
+<p>迭代法</p>
+<p>找到空的就插入新节点</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        TreeNode* node = root; 
+        TreeNode* insert = new TreeNode(val);//注意新插入节点的创建方式
+        if(node == NULL) return insert;
+        while(node != NULL){
+            if(val > node->val) {
+                if(node->right) node = node->right;
+                else {
+                    node->right = insert;
+                    break;
+                }
+            }
+            if(val < node->val) {
+                if(node->left) node = node->left;
+                else {
+                    node->left = insert;
+                    break;
+                }
+            }
+        }
+        return root;
+    }
+};
+</code></pre>
+<p>题解：</p>
+<p>记录了父节点</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        if (root == NULL) {
+            TreeNode* node = new TreeNode(val);
+            return node;
+        }
+        TreeNode* cur = root;
+        TreeNode* parent = root; // 这个很重要，需要记录上一个节点，否则无法赋值新节点
+        while (cur != NULL) {
+            parent = cur;
+            if (cur->val > val) cur = cur->left;
+            else cur = cur->right;
+        }
+        TreeNode* node = new TreeNode(val);
+        if (val < parent->val) parent->left = node;// 此时是用parent节点的进行赋值
+        else parent->right = node;
+        return root;
+    }
+};
+</code></pre>
+<h2 id="450-删除二叉搜索树中的节点"><a href="#450-删除二叉搜索树中的节点" class="headerlink" title="450.删除二叉搜索树中的节点*"></a>450.删除二叉搜索树中的节点*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/delete-node-in-a-bst/">力扣题目链接(opens new window)</a></p>
+<p>给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。</p>
+<p>一般来说，删除节点可分为两个步骤：</p>
+<p>首先找到需要删除的节点； 如果找到了，删除它。 说明： 要求算法时间复杂度为 $O(h)$，h 为树的高度。</p>
+<p>思路：</p>
+<ol>
+<li><p>暴力：中序遍历后变成数组再处理</p>
+</li>
+<li><p><strong>分析各种可能的情况</strong></p>
+<p> 有以下五种情况：</p>
+<ul>
+<li>第一种情况：没找到删除的节点，遍历到空节点直接返回了</li>
+<li>找到删除的节点<ul>
+<li>第二种情况：左右孩子都为空（叶子节点），直接删除节点， 返回NULL为根节点</li>
+<li>第三种情况：删除节点的左孩子为空，右孩子不为空，删除节点，右孩子补位，返回右孩子为该节点</li>
+<li>第四种情况：删除节点的右孩子为空，左孩子不为空，删除节点，左孩子补位，返回左孩子为该节点</li>
+<li>第五种情况：左右孩子节点都不为空，则将删除节点的左子树头结点（左孩子）放到删除节点的右子树的最左面节点的左孩子上，返回删除节点右孩子为该节点。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == nullptr) return nullptr; //1
+        if (root->val == key) {
+            if(root->left == nullptr && root->right == nullptr) return nullptr; //2
+            if(root->left == nullptr) return root->right; //3
+            if(root->right == nullptr) return root->left; //4
+            if(root->left != nullptr && root->right != nullptr){ //5
+                // 找右子树最左面的节点
+                TreeNode* cur = root->right; 
+                while(cur->left != nullptr) {
+                    cur = cur->left;
+                }
+                cur->left = root->left; // 把要删除的节点（root）左子树放在cur的左孩子的位置
+                root = root->right; 
+                return root;
+            } 
+        }
+   //上面相当于把新的节点返回给上一层，上一层就要用 root->left 或者 root->right接住，代码如下：
+        if (root->val > key) root->left = deleteNode(root->left, key);
+        if (root->val < key) root->right = deleteNode(root->right, key);
+        return root;
+    }
+};
+</code></pre>
+<h2 id="669-修剪二叉搜索树"><a href="#669-修剪二叉搜索树" class="headerlink" title="669. 修剪二叉搜索树*"></a>669. 修剪二叉搜索树*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/trim-a-binary-search-tree/">力扣题目链接</a></p>
+<p><img src="/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/trim2.jpg" alt="img" style="zoom:33%;"></p>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+        if (root == nullptr ) return nullptr;
+        if (root->val < low) {
+            TreeNode* right = trimBST(root->right, low, high); // 寻找符合区间[low, high]的节点
+            return right;
+        }
+        if (root->val > high) {
+            TreeNode* left = trimBST(root->left, low, high); // 寻找符合区间[low, high]的节点
+            return left;
+        }
+        root->left = trimBST(root->left, low, high); // root->left接入符合条件的左孩子
+        root->right = trimBST(root->right, low, high); // root->right接入符合条件的右孩子
+        return root;
+    }
+};
+</code></pre>
+<h2 id="108-将有序数组转换为二叉搜索树"><a href="#108-将有序数组转换为二叉搜索树" class="headerlink" title="108.将有序数组转换为二叉搜索树"></a>108.将有序数组转换为二叉搜索树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/">力扣题目链接(opens new window)</a></p>
+<p>将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。</p>
+<p>本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。</p>
+<p>思路：</p>
+<ol>
+<li>选取数组中间的节点为根节点，分割数组为左右两部分</li>
+<li>分别在两部分中间再找中间节点</li>
+</ol>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    TreeNode* traversal(vector<int>& nums, int left, int right) {
+        if (left > right) return nullptr;
+        int mid = left + ((right - left) / 2); // 防止溢出 
+        // 等价于int mid = (left + right) / 2;
+        TreeNode* root = new TreeNode(nums[mid]);
+        root->left = traversal(nums, left, mid - 1);
+        root->right = traversal(nums, mid + 1, right);
+        return root;
+    }
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        TreeNode* root = traversal(nums, 0, nums.size() - 1);
+        return root;
+    }
+};
+</code></pre>
+<h2 id="538-把二叉搜索树转换为累加树"><a href="#538-把二叉搜索树转换为累加树" class="headerlink" title="538.把二叉搜索树转换为累加树"></a>538.把二叉搜索树转换为累加树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/convert-bst-to-greater-tree/">力扣题目链接(opens new window)</a></p>
+<p>给出二叉 搜索 树的根节点，该树的节点值各不相同，请你将其转换为累加树（Greater Sum Tree），使每个节点 node 的新值等于原树中大于或等于 node.val 的值之和。</p>
+<p>思路：</p>
+<p>右中左序遍历，需要记录前一个节点的数值</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    int pre = 0; // 记录前一个节点的数值
+    void traversal(TreeNode* cur) { // 右中左遍历
+        if (cur == NULL) return;
+        traversal(cur->right);
+        cur->val += pre;
+        pre = cur->val;
+        traversal(cur->left);
+    }
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        pre = 0;
+        traversal(root);
+        return root;
+    }
+};
+</code></pre>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2023/03/11/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/" title="">https://youngyyp.github.io/2023/03/11/cpp/二叉树/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/09/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/11/cpp/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">二叉树理论基础篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">二叉树的定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86"><span class="nav-number">2.</span> <span class="nav-text">二叉树的递归遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E4%B8%89%E8%A6%81%E7%B4%A0%EF%BC%9A"><span class="nav-number">2.0.1.</span> <span class="nav-text">递归三要素：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86"><span class="nav-number">3.</span> <span class="nav-text">二叉树的迭代遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88%E8%BF%AD%E4%BB%A3%E6%B3%95%EF%BC%89"><span class="nav-number">3.0.1.</span> <span class="nav-text">前序遍历（迭代法）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">二叉树的统一迭代法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E6%B3%95%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">4.0.1.</span> <span class="nav-text">迭代法中序遍历</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#102-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86%E2%80%94%E2%80%94%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88"><span class="nav-number">5.</span> <span class="nav-text">102.二叉树的层序遍历——广度优先</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#226-%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number"></span> <span class="nav-text">226.翻转二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#101-%E5%AF%B9%E7%A7%B0%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">101. 对称二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#104-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%A4%A7%E6%B7%B1%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">104.二叉树的最大深度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#111-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E6%B7%B1%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">111.二叉树的最小深度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#222-%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%8A%82%E7%82%B9%E4%B8%AA%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">222.完全二叉树的节点个数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#110-%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">5.</span> <span class="nav-text">110.平衡二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#257-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%89%80%E6%9C%89%E8%B7%AF%E5%BE%84"><span class="nav-number">6.</span> <span class="nav-text">257. 二叉树的所有路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#404-%E5%B7%A6%E5%8F%B6%E5%AD%90%E4%B9%8B%E5%92%8C"><span class="nav-number">7.</span> <span class="nav-text">404.左叶子之和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#513-%E6%89%BE%E6%A0%91%E5%B7%A6%E4%B8%8B%E8%A7%92%E7%9A%84%E5%80%BC"><span class="nav-number">8.</span> <span class="nav-text">513.找树左下角的值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#112-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C"><span class="nav-number">9.</span> <span class="nav-text">112. 路径总和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#113-%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8Cii"><span class="nav-number">10.</span> <span class="nav-text">113. 路径总和ii</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#106-%E4%BB%8E%E4%B8%AD%E5%BA%8F%E4%B8%8E%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">11.</span> <span class="nav-text">106.从中序与后序遍历序列构造二叉树*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#654-%E6%9C%80%E5%A4%A7%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">12.</span> <span class="nav-text">654.最大二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#617-%E5%90%88%E5%B9%B6%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">13.</span> <span class="nav-text">617.合并二叉树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#700-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E6%90%9C%E7%B4%A2"><span class="nav-number">14.</span> <span class="nav-text">700.二叉搜索树中的搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#98-%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-number">15.</span> <span class="nav-text">98.验证二叉搜索树*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#530-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E5%B0%8F%E7%BB%9D%E5%AF%B9%E5%B7%AE"><span class="nav-number">16.</span> <span class="nav-text">530.二叉搜索树的最小绝对差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#501-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E4%BC%97%E6%95%B0"><span class="nav-number">17.</span> <span class="nav-text">501.二叉搜索树中的众数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#236-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88"><span class="nav-number">18.</span> <span class="nav-text">236. 二叉树的最近公共祖先</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#235-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88"><span class="nav-number">19.</span> <span class="nav-text">235. 二叉搜索树的最近公共祖先</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#701-%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">20.</span> <span class="nav-text">701.二叉搜索树中的插入操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#450-%E5%88%A0%E9%99%A4%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9"><span class="nav-number">21.</span> <span class="nav-text">450.删除二叉搜索树中的节点*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#669-%E4%BF%AE%E5%89%AA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-number">22.</span> <span class="nav-text">669. 修剪二叉搜索树*</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#108-%E5%B0%86%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-number">23.</span> <span class="nav-text">108.将有序数组转换为二叉搜索树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#538-%E6%8A%8A%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%B4%AF%E5%8A%A0%E6%A0%91"><span class="nav-number">24.</span> <span class="nav-text">538.把二叉搜索树转换为累加树</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

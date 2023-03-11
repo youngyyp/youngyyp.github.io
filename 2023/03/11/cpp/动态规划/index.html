@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="动态规划基础知识动态规划，Dynamic Programming，简称DP，如果某一问题有很多重叠子问题，使用动态规划是最有效的。 动规是由前一个状态推导出来的，而贪心是局部直接选最优的 动规五部曲：  确定dp数组（dp table）以及下标的含义 确定递推公式 dp数组如何初始化 确定遍历顺序 举例推导dp数组  509. 斐波那契数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="动态规划基础知识动态规划，Dynamic Programming，简称DP，如果某一问题有很多重叠子问题，使用动态规划是最有效的。 动规是由前一个状态推导出来的，而贪心是局部直接选最优的 动规五部曲：  确定dp数组（dp table）以及下标的含义 确定递推公式 dp数组如何初始化 确定遍历顺序 举例推导dp数组  509. 斐波那契数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20230310111953290.png">
+<meta property="article:published_time" content="2023-03-11T04:35:38.636Z">
+<meta property="article:modified_time" content="2023-03-11T04:35:38.652Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20230310111953290.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-11 12:35:38" itemprop="dateCreated datePublished" datetime="2023-03-11T12:35:38+08:00">2023-03-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="动态规划基础知识"><a href="#动态规划基础知识" class="headerlink" title="动态规划基础知识"></a>动态规划基础知识</h2><p>动态规划，Dynamic Programming，简称DP，如果某一问题有很多重叠子问题，使用动态规划是最有效的。</p>
+<p>动规是由前一个状态推导出来的，而贪心是局部直接选最优的</p>
+<p>动规五部曲：</p>
+<ol>
+<li>确定dp数组（dp table）以及下标的含义</li>
+<li>确定递推公式</li>
+<li>dp数组如何初始化</li>
+<li>确定遍历顺序</li>
+<li>举例推导dp数组</li>
+</ol>
+<h2 id="509-斐波那契数"><a href="#509-斐波那契数" class="headerlink" title="509. 斐波那契数"></a>509. 斐波那契数</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/fibonacci-number/">力扣题目链接(opens new window)</a></p>
+<p>斐波那契数，通常用 F(n) 表示，形成的序列称为 斐波那契数列 。该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是： F(0) = 0，F(1) = 1 F(n) = F(n - 1) + F(n - 2)，其中 n &gt; 1 给你n ，请计算 F(n) 。</p>
+<p>我的：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int fib(int n) {
+        if(n == 0) return 0;
+        if(n == 1) return 1;
+        return fib(n-1) + fib(n-2);
+    }
+};
+</code></pre>
+<p>题解动规：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int fib(int N) {
+        if (N <= 1) return N;
+        vector<int> dp(N + 1);
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= N; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[N];
+    }
+};
+</code></pre>
+<h2 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="70. 爬楼梯"></a>70. 爬楼梯</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/climbing-stairs/">力扣题目链接(opens new window)</a></p>
+<p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。</p>
+<p>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
+<p>注意：给定 n 是一个正整数。</p>
+<p><strong>用递归和回溯都超出时间限制</strong></p>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int climbStairs(int n) {
+        if (n <= 2) return n;
+        vector<int> dp(n+1);
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];//关键
+        }
+        return dp[n];
+    }
+};
+</code></pre>
+<h2 id="746-使用最小花费爬楼梯"><a href="#746-使用最小花费爬楼梯" class="headerlink" title="746. 使用最小花费爬楼梯"></a>746. 使用最小花费爬楼梯</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/min-cost-climbing-stairs/">力扣题目链接(opens new window)</a></p>
+<p>给你一个整数数组 <code>cost</code> ，其中 <code>cost[i]</code> 是从楼梯第 <code>i</code> 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。</p>
+<p>你可以选择从下标为 <code>0</code> 或下标为 <code>1</code> 的台阶开始爬楼梯。</p>
+<p>请你计算并返回达到楼梯顶部的最低花费。</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        vector<int> dp(cost.size() + 1);
+        dp[0] = 0; // 默认第一步都是不花费体力的
+        dp[1] = 0;
+        for (int i = 2; i <= cost.size(); i++) {
+            dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+        }
+        return dp[cost.size()];
+    }
+};
+</code></pre>
+<h1 id="62-不同路径"><a href="#62-不同路径" class="headerlink" title="62.不同路径"></a>62.不同路径</h1><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths/">力扣题目链接(opens new window)</a></p>
+<p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。</p>
+<p>机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。</p>
+<p>问总共有多少条不同的路径？</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        //初始化，最好吧初始化和逻辑处理分开写，比较明了
+        for (int i = 0; i < m; i++) dp[i][0] = 1;
+        for (int j = 0; j < n; j++) dp[0][j] = 1;
+
+        for(int i = 1; i < m; i++) {
+            for(int j = 1; j < n; j++){
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+</code></pre>
+<h1 id="63-不同路径-II"><a href="#63-不同路径-II" class="headerlink" title="63. 不同路径 II"></a>63. 不同路径 II</h1><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-paths-ii/">力扣题目链接(opens new window)</a></p>
+<p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。</p>
+<p>机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。</p>
+<p>现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？</p>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size(); //！！记住这里的方式
+        int n = obstacleGrid[0].size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+
+        /* 这块的判断写复杂了
+        int sig = 1;
+        for (int i = 0; i < m; i++) {
+            if(obstacleGrid[i][0] == 1) {
+                dp[i][0] = 0;
+                sig = 0;
+            }
+            if(sig) dp[i][0] = 1;
+        }
+        sig = 1;
+        for (int j = 0; j < n; j++) {
+            if(obstacleGrid[0][j] == 1) {
+                dp[0][j] = 0;
+                sig = 0;
+            }
+            if(sig) dp[0][j] = 1;
+        }
+        */
+        //题解的初始化判断
+        for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) dp[i][0] = 1;
+        for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) dp[0][j] = 1;
+
+        for(int i = 1; i < m; i++) {
+            for(int j = 1; j < n; j++){
+                if(obstacleGrid[i][j] == 1) dp[i][j] = 0;
+                else dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+</code></pre>
+<h2 id="343-整数拆分"><a href="#343-整数拆分" class="headerlink" title="343. 整数拆分"></a>343. 整数拆分</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/integer-break/">力扣题目链接(opens new window)</a></p>
+<p>给定一个正整数 n，将其拆分为至少两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。</p>
+<p>思路：遍历，比较<code>dp[i - j] * j, (i - j) * j</code>大小，即比较拆成两个和拆成两个以上的乘积大小。</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int integerBreak(int n) {
+        vector<int> dp(n+1);
+        dp[2] = 1;
+        for(int i = 3; i <= n; i++){
+            for (int j = 2; j < i; j++){
+                dp[i] = max(dp[i],max(dp[i - j] * j, (i - j) * j));
+            }
+        }
+        return dp[n];
+    }
+};
+</code></pre>
+<h2 id="96-不同的二叉搜索树"><a href="#96-不同的二叉搜索树" class="headerlink" title="96.不同的二叉搜索树"></a>96.不同的二叉搜索树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-binary-search-trees/">力扣题目链接(opens new window)</a></p>
+<p>给定一个整数 n，求以 1 … n 为节点组成的<strong>二叉搜索树</strong>有多少种？</p>
+<p>思路：</p>
+<p><img src="/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/image-20230310111953290.png" alt="image-20230310111953290"> </p>
+<p>dp[3] = dp[0]dp[2] + dp[1]dp[1]+dp[2]dp[0];</p>
+<p>节点的数值其实关系不大，只要每个值不一样就行；</p>
+<p>dp[i] += dp[j - 1] * dp[i - j];</p>
+<p>代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> dp(n+1);
+        dp[0] = 1;
+        dp[1] = 1;
+        for(int i = 2; i <= n; i++){
+            for(int j = 1; j <= i; j++){
+                dp[i] += dp[j - 1] * dp[i - j];
+            }
+        }
+        return dp[n];
+    }
+};
+</code></pre>
+<h2 id="01背包"><a href="#01背包" class="headerlink" title="01背包"></a>01背包</h2><p>有N件物品和⼀个最多能背重量为W 的背包。第i件物品的重量是weight[i]，得到的价值是value[i] 。每件物品只能⽤⼀次，求解将哪些物品装⼊背包⾥物品价值总和最⼤。</p>
+<p>例：</p>
+<p>背包最⼤重量为4。<br>              重量    价值<br>物品0      1          15<br>物品1      3          20<br>物品2      4          30</p>
+<p>思路：</p>
+<p>对于背包问题，有⼀种写法， 是使⽤<strong>⼆维数组</strong>，即<code>dp[i] [j]</code> 表⽰从下标为<code>[0-i]</code>的物品⾥任意取，放进容量为<code>j</code>的背包，价值总和最⼤是多少。</p>
+<p>不放物品i:  <code>dp[i-1] [j]</code></p>
+<p>放物品i:<code>dp[i-1] * [j - weight[ i ]] + value[ i ]</code></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">//测试代码
+void test_2_wei_bag_problem1() {
+    vector<int> weight = {1, 3, 4};
+    vector<int> value = {15, 20, 30};
+    int bagweight = 4;
+
+    // 二维数组
+    vector<vector<int>> dp(weight.size(), vector<int>(bagweight + 1, 0));
+
+    // 初始化
+    for (int j = weight[0]; j <= bagweight; j++) {
+        dp[0][j] = value[0];
+    }
+
+    // weight数组的大小 就是物品个数
+    for(int i = 1; i < weight.size(); i++) { // 遍历物品
+        for(int j = 0; j <= bagweight; j++) { // 遍历背包容量
+            if (j < weight[i]) dp[i][j] = dp[i - 1][j];
+            else dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+
+        }
+    }
+
+    cout << dp[weight.size() - 1][bagweight] << endl;
+}
+
+int main() {
+    test_2_wei_bag_problem1();
+}
+</code></pre>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="">https://youngyyp.github.io/2023/03/11/cpp/动态规划/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%80%9D%E8%80%83/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">动态规划基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#509-%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">509. 斐波那契数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#70-%E7%88%AC%E6%A5%BC%E6%A2%AF"><span class="nav-number">3.</span> <span class="nav-text">70. 爬楼梯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#746-%E4%BD%BF%E7%94%A8%E6%9C%80%E5%B0%8F%E8%8A%B1%E8%B4%B9%E7%88%AC%E6%A5%BC%E6%A2%AF"><span class="nav-number">4.</span> <span class="nav-text">746. 使用最小花费爬楼梯</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#62-%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84"><span class="nav-number"></span> <span class="nav-text">62.不同路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#63-%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II"><span class="nav-number"></span> <span class="nav-text">63. 不同路径 II</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#343-%E6%95%B4%E6%95%B0%E6%8B%86%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">343. 整数拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#96-%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-number">2.</span> <span class="nav-text">96.不同的二叉搜索树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#01%E8%83%8C%E5%8C%85"><span class="nav-number">3.</span> <span class="nav-text">01背包</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="题目：在线自适应学习算法研究研究背景DA:(59条消息) 域适应（domain adaptation）_点PY的博客-CSDN博客_domain adaptation (59条消息) 迁移学习——Domain AdaptationPeanut范的博客-CSDN博客_domain adaptation 随着深度学习的不断发展，深度神经网络在各种应用中表现出良好的性能，特别是当测试样本来自与训练数据相">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="题目：在线自适应学习算法研究研究背景DA:(59条消息) 域适应（domain adaptation）_点PY的博客-CSDN博客_domain adaptation (59条消息) 迁移学习——Domain AdaptationPeanut范的博客-CSDN博客_domain adaptation 随着深度学习的不断发展，深度神经网络在各种应用中表现出良好的性能，特别是当测试样本来自与训练数据相">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-12-11T08:56:20.992Z">
+<meta property="article:modified_time" content="2022-12-11T08:56:21.017Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-12-11 16:56:20 / 修改时间：16:56:21" itemprop="dateCreated datePublished" datetime="2022-12-11T16:56:20+08:00">2022-12-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="题目：在线自适应学习算法研究"><a href="#题目：在线自适应学习算法研究" class="headerlink" title="题目：在线自适应学习算法研究"></a>题目：<strong>在线自适应学习算法研究</strong></h2><h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>DA:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42990464/article/details/117149006">(59条消息) 域适应（domain adaptation）_点PY的博客-CSDN博客_domain adaptation</a></p>
+<p><a target="_blank" rel="noopener" href="https://fancp.blog.csdn.net/article/details/80956828?spm=1001.2101.3001.6650.10&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-10-80956828-blog-117149006.pc_relevant_3mothn_strategy_and_data_recovery&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-10-80956828-blog-117149006.pc_relevant_3mothn_strategy_and_data_recovery&amp;utm_relevant_index=16">(59条消息) 迁移学习——Domain Adaptation<em>Peanut</em>范的博客-CSDN博客_domain adaptation</a></p>
+<p>随着深度学习的不断发展，深度神经网络在各种应用中表现出良好的性能，特别是当测试样本来自与训练数据相同的分布时，网络预测的准确率可以达到非常高。然而，深度神经网络对于来自不同域数据的概括能力是有限的。当训练（源域）数据与测试（目标域）数据的分布不同时，模型预测的准确率会受到影响，这种情况被称为数据集偏移。例如场景的明暗变化、天气环境的变化以及传感器的退化。正因为存在数据集的偏移，模型在测试过程中可能对训练过程没有见过的未知变化敏感，当源域与目标域的差异过大时，会造成性能的急剧下降，在一些现实场景中，这样的性能下降可能会导致模型无法使用。</p>
+<p>在真实场景下的数据分布通常是与训练集的数据分布不同的，为了能在不同的数据分布上部署模型，我们需要模型能够对目标域进行自适应的学习。</p>
+<p>在深度学习领域中，可将深度学习算法分为在线学习和离线学习。离线学习也通常称为批学习，是指所有的源数据以批量的形式输入到网络中进行训练，然后将训练所得的模型用于预测任务中。一旦我们要对模型进行更改，只能通过再训练的方式，这将导致效率低下的问题。</p>
+<p>离线学习的缺点总结如下：</p>
+<p>\1.    模型训练过程低效</p>
+<p>\2.    训练过程不易拓展于大数据场景。</p>
+<p>\3.    模型无法适应动态变化的环境</p>
+<p>在线学习也称为增量学习或适应性学习，是指在一定顺序下接收数据，每接收一个数据，模型会对它进行预测并对当前模型进行更新，然后处理下一个数据。离线学习通常假设训练数据和测试数据是独立同分布的，但是在在线学习的设置中，对训练数据的假设是宽松或几乎没有的。</p>
+<p>在线学习的特点总结如下：</p>
+<p>\1.   无需源域数据</p>
+<p>\2.   无需目标域标签</p>
+<p>\3.   无需改变原训练流程</p>
+<p>\4.   无需批处理</p>
+<p>随着最近深度神经网络模型的参数量呈指数不断上升，网络的训练成本也急剧增加，普通的用户难以承担如此高额的训练成本。同时，由于数据安全性问题，模型可能在没有源数据的情况下分发，而且在测试期间重新去处理源数据会导致效率十分低下。这意味着在测试阶段，模型必须仅根据其参数和目标域数据在线地对网络进行更新，也就是说，我们需要研究基于目标域自适应的在线学习以解决离线学习的缺点，扩大模型的适用场景，提升模型对动态变化环境的适应能力。</p>
+<h3 id="研究现状"><a href="#研究现状" class="headerlink" title="研究现状"></a>研究现状</h3><h4 id="fine-tuning"><a href="#fine-tuning" class="headerlink" title="fine-tuning"></a>fine-tuning</h4><h4 id="DA"><a href="#DA" class="headerlink" title="DA"></a>DA</h4><p>深度学习是机器学习的一个子领域，旨在通过分层架构发现输入数据的多个层次的分布式表示[73]。在过去几年中，基于深度学习的方法出现了爆炸式增长，其中深度学习极大地改进了各种机器学习问题和应用的最先进方法[123]。特别是，深度学习已经将传统的信号处理方法转变为以端到端的方式同时学习特征和预测模型[7]。尽管有监督的深度学习是各种任务中最普遍和最成功的方法，但其成功取决于（i）大量标记的训练数据和（ii）独立且相同分布（i.i.d.）的训练和测试数据集的假设[99]。由于对各种应用领域的海量数据集进行可靠标记通常是昂贵且令人望而却步的，因此对于目标领域中没有足够标记数据集的任务，强烈需要通过利用源领域的丰富标记数据来应用经训练的模型[286]。然而，这种学习策略受到数据分布变化的影响，即源域和目标域之间的域变化[302]。因此，当遇到分布外（OOD）数据时，即源分布与目标分布不同时，训练模型的性能可能会严重下降[25]。<br>例如，无法保证应用于目标域中不同于源域中人群的疾病诊断系统的性能。</p>
+<p>为了解决这一问题，提出了无监督域自适应（UDA）作为一种可行的解决方案，将从标记的源域学习到的知识迁移到不可见、异构和未标记的目标域[155167]，如图1所示。UDA旨在减轻源域和目标域之间的域转移[118]。UDA的解决方案主要分为统计矩匹配（例如，最大平均差异（MMD）[174]）、领域风格转移[234]、自我训练[148165321]和特征级对抗性学习[66，81，82，171]</p>
+<p>域自适应可以被视为转移学习的一种特殊情况，假设标记数据仅在源域中可用[204]。</p>
+<p>本文旨在从理论和实践的角度为UDA提供广泛的模型和算法。本综述还涉及新兴方法，特别是最近开发的方法，提供了不同技术的彻底比较，并讨论了独特组件和方法与无监督深度域自适应的联系。UDA，特别是基于深度学习的UDA，在一般转移学习审查中的覆盖面有限。许多先前的领域适应审查没有纳入深度学习方法；然而，基于深度学习的方法已经成为UDA的主流。此外，一些综述没有深入触及域映射[49，118，119]、基于归一化统计[49，119，315，316]、基于集成[49，119270，316]或基于自训练的方法[275]。此外，其中一些只关注有限的应用领域，如视觉数据分析[49202270]或自然语言处理（NLP）[215]。在这篇综述中，我们对这一前景广阔的技术在广泛的应用领域提供了全面的看法，包括自然图像处理、视频分析、NLP、时间序列数据分析、医学图像分析以及气候和地球科学。表1总结了其他审查文件所涉及的主题。</p>
+<p>泛化是观察有限数量的样本并对所有可能的样本进行陈述的过程。在机器学习和模式识别的情况下，样本被用来训练分类器，以对未来的样本进行预测。然而，如果观察到的标记样本不是学习者应该操作的潜在分布的准确反映，系统将不能很好地推广到新样本。在实践中，收集的数据几乎从来不是操作环境的完全公正的表示。<br>如果系统地观察到某些结果比均匀随机抽样程序更频繁，则数据是有偏差的。例如，由于当地患者群体的生活条件不同，从一家医院采样的数据可能会相对于全球人群产生偏差。长期以来，统计学家一直在研究样本选择偏差[1]、[2]术语下的抽样偏差。<br>修正的基础是估计—或者在有实验设计控制的情况下，知道—选择一个实例进行观察的概率[3]、[4]、[5]。但许多现代数据收集程序，如互联网爬虫，比起从医院患者身上采样，结构化程度较低。因此，即使不是不可能，也很难估计样本被选择进行观察的概率，进而估计有偏差的样本与一般总体的不同之处。另一方面，可能没有必要将其推广到所有人口。更重要的可能是将其推广到特定的目标人群。例如，在欧洲医院收集的数据能否用于培训非洲医院的智能预测系统？</p>
+<p>为了针对样本空间（以下称为域）上的特定分布，我们至少需要一些信息。通常可以收集来自目标域的未标记数据，但标签更难获得。<br>然而，未标记的数据提供了源域和目标域彼此不同的方式。该信息可用于使分类器适应，即改变其决策，使其更好地向目标领域推广。<br>要问的重要问题是：分类器如何从源域学习并推广到目标域？我们将方法分类为三个部分，每个部分都包含更精细的子分类。<br>首先，有基于样本的方法，其基于通过单个样本纠正数据采样过程中的偏差。此类别中的方法侧重于数据重要性加权[6]、[7]或类重要性加权[8]。其次，有一些基于特征的方法，它们专注于重塑特征空间，以便在转换的源数据上训练的分类器将推广到目标数据。<br>进一步的区别可以在寻找子空间映射[9]、[10]、最优运输技术[11]、学习域不变表示[12]或构造相应的特征[13]中进行。第三，我们考虑我们所称的基于推理的方法。这些方法侧重于将自适应纳入参数估计过程。它是一个多样化的类别，包含算法鲁棒性[14]、极小极大估计量[15]、自学习[16]、经验贝叶斯[17]和PAC贝叶斯[18]。显然，上述分类不一定相互排斥，但我们认为它提供了一个可理解的概述。<br>我们的分类揭示了允许域自适应分类器的性能保证的少量条件。在实践中，我们必须假设一个条件成立，这意味着对于任何自适应分类器，都存在一个问题设置，该设置失败。我们讨论了假设检验和因果信息对领域自适应分类器选择的重要性。</p>
+<p>在机器学习和模式识别中，样本被用来训练分类器，以对未来的样本进行预测。然而，如果训练标记样本的分布和测试样本有较大差异，系统将不能很好地推广到新的测试样本。然而实际上，训练数据几乎从来都不能完全涵盖所有的测试场景以及相应的分布。</p>
+<p>为了针对目标域上的特定分布，我们至少需要收集一些信息，通常可以收集来自目标域的未标记数据，但标签更难获得。</p>
+<p>然而，未标记的数据提供了源域和目标域彼此不同的方式。该信息可用于使分类器适应，即改变其决策，使其更好地向目标领域推广。</p>
+<p>要问的重要问题是：分类器如何从源域学习并推广到目标域？我们将方法分类为三个部分，每个部分都包含更精细的子分类。</p>
+<p>首先，有基于样本的方法，其基于通过单个样本纠正数据采样过程中的偏差。此类别中的方法侧重于数据重要性加权[6]、[7]或类重要性加权[8]。其次，有一些基于特征的方法，它们专注于重塑特征空间，以便在转换的源数据上训练的分类器将推广到目标数据。</p>
+<p>进一步的区别可以在寻找子空间映射[9]、[10]、最优运输技术[11]、学习域不变表示[12]或构造相应的特征[13]中进行。第三，我们考虑我们所称的基于推理的方法。这些方法侧重于将自适应纳入参数估计过程。它是一个多样化的类别，包含算法鲁棒性[14]、极小极大估计量[15]、自学习[16]、经验贝叶斯[17]和PAC贝叶斯[18]。显然，上述分类不一定相互排斥，但我们认为它提供了一个可理解的概述。</p>
+<p>我们的分类揭示了允许域自适应分类器的性能保证的少量条件。在实践中，我们必须假设一个条件成立，这意味着对于任何自适应分类器，都存在一个问题设置，该设置失败。我们讨论了假设检验和因果信息对领域自适应分类器选择的重要性。</p>
+<p>近年来提出了许多方法来解决视域自适应问题，该问题也通常被框架为视觉数据集偏差问题[31]。所有人都认识到，源数据表示和目标数据表示的分布发生了变化。事实上，域移动的大小通常由源和目标子空间表示[5，11，21，25，27]之间的距离来衡量。大量方法试图通过学习特征空间变换来对齐源和目标表示[28，23，11，15]来克服这种差异。对于有监督的自适应场景，当目标域中有有限数量的标记数据可用时，已经提出了一些方法来学习对源分类器进行正则化的目标分类器[32，2，1]。其他人试图同时学习特征变换和正则化目标分类器[18，10]。<br>最近，基于有监督的CNN的特征表示被证明对于各种视觉识别任务非常有效[22，9，14，29]。特别是，使用深度表示显著减少了分辨率和光照对域移位的影响[9，19]。并行CNN结构，如暹罗网络，已被证明是学习不变表示的有效方法[6，8]。<br>然而，训练这些网络需要每个训练实例的标签，因此不清楚如何将这些方法扩展到非监督或半监督设置。还探索了多模式深度学习体系结构，以学习不同输入模式不变的表示[26]。然而，这种方法主要是在生成性的背景下运作的，因此没有充分利用监督的CNN陈述的代表性力量。<br>训练源和目标CNN的联合架构是由[7]提出的，但限于两层，因此显著优于使用更深架构的方法[22]，在大型辅助数据源(例如：ImageNet[4])上进行预训练。[13]提出先用去噪自动编码器进行预训练，然后同时训练一个两层网络，同时进行MMD域混淆损失。<br>这有效地学习了领域不变表示，但同样，因为学习的网络相对较浅，它缺乏通过使用受监督的深度CNN直接优化分类目标而学习的强语义表示。<br>在模型压缩或蒸馏的背景下，在训练期间使用分类器输出分布而不是类别标签已被探索[3，16]。然而，我们是第一个在域自适应设置中应用这一技术的，以便在域之间转移类别相关性。<br>其他工作同时探索了直接优化区域不变性表示的想法[12，24]。然而，它们要么使用较弱的域不变性度量，要么使用比我们提出的方法健壮性较差的优化方法，并且它们不试图解决半监督环境下的任务转移问题。</p>
+<h4 id="TTT"><a href="#TTT" class="headerlink" title="TTT"></a>TTT</h4><p>在分布变化的情况下，监督学习在泛化方面仍然是出了名的薄弱环节。除非训练和测试数据来自相同的分布，否则即使看似微小的差异也会击败最先进的模型（Recht等人，2018）。对抗鲁棒性和领域适应性只是一些现有的范例，它们试图通过拓扑结构或训练期间可用的测试分布数据来预测训练和测试分布之间的差异。我们探索了一种新的概括方法，它不预测分布变化，而是在测试时从中学习。<br>我们从一个简单的观察开始。测试时呈现的未标记测试样本x为我们提供了关于其绘制分布的提示。我们建议通过允许模型参数取决于测试样本x，而不是其未知标签y，利用测试分布的这一提示。可变决策边界（x）的概念在理论上是强大的，因为它脱离了固定模型容量的限制（见第A1节中的附加讨论），但是从x到（x）的反馈机制的设计在实践中提出了新的挑战，我们在这里才开始讨论。<br>我们提出的测试时间训练方法基于该单个测试样本x创建了一个自监督学习问题，在进行预测之前在测试时间进行更新。自我监督学习使用一个辅助任务，该任务从未标记的输入中自动创建标签。在我们的实验中，我们使用将每个输入图像旋转90度的倍数并预测其角度的任务（Gidaris等人，2018）。<br>这种方法也可以很容易地修改为在标准监督学习环境之外工作。如果一批中有几个测试样本，我们可以使用整个批次进行测试时间培训。如果样本到达在线流，我们通过保持参数的状态来获得进一步的改进。毕竟，预测很少是单一事件。在线版本可以是自然的部署模式，前提是测试样本是由相同或平稳变化的分布变化产生的。<br>我们在多个标准基准上的对象识别环境中对我们的方法进行了实验验证。其中包括具有不同级别的不同类型腐败的图像（Hendrycks&amp;Dieterich，2019）、移动对象的视频帧（Shankar等人，2019），以及由收集的一组未知位移的新测试集（Recht等人，2018）。我们的算法在分布变化的情况下进行了实质性改进，同时保持了与原始分布相同的性能。<br>在我们的实验中，我们与一个强大的基线（标记为联合训练）进行了比较，该基线在训练时使用监督和自我监督学习，但在测试时保持模型不变。最近的研究表明，训练时间自我监督提高了鲁棒性（Hendrycks等人，2019a）；我们的联合训练基线对应于这项工作的改进实施。第5节对相关工作进行了全面审查。<br>我们用第4节中的理论研究补充了实证结果，并在测试时间训练有帮助的凸模型上建立了直观的充分条件；粗略地说，这个条件是两个任务的损失函数之间具有相关的梯度。</p>
+<h4 id="TTA："><a href="#TTA：" class="headerlink" title="TTA："></a>TTA：</h4><p>测试时间适应（TTA）测试时间适应方法在部署期间利用当前可用的测试数据来适应预先训练的模型。由于测试样本还提供了分布变化的见解，[38]表明，在测试期间简单地调整批处理归一化（BN）统计数据已经可以显著提高损坏数据的性能。这与[20]的精神一致，[20]先前建议在UDA的设置中更新BN统计数据。虽然该策略只需要前向传递，但TTA中的当前方法进一步执行后向传递，其中更新了模型权重。例如，[49]使BN参数的熵最小化。[57]最小化了所有参数的熵，并使用测试时间增加[16]来人为地增加批量大小。其他方法应用对比学习[4]，甚至在源预训练期间引入额外的自我监督损失，该损失随后被用于在测试期间执行自适应[1，2，24，41]。多样性正则化[21，33]是一种最近的方法，可以避免由置信最大化可能导致的平凡解的崩溃。虽然许多方法都假设有一批可用的测试数据，但其中一项工作集中于单个样本TTA[2，10，31，57]</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/" title="">https://youngyyp.github.io/2022/12/11/计算机视觉/test_time_adaptation/开题/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%94%B9%E8%BF%9B%E6%96%B9%E6%A1%88(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20230207144511)/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9C%A8%E7%BA%BF%E8%87%AA%E9%80%82%E5%BA%94%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E7%A0%94%E7%A9%B6"><span class="nav-number">1.</span> <span class="nav-text">题目：在线自适应学习算法研究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">研究背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6"><span class="nav-number">1.2.</span> <span class="nav-text">研究现状</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fine-tuning"><span class="nav-number">1.2.1.</span> <span class="nav-text">fine-tuning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DA"><span class="nav-number">1.2.2.</span> <span class="nav-text">DA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TTT"><span class="nav-number">1.2.3.</span> <span class="nav-text">TTT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TTA%EF%BC%9A"><span class="nav-number">1.2.4.</span> <span class="nav-text">TTA：</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

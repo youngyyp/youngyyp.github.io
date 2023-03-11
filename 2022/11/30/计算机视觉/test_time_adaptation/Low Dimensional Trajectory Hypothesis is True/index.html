@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces用最直观的方式告诉你：什么是主成分分析PCA_哔哩哔哩_bilibili  【学长小课堂】什么是奇异值分解SVD—SVD如何分解时空矩阵_哔哩哔哩_bilibili">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces用最直观的方式告诉你：什么是主成分分析PCA_哔哩哔哩_bilibili  【学长小课堂】什么是奇异值分解SVD—SVD如何分解时空矩阵_哔哩哔哩_bilibili">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201516681.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201821493.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117203502974.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117210137300.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118101647594.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118102107485.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118102632722.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112111041.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112323474.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112351688.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118135412861.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118141342146.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118144500074.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118144822572.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145401179.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145518248.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145913877.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118150612211.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118150810037.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221125171645874.png">
+<meta property="article:published_time" content="2022-11-30T01:17:01.617Z">
+<meta property="article:modified_time" content="2022-11-30T01:17:01.921Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201516681.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-30 09:17:01" itemprop="dateCreated datePublished" datetime="2022-11-30T09:17:01+08:00">2022-11-30</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Low-Dimensional-Trajectory-Hypothesis-is-True-DNNs-can-be-Trained-in-Tiny-Subspaces"><a href="#Low-Dimensional-Trajectory-Hypothesis-is-True-DNNs-can-be-Trained-in-Tiny-Subspaces" class="headerlink" title="Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces"></a>Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=0bb4d13f4bd26eaf7f64c37f29dc9f27">用最直观的方式告诉你：什么是主成分分析PCA_哔哩哔哩_bilibili</a></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201516681.png" alt="image-20221117201516681" style="zoom:33%;"></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16A411T7zX/?spm_id_from=333.788&amp;vd_source=0bb4d13f4bd26eaf7f64c37f29dc9f27">【学长小课堂】什么是奇异值分解SVD—SVD如何分解时空矩阵_哔哩哔哩_bilibili</a></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201821493.png" alt="image-20221117201821493"></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117203502974.png" alt="image-20221117203502974" style="zoom:33%;"></p>
+<p><strong>摘要：</strong>深度神经网络（DNN）通常包含大量参数，但存在冗余，因此可以猜测它们可以在低维子空间中训练。在本文中，我们提出了一种基于训练轨迹的低维特性的动态线性降维（DLDR）。简化方法是有效的，并得到了综合实验的支持：在40维空间中优化DNN可以在数千甚至数百万个参数上实现与常规训练相当的性能。由于只有几个变量需要优化，我们开发了一种有效的基于准牛顿的算法，获得了对标记噪声的鲁棒性，并提高了训练有素的模型的性能，三个后续实验，可以显示找到这种低维子空间的优势</p>
+<h3 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h3><p>深度神经网络（DNN）在各个领域取得了前所未有的成功[1]，[2]。在DNN中，参数的数量通常非常大，例如，VGG11[3]中的28.5M，MobileNet[4]中的3.3M，Xception[5]中的21.0M。然而，简单地将DNN的每个参数视为独立变量太粗糙了。事实上，这些参数具有很强的相互关系。例如，梯度从深层传播到浅层，因此不同层之间的参数梯度密切相关。同一层中的参数也具有协同相关性。因此，独立优化变量的数量可能没有我们想象的那么多。换句话说，DNN似乎可以在相对低维的子空间中得到很好的训练，正如[6]首次提出的那样。<br>简而言之，DNN参数在训练中的依赖性和冗余性可以正式描述为以下假设。</p>
+<p><strong>低维轨迹假说</strong><br>对于具有n个参数的神经网络，参数在训练过程中的轨迹可以近似地被具有d维的空间覆盖d≪ n。如果这一假设成立，那么学习在实践和理论方面都会有很大的好处。<br>假说是否成立的最佳标准是在这样的低维空间中的优化是否可以实现与优化原始空间中的所有参数相同或相似的性能。<br>在开创性工作[7]中，作者将SGD训练在全参数上的90%准确度设置为标准，并发现所需的内在维度远小于参数的数量。例如，在CIFAR-10[8]上，具有62006个参数的LeNet[9]可以在2900维子空间中进行优化，获得的精度为常规训练的90%。尽管通过随机投影提取子空间的方法是初步的，但其性能非常有希望。随后，[10]考虑了网络的不同部分，并在每一步重新绘制随机基，进一步将所需维度减少到数百，但精度降级仍然类似。<br>但现有的工作部分不完全支持低维轨迹假设，因为与常规的全参数训练相比仍有很大差距。在本文中，我们建议通过分析动态轨迹来提取子空间，而不是[7]，[10]中的随机投影。通过所提出的方法，许多标准的神经网络结构可以<strong>仅由40个独立变量很好地训练，并且性能几乎与全参数上的常规训练相同</strong>，这表明<strong>DNN可以在低维子空间中训练</strong>，我们确实可以有效地找到这样的子空间。</p>
+<p>为了直观地说明假设和我们的目标，我们可以考虑参数为w∈Rn的DNN f(x，w)。<br>它的训练序列，即训练轨迹，可以表示为{wi}i=0，…，t，其中wi是指训练步骤i的w值。这个假设意味着我们可以找到一个子空间(实际上，它是一个仿射集，但我们稍后将进行集中化；因此，我们在本文中没有严格区分这两个概念)来近似覆盖优化轨迹{wi}i=0，…，t。这种现象与神经切核(NTK)[11]，[12]的低阶性质和顶子空间[6]的集中梯度有关，这将在3.1节中讨论。<br>请注意，提取子空间，即<strong>寻找独立变量（自变量），不同于在模型简化方法中选择参数</strong>，例如参见[13]、[14]。考虑图1中的一个玩具示例，其中包含三个需要优化的变量。如图所示，优化轨迹在e1和e2跨越的子空间中，即优化轨迹的维度为2，但没有单个参数可以减少。这个简单的例子显示了我们的关注点：我们的目标是找到合适的参数组合来构造低维子空间中的自变量。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117210137300.png" alt="image-20221117210137300" style="zoom:33%;"></p>
+<p><em>图1：有三个参数w(1)、w(2)、w(3)需要优化。</em><br><em>但是训练轨迹{wi}i=0，…，t可以在由e1和e2跨越的二维子空间中。如果是这样的话，在低维空间中的训练可以具有与在高维空间中的训练相当的性能。</em></p>
+<p>为了找到覆盖训练轨迹的子空间，人们应该关注训练轨迹。因此，我们将所提出的子空间提取方法命名为动态线性降维(DLDR)。利用DLDR得到的独立变量（自变量），我们可以很好地刻画只有几个基(自变量)的子空间中的训练轨迹。在第五节中，大量的数值实验将表明，许多标准的DNN结构只需40个自变量就可以很好地进行训练。同时，测试精度可以保持与在原始空间中对全参数进行常规训练几乎相同的精度。<br>从理论上讲，即使在训练集不是很大的情况下，将数百万个参数减少到几个自变量就可以解释DNN良好的泛化性能。在实际应用中，由于只需要对几个自变量进行优化，我们可以<strong>使用二阶方法而不是一阶优化方法（?）</strong>，如SGD[15]，以克服一些固有的缺点，如尺度敏感性和收敛速度慢。在现有的工作中，引入了<strong>动量等部分二阶信息</strong>，极大地提高了DNN的性能，导致了目前流行的自适应策略，如Adam[16]，RMSprop[17]等。由于DLDR发现的低维子空间，拟牛顿方法，如DFP和BFGS[18]，[19]，变得适用于DNN的训练。本文提出了一种投影子空间上的BFGS算法，称为P-BFGS算法，<strong>比SGD算法节省了约30%的时间</strong>。<br>低维轨迹假设的另一个后续应用是<strong>提高模型对标签噪声的稳健性</strong>。由于DNN是在过度参数化的制度下工作，它们可以很容易地适应任何标签，甚至是不正确或无意义的标签[20]。因此，当训练标签被噪声破坏时，DNN很容易被破坏。现在，由于我们已经发现了非常低维的子空间，随着训练自由度的显著降低，在这样的子空间中训练DNN有望对标签噪声具有更强的鲁棒性。在5.4节中，我们将发现，在没有任何其他稳健性增强技术的情况下，低维子空间的训练在CIFAR-10上可以达到<strong>50%以上的测试精度，即使90%的训练标签是随机设置的</strong>。<br>本文最重要的贡献是验证了低维轨迹假设，这表明在低维子空间中优化DNN可以在所有参数上获得与训练相似的性能。<br>具体贡献包括：子空间提取方法和提取低维子空间的三个后续优势：</p>
+<p>·动态线性降维技术，以有效地找到低维子空间；</p>
+<p>·通过在低维子空间中使用基于准牛顿的算法来节省训练时间；</p>
+<p>·通过在低维子空间中进行训练来对标签噪声具有鲁棒性；</p>
+<p>·通过子空间训练来提高训练有素的模型的性能。<br>本文的其余部分组织如下。我们首先回顾了第二节中的相关工作。然后在第三节中提出并验证了低维轨迹假设的DLDR算法。在第四节中，我们设计了一个基于DLDR的拟牛顿算法。然后在第五节中我们对降维性能进行了评估。第六节进行了简要的讨论。代码已发布1<a target="_blank" rel="noopener" href="https://github.com/nblt/DLDR。">https://github.com/nblt/DLDR。</a></p>
+<h3 id="RELATED-WORKS"><a href="#RELATED-WORKS" class="headerlink" title="RELATED WORKS"></a>RELATED WORKS</h3><p>分析和理解DNN优化目标的前景非常重要。例如，Li等人[21]使用一系列可视化方法可视化DNN的损失情况。他等人[22]观察到，在局部最优点存在许多不对称方向，沿着这些方向，损耗在一侧急剧增加，在另一侧缓慢增加。一个重要方面是衡量DNN景观的内在维度。在开创性工作[7]中，发现使用随机投影，在缩减子空间中的优化可以达到常规SGD训练的90%性能。在此基础上，提出了内在维数远小于参数数量的观点。<br>下面的工作[10]通过考虑网络的不同部分并在每个步骤重新绘制随机基来提高随机基训练性能。<br>与之前的工作不同，我们通过分析DNN的训练动态来提取子空间，然后得到了显著的改进：固有维数降低了一个数量级，并且精度提高到与常规训练几乎相同。<br>验证低维轨迹假设并找到可以很好地训练DNN的微小子空间非常重要，不仅对于理解DNN的学习，而且对于设计强大的优化方法也非常重要。这与[6]中的发现一致，即在短时间的训练之后，DNN的梯度可以收敛到一个非常小的子空间，该子空间由Hessian矩阵的几个顶部特征向量覆盖。在实践中，低维轨迹假设可能会激发更强大的优化方法，并带来更多潜力来克服学习中的一些现有障碍。由于在极小的子空间中，优化变量的数量大大减少，因此可以以相对简单的方式利用高阶信息。在[23]、[24]等中，设计了精细的方法来使用曲率信息，同时保持计算效率，然而，这是一个不相容的矛盾，除非可以有效减少优化变量的数量。另一个密切相关的方向是低级训练[25]，[26]或更新[27]，[28]。例如，LoRA[28]通过学习低秩参数矩阵来更新预训练的模型，提高了微调大型语言模型的效率。虽然这些方法侧重于参数矩阵的静态低秩结构或它们的自适应，但我们利用了训练动力学的低秩特性，并且是这些方法的补充，这可以带来进一步的可能效率</p>
+<h3 id="DYNAMIC-LINEAR-DIMENSIONALITY-REDUCTION"><a href="#DYNAMIC-LINEAR-DIMENSIONALITY-REDUCTION" class="headerlink" title="DYNAMIC LINEAR DIMENSIONALITY REDUCTION"></a>DYNAMIC LINEAR DIMENSIONALITY REDUCTION</h3><h4 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h4><p><strong>本文的主要目标是指出并验证DNN中参数的自由度相当低</strong>。这可以简洁地表示为参数的轨迹在低维空间中的假设。<br>在一项开创性的工作[6]中，作者发现在低维随机选择的空间中进行训练仍然可以产生有意义的神经网络。具体而言，原始空间中的参数w∈ Rn在d维空间v∈ Rd中更新:</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118101647594.png" alt="image-20221118101647594" style="zoom:35%;"></p>
+<p>其中P∈ Rn×d是一个随机逆投影矩阵。很明显，（1）中只有d个自由度。如[23]中的数值验证，即使在d≪ n、 （1）可以输出有意义的结果。这里，我们说“有意义”是指<strong>性能比初始化好得多，但比完全训练后的网络效果更差。</strong>[10]中通过用启发式方法替换随机投影，提高了性能。在这些低维空间中的训练性能可以在表1中观察到，表1部分但不完全支持DNN可以在低维空间训练的假设。<br>为了研究训练轨迹和低维景观，我们可以使用神经切线核（NTK），它理想地将单输出神经网络的梯度流公式化如下</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118102107485.png" alt="image-20221118102107485" style="zoom:33%;"></p>
+<p>（公式看不懂。。。先跳过）</p>
+<p>基于上述有趣的观察，我们正式提出了第1节中给出的<strong>低维轨迹假设说</strong>。数学上，对于参数的轨迹w0，w1，…，wt，…，低维轨迹假说声称存在低维轨迹v1，v2，…，vt，…和投影P∈ Rn×d使得</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118102632722.png" alt="image-20221118102632722" style="zoom:33%;"></p>
+<p>该假设侧重于神经网络的训练，其验证是直接的，即，<strong>如果神经网络可以在d维空间中很好地训练，那么低维轨迹假设是正确的。</strong></p>
+<p>如前所述，现有的工作现在只能部分验证该假设，因为在他们提取的子空间上进行训练，神经网络可以被训练为有意义的解决方案，但结果仍然比在整个参数空间上的训练差得多。在下文中，我们将提出一种新的方法来找到神经网络可以很好地训练的低维空间。<br>该结果验证了低维轨迹假设，有望为神经网络带来新的理解，例如泛化能力、隐式正则化、高效学习算法等。</p>
+<h4 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h4><p>降维的关键问题是找到近似覆盖参数轨迹的低维子空间。<strong>代替处理连续轨迹，我们实际上使用其离散化，即离散采样点来表征轨迹</strong>。基本操作包括:</p>
+<ul>
+<li>首先，对训练过程中神经网络参数的t步进行采样，即{w1，w2，.。。。，wt}。</li>
+<li>第二，中心化样本，即求样本集参数的均值，并且每个参数减去均值得到W</li>
+<li>第三，找出由d维子空间P=[e1，e2，.。。。，ed]来涵盖W.请注意，在DNN中，参数n的数目通常显著大于t和d。</li>
+</ul>
+<p>第三步是找到一个子空间，该子空间最小化从W的列向量到该子空间的距离之和。利用l2范数，可以将其公式化为最大化W的投影方差，即。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112111041.png" alt="image-20221118112111041" style="zoom:33%;"></p>
+<p>这是一个标准的PCA问题，但计算维度太大，可以使用SVD分解来减少计算量：</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112323474.png" alt="image-20221118112323474" style="zoom:33%;"></p>
+<p>DLDR算法总流程：</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118112351688.png" alt="image-20221118112351688" style="zoom:33%;"></p>
+<h4 id="Training-Performance"><a href="#Training-Performance" class="headerlink" title="Training Performance"></a>Training Performance</h4><p>基于优化轨迹近似位于低维子空间的假设，所提出的DLDR可以将优化空间的维数从n降到d。为了验证该假设，我们在这样的低维子空间中优化DNN，检查其性能是否与原始空间中所有参数的训练相似。<br>首先，我们为CIFAR-10进行了训练ResNet8[31]的实验，这也是开创性工作[10]所考虑的。如上所述，验证低维轨迹假设的标准是比较子空间和全参数空间中的训练性能，为此，我们使用SGD训练ResNet8的78330个参数。详细设置为：学习率为0.1，批量大小为128。请注意，在本文的实验中，SGD始终包含动量项，此处动量参数为0.9。经过3次试验，SGD平均获得83.84%的测试精度。<br>然后，我们应用DLDR从参数中提取低维子空间，方法是在SGD训练的30个时期内对轨迹进行采样。详细的采样策略是在每个历元训练之后对模型参数进行采样。在图2a中，绘制了前5个预测成分的方差比，显示总方差的90%以上属于这五个成分。这一观察结果与我们关于存在这样一个低维子空间的假设一致，该子空间可以近似覆盖优化轨迹。</p>
+<p>接下来，<strong>在DLDR提取的子空间中，我们从头开始训练神经网络</strong>。我们在这里设置的维度是15，我们在<strong>投影子空间中使用SGD优化器，称为P-SGD</strong>。为了避免公平性的其他影响，我们使用与常规SGD相同的超参数设置，并从相同的初始化开始。从图2b中可以看出，当DLDR采样停止时，P-SGD很快就超过了性能（因此P-SGD的良好性能不是来自DLDR采样阶段给出的可通过的解决方案），并达到了与常规SGD相似甚至更好的精度。这里，与SGD相比的优势可能来自低维子空间的去噪（方差降低）效果，并且可以进一步研究。然而，至少，它表明我们可以在具有<strong>显著较低维度（即15）</strong>的子空间中有效地训练CIFAR-10的ResNet8，这有力地支持了我们的假设，即优化轨迹可以近似地位于低维子空间中。<br>在表1中，我们报告了用于优化的维度和测试精度。在[7]中，7982个维度被用于实现平均58.35%的准确度，在[10]中提高到70.26。现在，DLDR可以找到一个维数更少的子空间，并获得更好的精度。在第5节中，我们将考虑更复杂的DNN架构和更复杂的任务，以进一步验证低维轨迹假设。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118135412861.png" alt="image-20221118135412861" style="zoom:33%;"></p>
+<h3 id="DLDR-BASED-QUASI-NEWTON-ALGORITHM"><a href="#DLDR-BASED-QUASI-NEWTON-ALGORITHM" class="headerlink" title="DLDR-BASED QUASI-NEWTON ALGORITHM"></a>DLDR-BASED QUASI-NEWTON ALGORITHM</h3><p>由于DNN通常有大量的参数需要优化，<strong>一阶方法，即基于梯度下降的方法</strong>是主要的方法。然而，一阶方法存在一些基本的局限性，例如围绕<strong>最优点的收敛速度慢，以及对学习速率的高度敏感性</strong>。二阶方法可以解决对于这些问题，但由于计算量大，应用它们来训练包含大量参数的DNN存在很大困难。取而代之的是，只使用部分二阶信息，如动量和累积信息，从而产生了许多流行的训练算法，如Adam[16]、RMSprop[17]和AdaGrad[32]，[33]。现在，使用所提出的DLDR，可以只找到几个（几十个）独立变量进行优化，这使得在训练复杂DNN时使用二阶方法变得适用。遵循这一思想，我们基于BFGS的框架开发了一种拟牛顿方法[18]，[19]。类似地，主要步骤包括基于历史梯度的黑森矩阵近似、拟牛顿更新和回溯线搜索，其详细信息在以下小节中给出。</p>
+<h4 id="Hessian-Matrix-Approximation"><a href="#Hessian-Matrix-Approximation" class="headerlink" title="Hessian Matrix Approximation"></a>Hessian Matrix Approximation</h4><p>（可见slam十四讲p127）</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118141342146.png" alt="image-20221118141342146" style="zoom:33%;"></p>
+<ol>
+<li>将参数的梯度投影到自变量空间；</li>
+<li>在自变量空间中计算牛顿方向；</li>
+<li>在训练过程中保持投影矩阵不变，将牛顿方向反投影到原始参数空间。</li>
+</ol>
+<h4 id="Quasi-Newton-Update"><a href="#Quasi-Newton-Update" class="headerlink" title="Quasi-Newton Update"></a>Quasi-Newton Update</h4><p>虽然我们能找到只有几个独立变量来优化，但它们的梯度是通过在当前DNN框架中投影原始参数的梯度来计算的。因此，直接计算二阶梯度仍然不切实际。或者，我们采用拟牛顿方法来逼近Hessian矩阵及其逆矩阵。以这种方式，标准BFGS算法[18]，[19]与秩2校正更新一起使用，如下所示</p>
+<p>（没看懂）</p>
+<h3 id="NUMERICAL-EXPERIMENTS"><a href="#NUMERICAL-EXPERIMENTS" class="headerlink" title="NUMERICAL EXPERIMENTS"></a>NUMERICAL EXPERIMENTS</h3><p>在介绍了实验设置之后，我们将在本节中对以下方面进行数值评估。（1） 我们应用P-SGD来训练子空间中的DNN，其中<strong>维数固定为40</strong>，由DLDR提取，以验证不同神经网络架构上的低维轨迹假设。（2） 我们评估了所提出的P-BFGS算法的性能，并显示了其在加速训练方面的潜力。（3） 我们用标签噪声进行了实验，以证明从子空间训练中获得的<strong>固有鲁棒性</strong>。（4） 我们在<strong>训练有素的网络上应用DLDR</strong>，以进一步提高其性能</p>
+<h4 id="Experiments-Setup"><a href="#Experiments-Setup" class="headerlink" title="Experiments Setup"></a>Experiments Setup</h4><p>我们实验中使用的数据集包括CIFAR-10、CIFAR-100[8]和ImageNet[41]。对于CIFAR，所有图像均通过通道平均值和方差进行归一化。数据增强[31]也被执行：概率为0.5的水平图像翻转、4像素填充和裁剪。<br>我们测试了ResNet20和ResNet32[31]以及其他11种DNN架构。这些网络中全参数的数量从0.27M到28.5M，但本文中我们始终只选择40个自变量。我们使用SGD优化器来训练DNN，其中权重衰减设置为1e-4，动量参数设置为0.9，批量大小设置为128。默认的初始学习率设置为0.1。对于CIFAR-10，我们训练DNN 150个时期，并在100个时期将学习率除以10，而对于CIFAR-100，我们训练200个时期，在150个时期进行除法。对于ImageNet，我们的代码是从官方PyTorch示例2修改而来的。实验是在Nvidia Geforce GTX 2080 TI上进行的。<br>我们为CIFAR使用一个GPU，为ImageNet使用四个GPU。5个独立试验的平均值和标准差。DLDR和实验设置的更详细分析见附录。<br>DLDR需要对优化轨迹进行采样。<strong>对于CIFAR，我们采用最简单的采样策略：在每个训练周期之后对模型参数进行采样。对于ImageNet，参数在每个训练时期被均匀采样3次。更精细的采样策略可以提高性能。</strong><br>对于P-SGD，我们采用与SGD相同的批量大小和动量因子。我们将初始学习率设置为1，训练时期设置为40，并在30个时期将学习率除以10。对于P-BFGS，我们将CIFAR的批大小设置为1024，ImageNet的批大小为256。请注意，这种二阶方法不需要学习速率表。</p>
+<h4 id="Verification-on-Various-Architectures"><a href="#Verification-on-Various-Architectures" class="headerlink" title="Verification on Various Architectures"></a>Verification on Various Architectures</h4><p>在第3.3小节中，在CIFAR10上进行了实验，在此我们验证了CIFAR-100上的低维轨迹假设。我们将分别在所有参数和缩减子空间（后者实际上是建议的P-SGD）中通过SGD训练DNN。对于不同的神经网络架构，我们总是选择40个独立变量。如果SGD和P-SGD给出了可比的性能，则支持我们的假设，同时验证了所提出的DLDR的有效性。该实验包含11个流行的DNN，包括VGG11[3]、DenseNet121[42]、Inception[43]、NasNet[44]等，参数数量从780K到28.5M不等。<br>在表2中，我们使用具有50/100/200个时期的SGD报告了测试精度，200个时期后的测试精度作为基线。然后，我们在40D子空间中应用P-SGD，DLDR从50或100个时期采样中提取这些子空间，并从初始化中进行40个时期的训练。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118144500074.png" alt="image-20221118144500074" style="zoom:33%;"></p>
+<p>见表2中最后一列的结果。它清楚地表明，具有40个自变量的P-SGD可以在整个参数上达到SGD的竞争性能。<br>这种竞争性能适用于所有这些架构，并有力地支持我们的低维轨迹假设。<br>一个次要的发现是，一般来说，如果更好地提取子空间，性能会更好</p>
+<p><strong>Performance of P-BFGS Algorithm</strong></p>
+<p>在实证证明了低维轨迹假设之后，我们现在尝试一种二阶算法，即P-BFGS。我们首先考虑CIFAR-10上的ResNet20[31]。在图3a中，绘制了SGD的训练和测试精度曲线。灰色区域表示我们从何处获取DLDR样本，然后提取自变量。在获得40个自变量后，我们使用P-BFGS从相同的初始化开始，并绘制图3b中的训练曲线。仅<strong>在2个时期后</strong>，P-BFGS就比SGD（50个时期，即DLDR的采样）获得了更好的性能，并且在10个时期内，P-BFG达到了SGD（150个时期）的性能，这初步证明了应用二阶方法在效率上的优势</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118144822572.png" alt="image-20221118144822572" style="zoom:50%;"></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145401179.png" alt="image-20221118145401179" style="zoom:33%;"></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145518248.png" alt="image-20221118145518248" style="zoom:33%;"></p>
+<h4 id="Robustness-to-Label-Noise"><a href="#Robustness-to-Label-Noise" class="headerlink" title="Robustness to Label Noise"></a>Robustness to Label Noise</h4><p>（这里没有说子空间是从哪里得到的，从带噪数据训练的参数中得到还是<strong>干净数据</strong>？）</p>
+<p>由于DNN的插值本质，它们对标签噪声敏感，即当标签不正确时，DNN将跟随这些不正确且无意义的标签。更糟糕的是，区分DNN学习的标签是正确的还是错误的，没有明显的区别[20]。目前，可以使用提前停止[50]（<strong>即防止过拟合</strong>），但如何选择最佳停止仍然具有挑战性，因为即使验证数据也可能损坏。在验证了DNN可以在低维子空间中训练之后，我们期望<strong>低维属性可以自然地为DNN带来对标签噪声的鲁棒性。</strong><br>为了检查<strong>标签噪声</strong>下的性能，我们考虑CIFAR-10，并将随机标签分配给训练数据的一部分c（针对不同的方法随机选择并固定）。然后，我们用损坏的数据训练ResNet20模型。有了标签噪声，SGD的完整训练性能显著下降，如图5中的蓝色曲线所示。提前停止（红色曲线）确实有帮助，但对干净数据的测试精度较差（c=0）。<br>在低维子空间（绿色曲线）中的训练可以以较大的优势持续优于早期停止，同时在干净数据上保持与常规训练相同的性能。注意，这里我们在没有任何增强技术的情况下获得了鲁棒性，例如，对损失函数的修改[51]，[52]，因此结果有望通过这些技术进一步改进。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118145913877.png" alt="image-20221118145913877" style="zoom:40%;"></p>
+<p>P-SGD对标签噪声的鲁棒性来自于训练子空间的低维特性，或者换句话说，<strong>训练的自由度非常小</strong>。为了进一步研究自变量数量的影响，我们将d从10变化到40，并在表4中报告了测试精度。在不同的标签噪声水平下，完全训练的PSGD（即，我们不选择提前停止）总是比完全训练的SGD具有更好的精度。<br>我们还提供SGD获得的最佳精度，即，我们在训练期间监控测试精度，并选择出现的最佳测试精度。当然，在实践中无法达到SGD（最佳），但它可以作为一个参考，表明在低维子空间中训练DNN对标记噪声是鲁棒的。</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118150612211.png" alt="image-20221118150612211" style="zoom:40%;"></p>
+<h4 id="Improving-Well-trained-Models"><a href="#Improving-Well-trained-Models" class="headerlink" title="Improving Well-trained Models"></a>Improving Well-trained Models</h4><p>在本小节中，我们研究了从井训练阶段提取的子空间。我们从在ImageNet上训练有素的ResNet18\/50开始[41]（来自torchvision.models）。<br>在表5中，他们的准确度显示为“训练有素”。这里，“训练有素”意味着继续进行最初的SGD培训无法提高绩效。现在我们提取具有30维的子空间（以0.005的学习率从SGD的5/10/15个时期采样），并应用P-BFGS。在这一阶段，解决方案接近最佳状态，前景更加平坦。因此，采样时间和维度可能比以前的实验少。由于在训练阶段获得了几个解决方案，<strong>随机加权平均</strong>（SWA，[53]）是一种有效且普遍采用的泛化改进方法，是适用的，我们将其性能作为比较。可以观察到，经过训练的模型可以通过子空间优化进一步改进，性能优于SWA</p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221118150810037.png" alt="image-20221118150810037" style="zoom:33%;"></p>
+<h4 id="CONCLUSIONS-AND-FURTHER-WORKS"><a href="#CONCLUSIONS-AND-FURTHER-WORKS" class="headerlink" title="CONCLUSIONS AND FURTHER WORKS"></a>CONCLUSIONS AND FURTHER WORKS</h4><p>本文的主要主张是低维轨迹假设。基于训练动力学，我们设计了一种高效的降维方法DLDR。在综合实验中，优化DLDR提取的几个（例如，几十个）独立变量可以获得与全参数常规训练类似的性能。<br>优化性能和降维都从先前的工作中得到了显著改善[7]，[10]，有力地支持了这一假设，并表明DNN可以在很小的子空间中得到很好的训练。<br>从DNN训练的新视角出发，我们尝试了三种后续应用，以进一步支持我们的假设，并获得了巨大的好处：1）随着维数的大幅减少，二阶方法变得适用，从中我们设计了P-BFGS算法，并为训练带来了极大的效率；2） 在低维子空间中的训练自然会给标签噪声带来鲁棒性；3） 我们还表明，子空间训练可以显著提高训练有素的模型的性能。这些应用进一步支持低维轨迹假设。<br>尽管它们非常简单，例如，使用原始的BFGS框架，没有任何增强技术，但它们的性能意味着找到这样的低维子空间可以有助于理论和实践学习。进一步工作的可能方向包括<strong>将子空间训练应用于微调任务</strong>[27]，[28]，结合其他低秩训练方法[25]，[26]，以了解过度拟合、过度参数化[54]，并研究少数镜头学习[55]、元学习[56]等。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/anshuai_aw1/article/details/82498374?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-82498374-blog-119275175.pc_relevant_3mothn_strategy_recovery&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-82498374-blog-119275175.pc_relevant_3mothn_strategy_recovery&amp;utm_relevant_index=1">https://blog.csdn.net/anshuai_aw1/article/details/82498374?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-82498374-blog-119275175.pc_relevant_3mothn_strategy_recovery&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-82498374-blog-119275175.pc_relevant_3mothn_strategy_recovery&amp;utm_relevant_index=1</a></p>
+<p><img src="/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221125171645874.png" alt="image-20221125171645874"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2022/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" title="">https://youngyyp.github.io/2022/11/30/计算机视觉/test_time_adaptation/Low Dimensional Trajectory Hypothesis is True/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/24/%E7%BC%96%E7%A8%8B/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E7%9B%B8%E5%85%B3/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/30/%E7%B1%BB%E8%84%91%E5%AE%9E%E9%AA%8C%E5%AE%A4/%E5%BC%80%E9%A2%98%E7%AD%94%E8%BE%A9%E8%AE%B0%E5%BD%95/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Low-Dimensional-Trajectory-Hypothesis-is-True-DNNs-can-be-Trained-in-Tiny-Subspaces"><span class="nav-number">1.</span> <span class="nav-text">Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#INTRODUCTION"><span class="nav-number">1.1.</span> <span class="nav-text">INTRODUCTION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RELATED-WORKS"><span class="nav-number">1.2.</span> <span class="nav-text">RELATED WORKS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DYNAMIC-LINEAR-DIMENSIONALITY-REDUCTION"><span class="nav-number">1.3.</span> <span class="nav-text">DYNAMIC LINEAR DIMENSIONALITY REDUCTION</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Motivation"><span class="nav-number">1.3.1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Methodology"><span class="nav-number">1.3.2.</span> <span class="nav-text">Methodology</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Training-Performance"><span class="nav-number">1.3.3.</span> <span class="nav-text">Training Performance</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DLDR-BASED-QUASI-NEWTON-ALGORITHM"><span class="nav-number">1.4.</span> <span class="nav-text">DLDR-BASED QUASI-NEWTON ALGORITHM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hessian-Matrix-Approximation"><span class="nav-number">1.4.1.</span> <span class="nav-text">Hessian Matrix Approximation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Quasi-Newton-Update"><span class="nav-number">1.4.2.</span> <span class="nav-text">Quasi-Newton Update</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NUMERICAL-EXPERIMENTS"><span class="nav-number">1.5.</span> <span class="nav-text">NUMERICAL EXPERIMENTS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Experiments-Setup"><span class="nav-number">1.5.1.</span> <span class="nav-text">Experiments Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Verification-on-Various-Architectures"><span class="nav-number">1.5.2.</span> <span class="nav-text">Verification on Various Architectures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Robustness-to-Label-Noise"><span class="nav-number">1.5.3.</span> <span class="nav-text">Robustness to Label Noise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Improving-Well-trained-Models"><span class="nav-number">1.5.4.</span> <span class="nav-text">Improving Well-trained Models</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CONCLUSIONS-AND-FURTHER-WORKS"><span class="nav-number">1.5.5.</span> <span class="nav-text">CONCLUSIONS AND FURTHER WORKS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">代码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

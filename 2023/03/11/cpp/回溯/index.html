@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="回溯算法理论基础回溯是递归的副产品，只要有递归就会有回溯。在下文中，回溯函数也就是递归函数，指的都是一个函数 回溯法解决的问题都可以抽象为树形结构，因为回溯法解决的都是在集合中递归查找子集，集合的大小就构成了树的宽度，递归的深度，都构成的树的深度。 回溯三部曲： void backtracking(参数){     if (终止条件) {         存放结果;         return;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="回溯算法理论基础回溯是递归的副产品，只要有递归就会有回溯。在下文中，回溯函数也就是递归函数，指的都是一个函数 回溯法解决的问题都可以抽象为树形结构，因为回溯法解决的都是在集合中递归查找子集，集合的大小就构成了树的宽度，递归的深度，都构成的树的深度。 回溯三部曲： void backtracking(参数){     if (终止条件) {         存放结果;         return;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201123195223940-16777567027868.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/2020102916424043.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201123200304469.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201223170730367.png">
+<meta property="article:published_time" content="2023-03-11T04:35:18.743Z">
+<meta property="article:modified_time" content="2023-03-11T04:35:18.783Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201123195223940-16777567027868.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-11 12:35:18" itemprop="dateCreated datePublished" datetime="2023-03-11T12:35:18+08:00">2023-03-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="回溯算法理论基础"><a href="#回溯算法理论基础" class="headerlink" title="回溯算法理论基础"></a>回溯算法理论基础</h2><p>回溯是递归的副产品，只要有递归就会有回溯。在下文中，<strong>回溯函数也就是递归函数，指的都是一个函数</strong></p>
+<p><strong>回溯法解决的问题都可以抽象为树形结构</strong>，因为回溯法解决的都是在集合中递归查找子集，<strong>集合的大小就构成了树的宽度，递归的深度，都构成的树的深度</strong>。</p>
+<p>回溯三部曲：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">void backtracking(参数){
+    if (终止条件) {
+        存放结果;
+        return;
+    }
+
+    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+        处理节点;
+        backtracking(路径，选择列表); // 递归
+        回溯，撤销处理结果
+    }
+}
+</code></pre>
+<h2 id="第77题-组合"><a href="#第77题-组合" class="headerlink" title="第77题. 组合"></a>第77题. 组合</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/combinations/">力扣题目链接(opens new window)</a></p>
+<p>给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。</p>
+<p>示例:<br>输入: n = 4, k = 2<br>输出:<br>[<br>[2,4],<br>[3,4],<br>[2,3],<br>[1,2],<br>[1,3],<br>[1,4],<br>]</p>
+<p>思路：</p>
+<p>把组合问题抽象为如下树形结构：</p>
+<p><img src="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201123195223940-16777567027868.png" alt="77.组合" style="zoom:33%;"></p>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+
+    vector<vector<int>> result; // 存放符合条件结果的集合
+    vector<int> path; // 用来存放符合条件结果
+    void backtracking(int n, int k, int startIndex) {
+        if(path.size() == k){
+            result.push_back(path);
+            return;
+        }
+        for(int i = startIndex; i <=n; i++){ //注意此处是<=
+            path.push_back(i);
+            backtracking(n, k, i + 1);
+            path.pop_back();
+        }
+
+    }
+
+    vector<vector<int>> combine(int n, int k) {
+        backtracking(n, k, 1);
+        return result;
+    }
+};
+</code></pre>
+<p>剪枝优化题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+
+    vector<vector<int>> result; // 存放符合条件结果的集合
+    vector<int> path; // 用来存放符合条件结果
+    void backtracking(int n, int k, int startIndex) {
+        if(path.size() == k){
+            result.push_back(path);
+            return;
+        }
+        // n-i+1 >= k-path.size() 大多数回溯算法的剪枝操作，都是改这里i的范围
+        for(int i = startIndex; i <= n + 1 - k + path.size(); i++){ //注意此处是<=
+            path.push_back(i);
+            backtracking(n, k, i + 1);
+            path.pop_back();
+        }
+
+    }
+
+    vector<vector<int>> combine(int n, int k) {
+        backtracking(n, k, 1);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="216-组合总和III"><a href="#216-组合总和III" class="headerlink" title="216.组合总和III"></a>216.组合总和III</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/combination-sum-iii/">力扣题目链接(opens new window)</a></p>
+<p>找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。</p>
+<p>说明：</p>
+<ul>
+<li>所有数字都是正整数。</li>
+<li>解集不能包含重复的组合。</li>
+</ul>
+<p>示例 1: 输入: k = 3, n = 7 输出: [[1,2,4]]</p>
+<p>示例 2: 输入: k = 3, n = 9 输出: [[1,2,6], [1,3,5], [2,3,4]]</p>
+<p>思路：</p>
+<p>k是树的深度，n是树的宽度</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(int targetSum, int k, int sum, int startIndex){
+        if(path.size() == k){
+            if(sum == targetSum) result.push_back(path);
+            return;
+        }
+        for(int i = startIndex; i <= 9; i++){
+            path.push_back(i);
+            sum = sum + i;
+            backtracking(targetSum, k, sum, i+1);
+            sum = sum - i;
+            path.pop_back();
+        }
+    }
+
+    vector<vector<int>> combinationSum3(int k, int n) {
+        backtracking(n, k, 0, 1);
+        return result;
+    }
+};
+</code></pre>
+<p>剪枝后：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(int targetSum, int k, int sum, int startIndex){
+        if(sum > targetSum) return;
+        if(path.size() == k){
+            if(sum == targetSum) result.push_back(path);
+            return;
+        }
+        for(int i = startIndex; i <= 9 + 1 - k + path.size(); i++){
+            path.push_back(i);
+            sum = sum + i;
+            backtracking(targetSum, k, sum, i+1);
+            sum = sum - i;
+            path.pop_back();
+        }
+    }
+
+    vector<vector<int>> combinationSum3(int k, int n) {
+        backtracking(n, k, 0, 1);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="17-电话号码的字母组合"><a href="#17-电话号码的字母组合" class="headerlink" title="17.电话号码的字母组合"></a>17.电话号码的字母组合</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/">力扣题目链接(opens new window)</a></p>
+<p>给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。</p>
+<p><img src="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/2020102916424043.png" alt="17.电话号码的字母组合"></p>
+<p>思路：</p>
+<p><img src="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201123200304469.png" alt="17. 电话号码的字母组合"></p>
+<p>代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    const string letterMap[10] = {
+        "", // 0
+        "", // 1
+        "abc", // 2
+        "def", // 3
+        "ghi", // 4
+        "jkl", // 5
+        "mno", // 6
+        "pqrs", // 7
+        "tuv", // 8
+        "wxyz", // 9
+    };
+
+    vector<string> result;
+    string s;
+    void backtracking(string digits, int index){
+        if (index == digits.size()) {
+            result.push_back(s);
+            return;
+        }
+
+        int digit = digits[index] - '0'; // 将index指向的数字转为int
+        string letters = letterMap[digit];
+        for (int i = 0; i < letters.size(); i++) {
+            s.push_back(letters[i]);
+            backtracking(digits,index + 1); // 递归
+            s.pop_back();
+        }
+    }
+
+    vector<string> letterCombinations(string digits) {
+        if(digits == "") return result;
+        backtracking(digits, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="39-组合总和"><a href="#39-组合总和" class="headerlink" title="39. 组合总和"></a>39. 组合总和</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/combination-sum/">力扣题目链接(opens new window)</a></p>
+<p>给定一个<strong>无重复元素</strong>的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。</p>
+<p><code>candidates</code> 中的 <strong>同一个</strong> 数字可以 <strong>无限制重复被选取</strong></p>
+<p><img src="/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/20201223170730367.png" alt="39.组合总和"></p>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<vector<int>> results;
+    vector<int> path;
+    void backtracking(vector<int> candidates, int target, int index, int sum){
+        if(sum == target){
+            results.push_back(path);
+            return;
+        }
+        if(sum > target){
+            return;
+        }
+        for (int i = index; i < candidates.size(); i++) {
+            path.push_back(candidates[i]);
+            backtracking(candidates, target, i, sum + candidates[i]); // 递归
+            path.pop_back();
+        }
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        backtracking(candidates, target, 0, 0);
+        return  results;
+    }
+};
+</code></pre>
+<h2 id="40-组合总和II"><a href="#40-组合总和II" class="headerlink" title="40.组合总和II"></a>40.组合总和II</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/combination-sum-ii/">力扣题目链接(opens new window)</a></p>
+<p>给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。</p>
+<p>candidates 中的每个数字在每个组合中只能使用一次。</p>
+<p>注意：数组candidates中会出现重复数字，需要<strong>排序后去重</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(vector<int>& candidates, int target, int sum, int startIndex) {
+        if (sum == target) {
+            result.push_back(path);
+            return;
+        }
+        if(sum > target){
+            return;
+        }
+        for (int i = startIndex; i < candidates.size(); i++) {
+            // 要对同一树层使用过的元素进行跳过，这是本题的关键
+            if (i > startIndex && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            path.push_back(candidates[i]);
+            backtracking(candidates, target, sum + candidates[i], i + 1); // 和39.组合总和的区别1，这里是i+1，每个数字在每个组合中只能使用一次
+            path.pop_back();
+        }
+    }
+
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        path.clear();
+        result.clear();
+        // 首先把给candidates排序，让其相同的元素都挨在一起。
+        sort(candidates.begin(), candidates.end());
+        backtracking(candidates, target, 0, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="131-分割回文串"><a href="#131-分割回文串" class="headerlink" title="131.分割回文串"></a>131.分割回文串</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/palindrome-partitioning/">力扣题目链接(opens new window)</a></p>
+<p>给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。</p>
+<p>返回 s 所有可能的分割方案。</p>
+<p>示例: 输入: “aab” 输出: [ [“aa”,”b”], [“a”,”a”,”b”] ]</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    // 用双指针法，一个指针从前向后，一个指针从后向前，如果前后指针所指向的元素是相等的，就是回文字符串
+    bool isPalindrome(const string& s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            if (s[i] != s[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    vector<vector<string>> result;
+    vector<string> path; // 放已经回文的子串
+    void backtracking (const string& s, int startIndex) {
+        if (startIndex >= s.size()) {
+            result.push_back(path);
+            return;
+        }
+
+        for (int i = startIndex; i < s.size(); i++) {
+            if (isPalindrome(s, startIndex, i)) { // 是回文子串
+                // 获取[startIndex,i]在s中的子串
+                string str = s.substr(startIndex, i - startIndex + 1);
+                path.push_back(str);
+            } else {                // 如果不是则直接跳过
+                continue;
+            }
+            backtracking(s, i + 1); // 寻找i+1为起始位置的子串
+            path.pop_back();        // 回溯过程，弹出本次已经填在的子串
+        }
+    }
+
+    vector<vector<string>> partition(string s) {
+        backtracking(s, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="93-复原IP地址"><a href="#93-复原IP地址" class="headerlink" title="93.复原IP地址"></a>93.复原IP地址</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/restore-ip-addresses/">力扣题目链接(opens new window)</a></p>
+<p>给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。</p>
+<p>有效的 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 ‘.’ 分隔。</p>
+<p>示例 1：</p>
+<ul>
+<li>输入：s = “25525511135”</li>
+<li>输出：[“255.255.11.135”,”255.255.111.35”]</li>
+</ul>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    // 判断字符串s在左闭又闭区间[start, end]所组成的数字是否合法
+    bool isValid(const string& s, int start, int end) {
+        if (start > end) {
+            return false;
+        }
+        if (s[start] == '0' && start != end) { // 0开头的数字不合法
+                return false;
+        }
+        int num = 0;
+        for (int i = start; i <= end; i++) {
+            if (s[i] > '9' || s[i] < '0') { // 遇到非数字字符不合法
+                return false;
+            }
+            num = num * 10 + (s[i] - '0');
+            if (num > 255) { // 如果大于255了不合法
+                return false;
+            }
+        }
+        return true;
+    }
+    vector<string> result;// 记录结果
+    // startIndex: 搜索的起始位置，pointNum:添加逗点的数量
+    void backtracking(string& s, int startIndex, int pointNum){
+        if (pointNum == 3) { // 逗点数量为3时，分隔结束
+            // 判断第四段子字符串是否合法，如果合法就放进result中
+            if (isValid(s, startIndex, s.size() - 1)) {
+                result.push_back(s);
+            }
+            return;
+        }
+
+        for (int i = startIndex; i < s.size(); i++) {
+            if (isValid(s, startIndex, i)) { // 判断 [startIndex,i] 这个区间的子串是否合法
+                s.insert(s.begin() + i + 1 , '.');  // 在i的后面插入一个逗点
+                pointNum++;
+                backtracking(s, i + 2, pointNum);   // 插入逗点之后下一个子串的起始位置为i+2
+                pointNum--;                         // 回溯
+                s.erase(s.begin() + i + 1);         // 回溯删掉逗点
+            } else break; // 不合法，直接结束本层循环
+        }
+    }
+
+
+    vector<string> restoreIpAddresses(string s) {
+        if (s.size() < 4 || s.size() > 12) return result; // 算是剪枝了
+        backtracking(s, 0, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="78-子集"><a href="#78-子集" class="headerlink" title="78.子集"></a>78.子集</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/subsets/">力扣题目链接(opens new window)</a></p>
+<p>给定一组<strong>不含重复元素</strong>的整数数组 nums，返回该数组所有可能的子集（幂集）。</p>
+<p>说明：解集不能包含重复的子集。</p>
+<p>示例: 输入: nums = [1,2,3] 输出: [ [3],  [1],  [2],  [1,2,3],  [1,3],  [2,3],  [1,2],  [] ]</p>
+<p><strong>子集是收集树形结构中树的所有节点的结果</strong>。<strong>而组合问题、分割问题是收集树形结构中叶子节点的结果</strong>。</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(vector<int> nums, int index){
+        result.push_back(path);// 重点！不管到没到最后都要收集结果
+        //下面这个可要可不要,因为在for循环中给出了判断
+        if (index >= nums.size()) {
+            //不是在这里才收集结果
+            return;
+        }
+
+        for (int i = index; i < nums.size(); i++) {
+            path.push_back(nums[i]);
+            backtracking(nums, i + 1); // 递归
+            path.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        backtracking(nums, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="90-子集II"><a href="#90-子集II" class="headerlink" title="90.子集II"></a>90.子集II</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/subsets-ii/">力扣题目链接(opens new window)</a></p>
+<p>给定一个可能包含<strong>重复元素</strong>的整数数组 nums，返回该数组所有可能的子集（幂集）。</p>
+<p>说明：解集不能包含重复的子集。</p>
+<p>示例:</p>
+<ul>
+<li>输入: [1,2,2]</li>
+<li>输出: [ [2], [1], [1,2,2], [2,2], [1,2], [] ]</li>
+</ul>
+<p>思路：</p>
+<p>本题就是在上一题的基础上加上了<strong>去重</strong>，通过<strong>排序去重</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(vector<int>& nums, int startIndex) {
+        result.push_back(path);
+        //if (startIndex >= nums.size()) {
+        //    return;
+        //}
+        for (int i = startIndex; i < nums.size(); i++) {
+            //跳过重复元素
+            if (i > startIndex && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            path.push_back(nums[i]);
+            backtracking(nums, i + 1);
+            path.pop_back();
+        }
+    }
+
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end()); // 去重需要排序
+        backtracking(nums, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="491-递增子序列"><a href="#491-递增子序列" class="headerlink" title="491.递增子序列"></a>491.递增子序列</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/non-decreasing-subsequences/">力扣题目链接(opens new window)</a></p>
+<p>给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。</p>
+<p>示例:</p>
+<ul>
+<li>输入: [4, 6, 7, 7]</li>
+<li>输出: [[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]</li>
+</ul>
+<p>说明:</p>
+<ul>
+<li>给定数组的长度不会超过15。</li>
+<li>数组中的整数范围是 [-100,100]。</li>
+<li>给定数组中可能包含重复数字，相等的数字应该被视为递增的一种情况。</li>
+</ul>
+<p>思路：</p>
+<p>不可对原数组进行重排，而且重复的数字不一定挨着出现，所以可以使用哈希表来判断数字是否用过</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking(vector<int>& nums, int startIndex) {
+        if (path.size() > 1) {
+            result.push_back(path);
+            // 注意这里不要加return，要取树上的节点
+        }
+        unordered_set<int> uset; // 使用set对本层元素进行去重
+        for (int i = startIndex; i < nums.size(); i++) {
+            //若当前数比上一个小（注意上一个是path.back），或者使用过，则跳过
+            if ((!path.empty() && nums[i] < path.back())
+                    || uset.find(nums[i]) != uset.end()) {
+                    continue;
+            }
+            uset.insert(nums[i]); // 记录这个元素在本层用过了，本层后面不能再用了
+            path.push_back(nums[i]);
+            backtracking(nums, i + 1);
+            path.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        result.clear();
+        path.clear();
+        backtracking(nums, 0);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="46-全排列"><a href="#46-全排列" class="headerlink" title="46.全排列"></a>46.全排列</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations/">力扣题目链接(opens new window)</a></p>
+<p>给定一个 没有重复 数字的序列，返回其所有可能的全排列。</p>
+<p>示例:</p>
+<ul>
+<li>输入: [1,2,3]</li>
+<li>输出: [ [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1] ]</li>
+</ul>
+<p>思路：</p>
+<p>用used数组，用过的记为1</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking (vector<int>& nums, vector<bool>& used) {
+        // 此时说明找到了一组
+        if (path.size() == nums.size()) {
+            result.push_back(path);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            if (used[i] == true) continue; // path里已经收录的元素，直接跳过
+            used[i] = true;
+            path.push_back(nums[i]);
+            backtracking(nums, used);
+            path.pop_back();
+            used[i] = false;
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        result.clear();
+        path.clear();
+        vector<bool> used(nums.size(), false);//注意vector的初始化方式
+        backtracking(nums, used);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="47-全排列-II"><a href="#47-全排列-II" class="headerlink" title="47.全排列 II"></a>47.全排列 II</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations-ii/">力扣题目链接(opens new window)</a></p>
+<p>给定一个<strong>可包含重复</strong>数字的序列 nums ，按任意顺序返回所有<strong>不重复</strong>的全排列。</p>
+<p>思路：</p>
+<p>排序+used+set</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void backtracking (vector<int>& nums, vector<bool>& used) {
+        if (path.size() == nums.size()) {
+            result.push_back(path);
+            return;
+        }
+        unordered_set<int> uset; // 控制某一节点下的同一层元素不能重复
+        for (int i = 0; i < nums.size(); i++) {
+            if (uset.find(nums[i]) != uset.end()) {
+                continue;
+            }
+            if (used[i] == false) {  //控制同一树枝不重复
+                uset.insert(nums[i]); // 记录元素
+                used[i] = true;
+                path.push_back(nums[i]);
+                backtracking(nums, used);
+                path.pop_back();
+                used[i] = false;
+            }
+        }
+    }
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        result.clear();
+        path.clear();
+        sort(nums.begin(), nums.end()); // 排序
+        vector<bool> used(nums.size(), false);
+        backtracking(nums, used);
+        return result;
+    }
+};
+</code></pre>
+<h2 id="51-N皇后"><a href="#51-N皇后" class="headerlink" title="51. N皇后*"></a>51. N皇后*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/n-queens/">力扣题目链接(opens new window)</a></p>
+<p>按照国际象棋的规则，皇后可以攻击与之处在同一行或同一列或<strong>同一斜线</strong>！上的棋子。</p>
+<p>n 皇后问题 研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。</p>
+<p>给你一个整数 n ，返回所有不同的 n 皇后问题 的解决方案。</p>
+<p>每一种解法包含一个不同的 n 皇后问题 的棋子放置方案，该方案中 ‘Q’ 和 ‘.’ 分别代表了皇后和空位。</p>
+<p>题解：</p>
+<p>重点是 isValid函数的逻辑</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+private:
+vector<vector<string>> result;
+// n 为输入的棋盘大小
+// row 是当前递归到棋盘的第几行了
+void backtracking(int n, int row, vector<string>& chessboard) {
+    if (row == n) {
+        result.push_back(chessboard);
+        return;
+    }
+    for (int col = 0; col < n; col++) {
+        if (isValid(row, col, chessboard, n)) { // 验证合法就可以放
+            chessboard[row][col] = 'Q'; // 放置皇后
+            backtracking(n, row + 1, chessboard);
+            chessboard[row][col] = '.'; // 回溯，撤销皇后
+        }
+    }
+}
+bool isValid(int row, int col, vector<string>& chessboard, int n) {
+    // 检查列
+    for (int i = 0; i < row; i++) { // 这是一个剪枝
+        if (chessboard[i][col] == 'Q') {
+            return false;
+        }
+    }
+    // 检查 45度角是否有皇后
+    for (int i = row - 1, j = col - 1; i >=0 && j >= 0; i--, j--) {
+        if (chessboard[i][j] == 'Q') {
+            return false;
+        }
+    }
+    // 检查 135度角是否有皇后
+    for(int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+        if (chessboard[i][j] == 'Q') {
+            return false;
+        }
+    }
+    return true;
+}
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        result.clear();
+        vector<string> chessboard(n, string(n, '.'));
+        backtracking(n, 0, chessboard);
+        return result;
+    }
+};
+</code></pre>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2023/03/11/cpp/%E5%9B%9E%E6%BA%AF/" title="">https://youngyyp.github.io/2023/03/11/cpp/回溯/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/wideresnet%E7%BB%93%E6%9E%84/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%AE%9E%E9%AA%8C/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">回溯算法理论基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC77%E9%A2%98-%E7%BB%84%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">第77题. 组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#216-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8CIII"><span class="nav-number">3.</span> <span class="nav-text">216.组合总和III</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text">17.电话号码的字母组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#39-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8C"><span class="nav-number">5.</span> <span class="nav-text">39. 组合总和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#40-%E7%BB%84%E5%90%88%E6%80%BB%E5%92%8CII"><span class="nav-number">6.</span> <span class="nav-text">40.组合总和II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#131-%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2"><span class="nav-number">7.</span> <span class="nav-text">131.分割回文串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#93-%E5%A4%8D%E5%8E%9FIP%E5%9C%B0%E5%9D%80"><span class="nav-number">8.</span> <span class="nav-text">93.复原IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#78-%E5%AD%90%E9%9B%86"><span class="nav-number">9.</span> <span class="nav-text">78.子集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#90-%E5%AD%90%E9%9B%86II"><span class="nav-number">10.</span> <span class="nav-text">90.子集II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#491-%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">11.</span> <span class="nav-text">491.递增子序列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#46-%E5%85%A8%E6%8E%92%E5%88%97"><span class="nav-number">12.</span> <span class="nav-text">46.全排列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#47-%E5%85%A8%E6%8E%92%E5%88%97-II"><span class="nav-number">13.</span> <span class="nav-text">47.全排列 II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#51-N%E7%9A%87%E5%90%8E"><span class="nav-number">14.</span> <span class="nav-text">51. N皇后*</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

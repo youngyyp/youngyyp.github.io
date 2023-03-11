@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="相关链接(34条消息) 特征点检测与匹配相关论文梳理（持续更新）秋山丶雪绪的博客-CSDN博客特征匹配论文 (34条消息) 秋山丶雪绪的博客_CSDN博客-特征点检测与匹配,计算机系统结构,Python代码记录领域博主 2020最强匹配综述—《Image Matching from Handcrafted to Deep Features: A Survey》阅读总结_喵呜喵喵喵的博客-CSDN博">
+<meta property="og:type" content="article">
+<meta property="og:title" content="特征匹配">
+<meta property="og:url" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="相关链接(34条消息) 特征点检测与匹配相关论文梳理（持续更新）秋山丶雪绪的博客-CSDN博客特征匹配论文 (34条消息) 秋山丶雪绪的博客_CSDN博客-特征点检测与匹配,计算机系统结构,Python代码记录领域博主 2020最强匹配综述—《Image Matching from Handcrafted to Deep Features: A Survey》阅读总结_喵呜喵喵喵的博客-CSDN博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20221018194006676.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20220530163756268.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20220531171555853.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20221013105241665.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/30262663c9724bd29d37ff71a4bb3557.png">
+<meta property="og:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/87d6fe3e3daf4388bf782cdadee9af4f.png">
+<meta property="article:published_time" content="2022-04-10T08:52:31.000Z">
+<meta property="article:modified_time" content="2022-11-24T02:59:24.195Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20221018194006676.png">
+
+<link rel="canonical" href="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>特征匹配 | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          特征匹配
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-10 16:52:31" itemprop="dateCreated datePublished" datetime="2022-04-10T16:52:31+08:00">2022-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-24 10:59:24" itemprop="dateModified" datetime="2022-11-24T10:59:24+08:00">2022-11-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">位姿估计</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43605641/article/details/122572446">(34条消息) 特征点检测与匹配相关论文梳理（持续更新）<em>秋山丶雪绪的博客-CSDN博客</em>特征匹配论文</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43605641">(34条消息) 秋山丶雪绪的博客_CSDN博客-特征点检测与匹配,计算机系统结构,Python代码记录领域博主</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42708183/article/details/109133806">2020最强匹配综述—《Image Matching from Handcrafted to Deep Features: A Survey》阅读总结_喵呜喵喵喵的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NDIyMjcyNg==&amp;mid=2652161460&amp;idx=1&amp;sn=4d2ee4e6973593e670ce460cc8eb590b&amp;chksm=f0f73e5dc780b74b1a4b68d6909708c261a539383720e245c2133f48753a8e871f98fd221912&amp;scene=21#wechat_redirect">CVPR2020图像匹配挑战赛，新数据集+新评测方法，SOTA正瑟瑟发抖！ (qq.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/387962855">CVPR 2021 | 图像匹配挑战赛总结 (SuperPoint + SuperGlue 缝缝补补还能再战一年) - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://aijishu.com/a/1060000000224837">CVPR 2021 Image Matching 挑战赛双冠算法：揭秘AR导航背后的技术 - 极术社区 - 连接开发者与智能计算生态 (aijishu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ducha-aiki/pydegensac">ducha-aiki/pydegensac: Advanced RANSAC (DEGENSAC) with bells and whistles for H and F estimation (github.com)</a>（ransac的改进方案，效果更好）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hpatches/hpatches-dataset">hpatches/hpatches-dataset： HPatches： Homography-patchs dataset. (github.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010440456/article/details/81483145">非常详细的sift算法原理解析_可时间倒数了的博客-CSDN博客_sift</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zddblog/article/details/7521424?spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-7521424-blog-81483145.pc_relevant_multi_platform_whitelistv1&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2-7521424-blog-81483145.pc_relevant_multi_platform_whitelistv1&amp;utm_relevant_index=3">SIFT算法详解_zddhub的博客-CSDN博客_sift</a></p>
+<p><a target="_blank" rel="noopener" href="https://wenku.baidu.com/view/1e08afaea3116c175f0e7cd184254b35eefd1aa4.html">关于softmax、argmax、softargmax - 百度文库 (baidu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/539740663">CVPR 2022 图像匹配挑战赛回顾 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/261310941">LearninCorrespondencefromtheCycleConsistencyofTime - 知乎 (zhihu.com)</a>中的一段话很有意思，如下：</p>
+<p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20221018194006676.png" alt="image-20221018194006676"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42722197/article/details/126775116">(54条消息) 巧解图像处理经典难题之图像配准_小白学视觉的博客-CSDN博客</a></p>
+<h1 id="线特征匹配"><a href="#线特征匹配" class="headerlink" title="线特征匹配"></a>线特征匹配</h1><p>LBD，LSD 算法</p>
+<p>An efficient and robust line segment matching approach based on LBD descriptor and pairwise geometric consistency</p>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><p><a target="_blank" rel="noopener" href="https://github.com/lh9171338/Line-Segment-Detection-Papers">lh9171338/Line-Segment-Detection-Papers: Line segment detection papers (github.com)</a></p>
+<h1 id="双目深度图（立体匹配）"><a href="#双目深度图（立体匹配）" class="headerlink" title="双目深度图（立体匹配）"></a>双目深度图（立体匹配）</h1><p>参考代码 <strong><a target="_blank" rel="noopener" href="https://github.com/aliyasineser/stereoDepth">stereoDepth</a></strong>  在该代码的基础上加一个mask，输出mask内像素的平均距离</p>
+<p>这个是只算了圆心点的距离，不过可以借鉴里面的mask<a target="_blank" rel="noopener" href="https://github.com/niconielsen32/ComputerVision/blob/master/StereoVision/Python/main.py">ComputerVision/main.py at master · niconielsen32/ComputerVision (github.com)</a></p>
+<h3 id="立体标定与立体校正"><a href="#立体标定与立体校正" class="headerlink" title="立体标定与立体校正"></a>立体标定与立体校正</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011574296/article/details/73826420">(30条消息) 【立体视觉】双目立体标定与立体校正<em>ZealCV的博客-CSDN博客</em>立体校正</a></p>
+<p><a target="_blank" rel="noopener" href="https://aijishu.com/a/1060000000139727">来聊聊双目视觉的基础知识（视察深度、标定、立体匹配） - 极术社区 - 连接开发者与智能计算生态 (aijishu.com)</a></p>
+<h1 id="Learning-Feature-Descriptors-using-Camera-Pose-Supervision"><a href="#Learning-Feature-Descriptors-using-Camera-Pose-Supervision" class="headerlink" title="Learning Feature Descriptors using Camera Pose Supervision"></a>Learning Feature Descriptors using Camera Pose Supervision</h1><p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20220530163756268.png" alt="image-20220530163756268"></p>
+<p>caps预训练模型在mepdepth测试集测试结果</p>
+<p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20220531171555853.png" alt="image-20220531171555853"></p>
+<p>训练测试</p>
+<pre class=" language-lang-python"><code class="language-lang-python">/home/young/anaconda3/envs/sgp/bin/python /home/young/code/SGP/code/perception2d/sgp.py --config /home/young/code/SGP/code/perception2d/config_sgp_sample.yml
+label root caps_pseudo_label/bs will be overwritten to enter teaching mode
+Dataset size: 3337
+0it [00:00, ?it/s][ WARN:0@1.508] global /io/opencv_contrib/modules/xfeatures2d/misc/python/shadow_sift.hpp (13) SIFT_create DEPRECATED: cv.xfeatures2d.SIFT_create() is deprecated due SIFT tranfer to the main repository. https://github.com/opencv/opencv/issues/16736
+3337it [10:10,  5.47it/s]
+label root caps_pseudo_label/bs exists, entering learning mode.
+tensorboard log files are stored in caps_logs/bs/caps_sgp
+No ckpts found, training from scratch...
+/home/young/anaconda3/envs/sgp/lib/python3.8/site-packages/torch/nn/functional.py:3981: UserWarning: Default grid_sample and affine_grid behavior has changed to align_corners=False since 1.3.0. Please specify align_corners=True if the old behavior is desired. See the documentation of grid_sample for details.
+  warnings.warn(
+/home/young/anaconda3/envs/sgp/lib/python3.8/site-packages/torch/_tensor.py:575: UserWarning: floor_divide is deprecated, and will be removed in a future version of pytorch. It currently rounds toward 0 (like the 'trunc' function NOT 'floor'). This results in incorrect rounding for negative values.
+To keep the current behavior, use torch.div(a, b, rounding_mode='trunc'), or for actual floor division, use torch.div(a, b, rounding_mode='floor'). (Triggered internally at  /tmp/pip-req-build-ex__3qls/aten/src/ATen/native/BinaryOps.cpp:467.)
+  return torch.floor_divide(self, other)
+caps_sgp | Step: 1, Loss: 0.16486
+caps_sgp | Step: 2, Loss: 0.08825
+caps_sgp | Step: 3, Loss: 0.19555
+caps_sgp | Step: 4, Loss: 0.10034
+caps_sgp | Step: 5, Loss: 0.08762
+saving ckpts caps_outputs/bs/caps_sgp/000005.pth...
+label root caps_pseudo_label/00 does not exist, entering teaching mode.
+0it [00:00, ?it/s]Reloading from caps_outputs/bs/caps_sgp/000005.pth, starting at step=5
+3337it [16:32,  3.36it/s]
+label root caps_pseudo_label/00 exists, entering learning mode.
+tensorboard log files are stored in caps_logs/00/caps_sgp
+No ckpts found, training from scratch...
+caps_sgp | Step: 1, Loss: 0.16329
+caps_sgp | Step: 2, Loss: 0.13774
+caps_sgp | Step: 3, Loss: 0.12036
+caps_sgp | Step: 4, Loss: 0.11186
+caps_sgp | Step: 5, Loss: 0.11013
+saving ckpts caps_outputs/00/caps_sgp/000005.pth...
+label root caps_pseudo_label/01 does not exist, entering teaching mode.
+Reloading from caps_outputs/00/caps_sgp/000005.pth, starting at step=5
+3337it [16:32,  3.36it/s]
+label root caps_pseudo_label/01 exists, entering learning mode.
+tensorboard log files are stored in caps_logs/01/caps_sgp
+No ckpts found, training from scratch...
+caps_sgp | Step: 1, Loss: 0.21352
+caps_sgp | Step: 2, Loss: 0.08665
+caps_sgp | Step: 3, Loss: 0.08282
+caps_sgp | Step: 4, Loss: 0.12540
+caps_sgp | Step: 5, Loss: 0.09589
+saving ckpts caps_outputs/01/caps_sgp/000005.pth...
+
+Process finished with exit code 0
+</code></pre>
+<h1 id="论文中提到的问题"><a href="#论文中提到的问题" class="headerlink" title="论文中提到的问题"></a>论文中提到的问题</h1><ul>
+<li>特征检测器比描述符更难学习，因为对于描述符的定义更为明确，而人们通常不清楚哪些点是有趣的，难以进行人为标记</li>
+<li>特征点的性质：可区分和可重复<ul>
+<li>1.能够发现图像中局部的具备区分度的信息；同一性约束（identity constraint）<br>  2.当场景经过多种变换后，仍能够重复检测出一致的特征；协变约束（covariant constraint ）</li>
+</ul>
+</li>
+<li>虽然机器学习显然有助于照明不变性，但对于视点不变性，传统方法仍然具有惊人的竞争力。</li>
+<li>监督学习不能很好地作用于关键点的检测，因为在这种情况下，监督学习的本质可以归结为复制现有的检测器，而不是发现更好、更容易的关键点。更有效的方向是自监督/无监督的学习</li>
+<li>将网络的某部分用传统方法代替，能极大减少网络的参数量</li>
+<li>数据集的质量&gt;数量？</li>
+</ul>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p><a target="_blank" rel="noopener" href="https://www.aiuai.cn/aifarm1697.html">度量学习 - 损失函数汇总[译] - AI备忘录 (aiuai.cn)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/80761087?from_voters_page=true">深度学习loss清单-未完待续 - 知乎 (zhihu.com)</a></p>
+<h1 id="CVPR-2022-Image-matching-challenge"><a href="#CVPR-2022-Image-matching-challenge" class="headerlink" title="CVPR 2022 Image matching challenge"></a>CVPR 2022 Image matching challenge</h1><p>有用的点：</p>
+<ul>
+<li>对匹配聚类除去外点后框选bbox，再进行匹配</li>
+</ul>
+<p>无用的点：</p>
+<ul>
+<li>使用分割过滤移动对象</li>
+<li></li>
+</ul>
+<h1 id="The-MegaDepth-Dataset"><a href="#The-MegaDepth-Dataset" class="headerlink" title="The MegaDepth Dataset"></a>The MegaDepth Dataset</h1><ul>
+<li><p>colmap的sfm和mvs重建，得到原始深度图</p>
+</li>
+<li><p>采用更谨慎的mvs方法，更倾向于少而准确的真实数据，未计算出真实值的点输出为0</p>
+</li>
+<li>采用语义分割来增强和过滤深度图，过滤了天空部分的深度，以及移动物体的深度。</li>
+</ul>
+<p><strong>Multi-View Optimization of Local Feature Geometry 中提到：</strong></p>
+<p>由于稀疏和密集重建之间的不一致，我们丢弃了 16 个场景。虽然 MegaDepth 数据集提供了跨多种视点和照明条件的训练数据，但由于密集重建中的错误，地面实况流有时不是完全准确的亚像素。因此，我们使用参考补丁的随机扭曲来合成具有完美几何流注释的相同条件补丁对，以生成合成对应物。</p>
+<h1 id="Loftr"><a href="#Loftr" class="headerlink" title="Loftr"></a>Loftr</h1><pre><code>
+data_cfg_path="configs/data/megadepth_trainval_640.py"
+main_cfg_path="configs/loftr/outdoor/loftr_ds_dense.py"
+
+n_nodes=1
+n_gpus_per_node=4
+torch_num_workers=0
+batch_size=1
+pin_memory=true
+exp_name="outdoor-ds-640"
+
+python -u ./train.py "configs/data/megadepth_trainval_640.py" "configs/loftr/outdoor/loftr_ds_dense.py" --exp_name="outdoor-ds-640" --gpus=4 --num_nodes=1 --accelerator="ddp" --batch_size=1 --num_workers=4 --pin_memory=true --check_val_every_n_epoch=1 --log_every_n_steps=1 --flush_logs_every_n_steps=1 --limit_val_batches=1. --num_sanity_val_steps=10 --benchmark=True --max_epochs=30
+</code></pre><h2 id="不变性与等变性"><a href="#不变性与等变性" class="headerlink" title="不变性与等变性"></a>不变性与等变性</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/427205686">https://zhuanlan.zhihu.com/p/427205686</a></p>
+<p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/image-20221013105241665.png" alt="image-20221013105241665"></p>
+<p>描述符应该是不变性的，特征点位置应该是等变性的</p>
+<h2 id="UnSuperPoint-End-to-End-Unsupervised-Interest-Point-Detector-And-Descriptor"><a href="#UnSuperPoint-End-to-End-Unsupervised-Interest-Point-Detector-And-Descriptor" class="headerlink" title="UnSuperPoint:End-to-End Unsupervised Interest Point Detector And Descriptor"></a>UnSuperPoint:End-to-End Unsupervised Interest Point Detector And Descriptor</h2><p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/30262663c9724bd29d37ff71a4bb3557.png" alt="在这里插入图片描述"></p>
+<p><img src="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/87d6fe3e3daf4388bf782cdadee9af4f.png" alt="在这里插入图片描述"></p>
+<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>image matching, also known as image registration or correspondence</p>
+<p>aims to identify then correspond the same or similar structure/content from two ormore images</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/" title="特征匹配">https://youngyyp.github.io/2022/04/10/计算机视觉/Feature Matching/特征匹配/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E9%A3%9E%E6%9C%BA%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/" rel="prev" title="飞机6D位姿估计">
+      <i class="fa fa-chevron-left"></i> 飞机6D位姿估计
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/29/SNN/SNN%E5%9F%BA%E7%A1%80/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">相关链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D"><span class="nav-number">2.</span> <span class="nav-text">线特征匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text"> </span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E7%9B%AE%E6%B7%B1%E5%BA%A6%E5%9B%BE%EF%BC%88%E7%AB%8B%E4%BD%93%E5%8C%B9%E9%85%8D%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">双目深度图（立体匹配）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%8B%E4%BD%93%E6%A0%87%E5%AE%9A%E4%B8%8E%E7%AB%8B%E4%BD%93%E6%A0%A1%E6%AD%A3"><span class="nav-number">3.0.1.</span> <span class="nav-text">立体标定与立体校正</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Learning-Feature-Descriptors-using-Camera-Pose-Supervision"><span class="nav-number">4.</span> <span class="nav-text">Learning Feature Descriptors using Camera Pose Supervision</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E4%B8%AD%E6%8F%90%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">论文中提到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CVPR-2022-Image-matching-challenge"><span class="nav-number">6.</span> <span class="nav-text">CVPR 2022 Image matching challenge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-MegaDepth-Dataset"><span class="nav-number">7.</span> <span class="nav-text">The MegaDepth Dataset</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Loftr"><span class="nav-number">8.</span> <span class="nav-text">Loftr</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%98%E6%80%A7%E4%B8%8E%E7%AD%89%E5%8F%98%E6%80%A7"><span class="nav-number">8.1.</span> <span class="nav-text">不变性与等变性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnSuperPoint-End-to-End-Unsupervised-Interest-Point-Detector-And-Descriptor"><span class="nav-number">8.2.</span> <span class="nav-text">UnSuperPoint:End-to-End Unsupervised Interest Point Detector And Descriptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E8%BF%B0"><span class="nav-number">8.3.</span> <span class="nav-text">综述</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

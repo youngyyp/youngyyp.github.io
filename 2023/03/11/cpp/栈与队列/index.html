@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="栈与队列理论基础队列是先进先出，栈是先进后出。 我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。 deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。 SGI STL中队列一样是以deque为缺省情况下的底部结构 STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="栈与队列理论基础队列是先进先出，栈是先进后出。 我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。 deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。 SGI STL中队列一样是以deque为缺省情况下的底部结构 STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/232.%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%E7%89%88%E6%9C%AC2.gif">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/image-20230216192400940.png">
+<meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/239.%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC-2.gif">
+<meta property="article:published_time" content="2023-03-11T04:35:37.109Z">
+<meta property="article:modified_time" content="2023-03-11T04:35:37.131Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://code-thinking.cdn.bcebos.com/gifs/232.%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%E7%89%88%E6%9C%AC2.gif">
+
+<link rel="canonical" href="https://youngyyp.github.io/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-11 12:35:37" itemprop="dateCreated datePublished" datetime="2023-03-11T12:35:37+08:00">2023-03-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="栈与队列理论基础"><a href="#栈与队列理论基础" class="headerlink" title="栈与队列理论基础"></a>栈与队列理论基础</h2><p>队列是先进先出，栈是先进后出。</p>
+<p><strong>我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。</strong></p>
+<p>deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。</p>
+<p><strong>SGI STL中队列一样是以deque为缺省情况下的底部结构</strong></p>
+<p>STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。</p>
+<h2 id="用栈实现队列"><a href="#用栈实现队列" class="headerlink" title="用栈实现队列"></a>用栈实现队列</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-queue-using-stacks/">力扣题目链接(opens new window)</a></p>
+<p>使用栈实现队列的下列操作：</p>
+<p>push(x) — 将一个元素放入队列的尾部。<br>pop() — 从队列首部移除元素。<br>peek() — 返回队列首部的元素。<br>empty() — 返回队列是否为空。</p>
+<p>示例:</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">MyQueue queue = new MyQueue();
+queue.push(1);
+queue.push(2);
+queue.peek();  // 返回 1
+queue.pop();   // 返回 1
+queue.empty(); // 返回 false
+</code></pre>
+<p>说明:</p>
+<ul>
+<li>你只能使用标准的栈操作 — 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。</li>
+<li>你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。</li>
+<li>假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）。</li>
+</ul>
+<p><strong>思路：</strong></p>
+<p><img src="https://code-thinking.cdn.bcebos.com/gifs/232.%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%E7%89%88%E6%9C%AC2.gif" alt="232.用栈实现队列版本2" style="zoom: 67%;"></p>
+<p>在push数据的时候，只要数据放进输入栈就好，<strong>但在pop的时候，操作就复杂一些，输出栈如果为空，就把进栈数据全部导入进来（注意是全部导入）</strong>，再从出栈弹出数据，如果输出栈不为空，则直接从出栈弹出数据就可以了。</p>
+<p>最后如何判断队列为空呢？<strong>如果进栈和出栈都为空的话，说明模拟的队列为空了。</strong></p>
+<p><strong>代码：</strong></p>
+<p>类的构造函数</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/cplusplus/cpp-constructor-destructor.html">https://www.runoob.com/cplusplus/cpp-constructor-destructor.html</a></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">stack<type> s; // 初始化
+s.push(value); // 入栈
+s.pop(); // 出栈，返回void
+s.empty(); // 判断空否
+s.top(); // 返回栈顶元素
+s.size();  // 返回栈元素个数
+</code></pre>
+<p>在pop()之前要先用top()访问，pop()本身是不返回元素的。这个想法看来还真是有意义的</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class MyQueue {
+public:
+    stack<int> stIn;
+    stack<int> stOut;
+
+    MyQueue() {
+
+    }
+
+    void push(int x) {
+        stIn.push(x);
+    }
+
+    int pop() {
+        if(stOut.empty()){
+            while(!stIn.empty()){
+                stOut.push(stIn.top());
+                stIn.pop();
+            }
+        }
+        int result = stOut.top();
+        stOut.pop();
+        return result;
+    }
+
+    int peek() {
+        int res = this->pop(); // 直接使用已有的pop函数
+        stOut.push(res); // 因为pop函数弹出了元素res，所以再添加回去
+        return res;
+    }
+
+    bool empty() {
+        if(stOut.empty()&&stIn.empty()) return true;
+        else return false;
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
+</code></pre>
+<h2 id="225-用队列实现栈"><a href="#225-用队列实现栈" class="headerlink" title="225. 用队列实现栈"></a>225. 用队列实现栈</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-stack-using-queues/">力扣题目链接(opens new window)</a></p>
+<p>使用单向队列实现栈的下列操作：</p>
+<ul>
+<li>push(x) — 元素 x 入栈</li>
+<li>pop() — 移除栈顶元素</li>
+<li>top() — 获取栈顶元素</li>
+<li>empty() — 返回栈是否为空</li>
+</ul>
+<p>注意:</p>
+<ul>
+<li>你只能使用队列的基本操作— 也就是 push to back, peek/pop from front, size, 和 is empty 这些操作是合法的。</li>
+<li>你所使用的语言也许不支持队列。 你可以使用 list 或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。</li>
+<li>你可以假设所有操作都是有效的（例如, 对一个空的栈不会调用 pop 或者 top 操作）。</li>
+</ul>
+<p><strong>代码：</strong></p>
+<p>queue操作：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">q.front();        //获取队首
+q.back();        //获取队尾
+q.push(x);        //插入元素,x表示要插入的值,什么都行（但是类型必须和定义的相同）
+q.pop();        //将队头弹出,无返回值
+q.size();        //返回队列里有多少个元素
+q.empty();        //如果队列为空，返回true，否则返回false（ 等同于q.size()==0 ）
+q.swap(q2);        //交换q和q2里面的值(q2需要和q是一个类型)
+</code></pre>
+<p><strong>一个队列在模拟栈弹出元素的时候只要将队列头部的元素（除了最后一个元素外） 重新添加到队列尾部，此时再去弹出元素就是栈的顺序了。</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class MyStack {
+public:
+    queue<int> que;
+
+    MyStack() {
+
+    }
+
+    void push(int x) {
+        que.push(x);
+    }
+
+    int pop() {
+        int size = que.size();
+        while(size >1){
+            que.push(que.front());
+            que.pop();
+            size--;
+        }
+        int result = que.front();
+        que.pop();
+        return result;
+    }
+
+    int top() {
+        int result = this->pop();
+        que.push(result);
+        return result;
+    }
+
+    bool empty() {
+        return que.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+</code></pre>
+<h2 id="20-有效的括号"><a href="#20-有效的括号" class="headerlink" title="20. 有效的括号"></a>20. 有效的括号</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-parentheses/">力扣题目链接(opens new window)</a></p>
+<p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。</p>
+<p>有效字符串需满足：</p>
+<ul>
+<li>左括号必须用相同类型的右括号闭合。</li>
+<li>左括号必须以正确的顺序闭合。</li>
+<li>注意空字符串可被认为是有效字符串。</li>
+</ul>
+<p>示例 1:</p>
+<ul>
+<li>输入: “()”</li>
+<li>输出: true</li>
+</ul>
+<p>示例 2:</p>
+<ul>
+<li>输入: “()[]{}”</li>
+<li>输出: true</li>
+</ul>
+<p>示例 3:</p>
+<ul>
+<li>输入: “(]”</li>
+<li>输出: false</li>
+</ul>
+<p>示例 4:</p>
+<ul>
+<li>输入: “([)]”</li>
+<li>输出: false</li>
+</ul>
+<p>示例 5:</p>
+<ul>
+<li>输入: “{[]}”</li>
+<li>输出: true</li>
+</ul>
+<p>我的代码：</p>
+<p>使用单个栈实现</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> t;
+        for(int i = 0; i < s.size(); i++){
+            if(s[i] == '(' or s[i] == '[' or s[i] == '{'){
+                t.push(s[i]);
+            }else if(!t.empty()){
+                if((t.top() == '(' && s[i] == ')') or (t.top() == '[' && s[i] == ']') or (t.top() == '{' && s[i] == '}')) t.pop();
+                else return false;
+            }else return false;
+        }
+        if(t.size() == 0) return true;
+        else return false;
+    }
+};
+</code></pre>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    bool isValid(string s) {
+        if (s.size() % 2 != 0) return false; // 如果s的长度为奇数，一定不符合要求
+        stack<char> st;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == '(') st.push(')');
+            else if (s[i] == '{') st.push('}');
+            else if (s[i] == '[') st.push(']');
+            // 第三种情况：遍历字符串匹配的过程中，栈已经为空了，没有匹配的字符了，说明右括号没有找到对应的左括号 return false
+            // 第二种情况：遍历字符串匹配的过程中，发现栈里没有我们要匹配的字符。所以return false
+            else if (st.empty() || st.top() != s[i]) return false;
+            else st.pop(); // st.top() 与 s[i]相等，栈弹出元素
+        }
+        // 第一种情况：此时我们已经遍历完了字符串，但是栈不为空，说明有相应的左括号没有右括号来匹配，所以return false，否则就return true
+        return st.empty();
+    }
+};
+</code></pre>
+<h2 id="1047-删除字符串中的所有相邻重复项"><a href="#1047-删除字符串中的所有相邻重复项" class="headerlink" title="1047. 删除字符串中的所有相邻重复项"></a>1047. 删除字符串中的所有相邻重复项</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/">力扣题目链接(opens new window)</a></p>
+<p>给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。</p>
+<p>在 S 上反复执行重复项删除操作，直到无法继续删除。</p>
+<p>在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。</p>
+<p>示例：</p>
+<ul>
+<li>输入：”abbaca”</li>
+<li>输出：”ca”</li>
+<li>解释：例如，在 “abbaca” 中，我们可以删除 “bb” 由于两字母相邻且相同，这是此时唯一可以执行删除操作的重复项。之后我们得到字符串 “aaca”，其中又只有 “aa” 可以执行重复项删除操作，所以最后的字符串为 “ca”。</li>
+</ul>
+<p>提示：</p>
+<ul>
+<li>1 &lt;= S.length &lt;= 20000</li>
+<li>S 仅由小写英文字母组成。</li>
+</ul>
+<p>我的代码：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    string removeDuplicates(string s) {
+        stack<char> t;
+        for(int i = 0; i < s.size(); i++){
+            if(t.empty() || s[i] != t.top()) t.push(s[i]);
+            else t.pop();
+        }
+        string result = "";
+        while (!t.empty()){
+            result += t.top(); //注意字符串的+操作
+            t.pop();
+        }
+        reverse (result.begin(), result.end()); // 此时字符串需要反转一下
+        return result;
+    }
+};
+</code></pre>
+<p>题解：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    string removeDuplicates(string S) {
+        stack<char> st;
+        for (char s : S) {
+            if (st.empty() || s != st.top()) {
+                st.push(s);
+            } else {
+                st.pop(); // s 与 st.top()相等的情况
+            }
+        }
+        string result = "";
+        while (!st.empty()) { // 将栈中元素放到result字符串汇总
+            result += st.top();
+            st.pop();
+        }
+        reverse (result.begin(), result.end()); // 此时字符串需要反转一下
+        return result;
+
+    }
+};
+</code></pre>
+<p>还可以拿字符串直接作为栈，这样省去了栈还要转为字符串的操作。</p>
+<p>代码如下：</p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    string removeDuplicates(string S) {
+        string result;
+        for(char s : S) {
+            if(result.empty() || result.back() != s) {
+                result.push_back(s); //注意字符串操作
+            }
+            else {
+                result.pop_back();//注意字符串操作
+            }
+        }
+        return result;
+    }
+};
+</code></pre>
+<h2 id="150-逆波兰表达式求值"><a href="#150-逆波兰表达式求值" class="headerlink" title="150. 逆波兰表达式求值"></a>150. 逆波兰表达式求值</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/evaluate-reverse-polish-notation/">力扣题目链接</a></p>
+<p>根据 逆波兰表示法，求表达式的值。</p>
+<p>有效的运算符包括 + , - , * , / 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。</p>
+<p>说明：</p>
+<p>整数除法只保留整数部分。 给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。</p>
+<p>示例 1：</p>
+<ul>
+<li>输入: [“2”, “1”, “+”, “3”, “ * “]</li>
+<li>输出: 9</li>
+<li>解释: 该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9</li>
+</ul>
+<p>逆波兰表达式主要有以下两个优点：</p>
+<ul>
+<li>去掉括号后表达式无歧义，上式即便写成 1 2 + 3 4 + * 也可以依据次序计算出正确结果。</li>
+<li>适合用栈操作运算：遇到数字则入栈；遇到运算符则取出栈顶两个数字进行计算，并将结果压入栈中。</li>
+</ul>
+<p><strong>代码：</strong></p>
+<p>C++字符串转换(stoi；stol；stoul；stoll；stoull；stof；stod；stold)</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43899069/article/details/110290292?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-110290292-blog-114146606.pc_relevant_multi_platform_whitelistv4&amp;spm=1001.2101.3001.4242.3&amp;utm_relevant_index=7">https://blog.csdn.net/weixin_43899069/article/details/110290292?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-4-110290292-blog-114146606.pc_relevant_multi_platform_whitelistv4&amp;spm=1001.2101.3001.4242.3&amp;utm_relevant_index=7</a></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<long long> st; 
+        for(int i = 0; i < tokens.size(); i++){
+            if (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/") {
+                long long num1 = st.top();
+                st.pop();
+                long long num2 = st.top();
+                st.pop();
+                if (tokens[i] == "+") st.push(num2 + num1);
+                if (tokens[i] == "-") st.push(num2 - num1);
+                if (tokens[i] == "*") st.push(num2 * num1);
+                if (tokens[i] == "/") st.push(num2 / num1);
+            }else{
+                st.push(stoll(tokens[i]));
+            }
+
+        }
+        return st.top();
+    }
+};
+</code></pre>
+<h2 id="239-滑动窗口最大值——单调队列"><a href="#239-滑动窗口最大值——单调队列" class="headerlink" title="239. 滑动窗口最大值——单调队列"></a>239. 滑动窗口最大值——单调队列</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/sliding-window-maximum/">力扣题目链接(opens new window)</a></p>
+<p>给定一个数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。</p>
+<p>返回滑动窗口中的最大值。</p>
+<p>进阶：</p>
+<p>你能在线性时间复杂度内解决此题吗？</p>
+<p><img src="/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/image-20230216192400940.png" alt="image-20230216192400940" style="zoom:33%;"></p>
+<p><strong>思路：</strong></p>
+<p><img src="https://code-thinking.cdn.bcebos.com/gifs/239.%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC-2.gif" alt="239.滑动窗口最大值-2" style="zoom:67%;"></p>
+<p>使用<strong>单调队列</strong>:</p>
+<ol>
+<li>pop(value)：如果窗口移除的元素value等于单调队列的front元素，那么队列弹出元素，否则不用任何操作</li>
+<li>push(value)：如果push的元素value大于<strong>back元素</strong>的数值，那么就将队列front的元素弹出，直到push元素的数值小于等于队列入口元素的数值为止</li>
+</ol>
+<p><strong>代码：</strong></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
+public:
+    class MyQueue{ //单调队列（从大到小），由于需要访问q.back()和pop_back()，需要用双向的
+        public:
+            deque<int> q;
+            void pop(int x){
+                if(!q.empty() && x == q.front()) q.pop_front();
+            }
+        // 判断非空需要放在前面，如果改为x == q.front() && !q.empty()就会报错
+            void push(int x){
+                while(!q.empty() && x > q.back()) {
+                    q.pop_back();
+                }
+                q.push_back(x);
+            }
+            int front(){
+                return q.front();
+            }
+    };
+
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        MyQueue que;
+        vector<int> results;
+        for(int i = 0; i < k; i++){
+            que.push(nums[i]);
+        }
+        results.push_back(que.front());
+        for(int i = k; i < nums.size(); i++){
+            que.pop(nums[i-k]);
+            que.push(nums[i]);
+            results.push_back(que.front());
+        }
+        return results;
+    }
+};
+</code></pre>
+<h2 id="347-前-K-个高频元素——优先级队列"><a href="#347-前-K-个高频元素——优先级队列" class="headerlink" title="347.前 K 个高频元素——优先级队列"></a>347.前 K 个高频元素——优先级队列</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/top-k-frequent-elements/">力扣题目链接(opens new window)</a></p>
+<p>给定一个非空的整数数组，返回其中出现频率前 k 高的元素。</p>
+<p>示例 1:</p>
+<ul>
+<li>输入: nums = [1,1,1,2,2,3], k = 2</li>
+<li>输出: [1,2]</li>
+</ul>
+<p>思路：</p>
+<p><strong>堆是一棵完全二叉树，树中每个结点的值都不小于（或不大于）其左右孩子的值。</strong> 如果父亲结点是大于等于左右孩子就是大顶堆，小于等于左右孩子就是小顶堆。</p>
+<p>使用map（key元素  value频率）和小顶堆</p>
+<p>【priority_queue优先队列的基础知识】</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/top-k-frequent-elements/solutions/1283998/c-xiao-bai-you-hao-you-xian-dui-lie-de-j-53ay/">https://leetcode.cn/problems/top-k-frequent-elements/solutions/1283998/c-xiao-bai-you-hao-you-xian-dui-lie-de-j-53ay/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43679351/article/details/124825229">https://blog.csdn.net/qq_43679351/article/details/124825229</a></p>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">// 时间复杂度：O(nlogk)
+// 空间复杂度：O(n)
+class Solution {
+public:
+
+    //小顶堆
+    class mycomparison{
+    public:
+        bool operator()(const pair<int, int>& lhs, const pair<int, int>& rhs) {
+            return lhs.second > rhs.second;
+        }
+    }; //注意这里的分号
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+         // 要统计元素出现频率
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++; //key元素  value频率
+        }
+        //上式可以改写为
+        // for (int i : nums) {
+        //    map[i]++; //key元素  value频率
+        //}
+
+        // 对频率排序
+        // 定义一个小顶堆，大小为k
+        priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> q;
+
+        // 用固定大小为k的小顶堆，扫描所有频率的数值
+        for(auto& a:map){
+            q.push(a);
+            if(q.size()>k){
+               q.pop(); 
+            }
+        }
+
+        // 找出前K个高频元素，因为小顶堆先弹出的是最小的，所以倒序来输出到数组
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = q.top().first;
+            q.pop();
+        }
+        return result;
+    }
+};
+</code></pre>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2023/03/11/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/" title="">https://youngyyp.github.io/2023/03/11/cpp/栈与队列/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/resnet50%E7%BB%93%E6%9E%84/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/11/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">栈与队列理论基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">用栈实现队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#225-%E7%94%A8%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E6%A0%88"><span class="nav-number">3.</span> <span class="nav-text">225. 用队列实现栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7"><span class="nav-number">4.</span> <span class="nav-text">20. 有效的括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1047-%E5%88%A0%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E6%89%80%E6%9C%89%E7%9B%B8%E9%82%BB%E9%87%8D%E5%A4%8D%E9%A1%B9"><span class="nav-number">5.</span> <span class="nav-text">1047. 删除字符串中的所有相邻重复项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#150-%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC"><span class="nav-number">6.</span> <span class="nav-text">150. 逆波兰表达式求值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#239-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%9C%80%E5%A4%A7%E5%80%BC%E2%80%94%E2%80%94%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97"><span class="nav-number">7.</span> <span class="nav-text">239. 滑动窗口最大值——单调队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#347-%E5%89%8D-K-%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E7%BA%A7%E9%98%9F%E5%88%97"><span class="nav-number">8.</span> <span class="nav-text">347.前 K 个高频元素——优先级队列</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="参考资料目标检测究竟发展到了什么程度? | CVHub带你聊一聊目标检测发展的这22年https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;tZztakvzU9kl0nPbl8oCww 视频学习：https:&#x2F;&#x2F;space.bilibili.com&#x2F;18161609&#x2F;channel&#x2F;seriesdetail?sid&#x3D;244160 目标检测综述Anchor based方法(一阶段，二阶段)和Anch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="young&#39;s blog">
+<meta property="og:url" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="young&#39;s blog">
+<meta property="og:description" content="参考资料目标检测究竟发展到了什么程度? | CVHub带你聊一聊目标检测发展的这22年https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s&#x2F;tZztakvzU9kl0nPbl8oCww 视频学习：https:&#x2F;&#x2F;space.bilibili.com&#x2F;18161609&#x2F;channel&#x2F;seriesdetail?sid&#x3D;244160 目标检测综述Anchor based方法(一阶段，二阶段)和Anch">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640.jpeg">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-2ebc675f93f886e008c222880200a274_1440w.webp">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-23115fb3ba6ff0cdd2fc2c51b354bc49_r.jpg">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/4cee39e6039ca5ee032f7c488c4b21f7.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817488587921.jpeg">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307154723215.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817537029823.jpeg">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307102437011-167815588021814.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/70.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307104915451.png">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/20201020204029755.png#pic_center">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-4e9fab45f2fd1a862dbb656296a6ae85_1440w.webp">
+<meta property="og:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817795102025.png">
+<meta property="article:published_time" content="2023-03-11T04:35:43.808Z">
+<meta property="article:modified_time" content="2023-03-11T04:35:43.816Z">
+<meta property="article:author" content="young">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640.jpeg">
+
+<link rel="canonical" href="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | young's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">young's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">慢慢来，比较快</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-11 12:35:43" itemprop="dateCreated datePublished" datetime="2023-03-11T12:35:43+08:00">2023-03-11</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>目标检测究竟发展到了什么程度? | CVHub带你聊一聊目标检测发展的这22年<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/tZztakvzU9kl0nPbl8oCww">https://mp.weixin.qq.com/s/tZztakvzU9kl0nPbl8oCww</a></p>
+<p>视频学习：<a target="_blank" rel="noopener" href="https://space.bilibili.com/18161609/channel/seriesdetail?sid=244160">https://space.bilibili.com/18161609/channel/seriesdetail?sid=244160</a></p>
+<h1 id="目标检测综述"><a href="#目标检测综述" class="headerlink" title="目标检测综述"></a>目标检测综述</h1><p><strong>Anchor based</strong>方法(一阶段，二阶段)和<strong>Anchor free</strong>方法</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640.jpeg" alt="图片"></p>
+<h2 id="传统算法"><a href="#传统算法" class="headerlink" title="传统算法"></a>传统算法</h2><h3 id="HOG"><a href="#HOG" class="headerlink" title="HOG"></a>HOG</h3><p>HOG (Histogram of Oriented Gradients，方向梯度直方图) </p>
+<p>1）主要思想：</p>
+<p>在一副图像中，局部目标的表象和形状能够被梯度或边缘的方向密度分布很好地描述。其本质为：梯度的统计信息，而梯度主要存在于边缘的地方。</p>
+<p>Hog+SVM做行人识别</p>
+<p>2）实现方法：</p>
+<p>把样本图像分割为若干个像素的单元，把梯度方向平均划分为多个区间，在每个单元里面对所有像素的梯度方向在各个方向区间进行直方图统计。最后把这些直方图组合起来，就可以构成特征描述符。</p>
+<h3 id="传统方法的缺点"><a href="#传统方法的缺点" class="headerlink" title="传统方法的缺点"></a>传统方法的缺点</h3><p>1）基于滑动窗口的区域选择策略没有针对性,时间复杂度高,窗口冗余</p>
+<p>2）手工设计的特征对于多样性的变化没有很好的鲁棒性</p>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h2 id="二阶段anchor-based-RCNN系列"><a href="#二阶段anchor-based-RCNN系列" class="headerlink" title="二阶段anchor based - RCNN系列"></a>二阶段anchor based - RCNN系列</h2><p>二阶段检测算法主要分为以下两个阶段<br><strong>Stage1</strong>：从图像中生成region proposals<br><strong>Stage2</strong>：从region proposals生成最终的物体边框。</p>
+<p>[RCNN系列]<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/383167028">https://zhuanlan.zhihu.com/p/383167028</a></p>
+<h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-2ebc675f93f886e008c222880200a274_1440w.webp" alt="img"></p>
+<p>RCNN首先通过选择性搜索算法Selective Search从一组对象候选框中选择可能出现的对象框，然后将这些选择出来的对象框中的图像resize到某一固定尺寸的图像，并喂入到CNN模型和svm模型</p>
+<h3 id="Fast-RCNN"><a href="#Fast-RCNN" class="headerlink" title="Fast RCNN"></a>Fast RCNN</h3><p>Fast R-CNN与R-CNN相比主要有以下几点不同：</p>
+<ol>
+<li>不再是对每一个候选区域单独提取特征，而是在提取整个图像的特征后，将每一个候选区域映射到特征图上</li>
+<li>在R-CNN中为了统一输入使用了暴力缩放的方法，但在Fast R-CNN中，使用了RoI Pooling</li>
+<li>使用了多任务的损失函数来简化R-CNN中的多阶段训练</li>
+</ol>
+<p>Fast RCNN不足：</p>
+<ul>
+<li><ul>
+<li>候选区域的选取还是通过selective search，并且只能在CPU中运行这个算法，所以这个阶段浪费了大量时间。（这也是Faster RCNN改进的点）</li>
+</ul>
+</li>
+</ul>
+<h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster RCNN"></a>Faster RCNN</h3><p>Faster RCNN就是RPN+Fast RCNN，具体算法步骤如下</p>
+<ol>
+<li>输入图像到特征提取器中，得到整张图片的feature map。</li>
+<li>使用RPN生成候选框，并投影到feature map上，得到每一个候选区域的特征矩阵。</li>
+<li>将每一个特征矩阵经过ROI Pooling缩放到7*7大小，然后经过展平处理后通过全连接层获得预测的分类以及候选区域位置偏移信息。</li>
+</ol>
+<p>Faster RCNN有三个部分需要训练，分别是特征提取器VGG16，RPN以及RoIHead</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-23115fb3ba6ff0cdd2fc2c51b354bc49_r.jpg" alt="img"></p>
+<p>问：为什么要生成一堆anchor，再对它们进行修正，而不是一开始直接预测anchor的坐标？</p>
+<p>答：其实YOLO v1就是没有使用anchor，直接对候选区域的坐标进行预测，但作者发现，效果并不好，主要是因为网络很难收敛，训练难度较大，所以YOLO的作者后来就将Faster RCC的RPN进行了相关的修改，加入到了YOLO v2中，效果有了显著的提高。</p>
+<h2 id="一阶段anchor-based-YOLO系列"><a href="#一阶段anchor-based-YOLO系列" class="headerlink" title="一阶段anchor based - YOLO系列"></a>一阶段anchor based - YOLO系列</h2><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/4cee39e6039ca5ee032f7c488c4b21f7.png" alt="img" style="zoom:50%;"></p>
+<p>backbone <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38668236/article/details/127378254">https://blog.csdn.net/qq_38668236/article/details/127378254</a></p>
+<p>neck <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38668236/article/details/127400899">https://blog.csdn.net/qq_38668236/article/details/127400899</a></p>
+<p>head <a target="_blank" rel="noopener" href="https://ac.nowcoder.com/discuss/1031260?type=0&amp;order=0&amp;page=1&amp;channel=-1">https://ac.nowcoder.com/discuss/1031260?type=0&amp;order=0&amp;page=1&amp;channel=-1</a></p>
+<p>通俗易懂的YOLO系列（从V1到V5）模型解读：</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzU0NjgzMDIxMQ==&amp;mid=2247579969&amp;idx=3&amp;sn=2c4d437570b83b62bdc268cc94aab3ce&amp;chksm=fb545badcc23d2bb5185f4d5131dac466abc75abbd7022d1910916cc44cb9d1d1417173371cb&amp;scene=27">https://mp.weixin.qq.com/s?__biz=MzU0NjgzMDIxMQ==&amp;mid=2247579969&amp;idx=3&amp;sn=2c4d437570b83b62bdc268cc94aab3ce&amp;chksm=fb545badcc23d2bb5185f4d5131dac466abc75abbd7022d1910916cc44cb9d1d1417173371cb&amp;scene=27</a></p>
+<p>总结：</p>
+<p><strong>YOLO v1：直接回归位置。</strong></p>
+<p><strong>YOLO v2：全流程多尺度方法。</strong></p>
+<p><strong>YOLO v3：多尺度检测头，resblock darknet53</strong></p>
+<p><strong>YOLO v4：cspdarknet53，spp，panet，tricks</strong></p>
+<h3 id="YOLO-V1"><a href="#YOLO-V1" class="headerlink" title="YOLO V1"></a>YOLO V1</h3><p>YOLO的作者当时是这么想的：你分类器输出一个one-hot vector，那我把它换成(x,y,w,h,c)，c表示confidence置信度，把问题转化成一个回归问题，直接回归出Bounding Box的位置不就好了吗？</p>
+<p>YOLOv1的缺陷：</p>
+<ol>
+<li>由于YOLOv1每个网格的检测框只有2个，对于密集型目标检测和小物体检测都不能很好适用。 </li>
+<li>Inference时，当同一类物体出现的不常见的长宽比时泛化能力偏弱。 </li>
+<li>由于损失函数的问题，定位误差是影响检测效果的主要原因，尤其是大小物体的处理上，还有待加强。</li>
+</ol>
+<h3 id="YOLO-V2"><a href="#YOLO-V2" class="headerlink" title="YOLO V2"></a>YOLO V2</h3><p>从<strong>直接预测位置</strong>改为<strong>预测一个偏移量</strong>，基于<strong>Anchor框的宽和高</strong>和<strong>grid的先验位置</strong>的<strong>偏移量</strong>，得到最终目标的位置，这种方法也叫作<strong>location prediction</strong>。</p>
+<p>直接预测位置会导致神经网络在一开始训练时不稳定，使用偏移量会使得训练过程更加稳定</p>
+<p>YOLO v2先对每个区域得到了5个anchor作为参考，这些anchor是通过GT聚类得到的</p>
+<h3 id="YOLO-V3"><a href="#YOLO-V3" class="headerlink" title="YOLO V3"></a>YOLO V3</h3><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817488587921.jpeg" alt="图片" style="zoom: 80%;"></p>
+<p>分出了3个分支，分别为<strong>32倍下采样，16倍下采样，8倍下采样</strong>，分别取预测<strong>大，中，小目标</strong></p>
+<h3 id="YOLO-V4"><a href="#YOLO-V4" class="headerlink" title="YOLO V4"></a>YOLO V4</h3><p>loss做了很多改进</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307154723215.png" alt="image-20230307154723215" style="zoom:50%;"></p>
+<p>YOLO v4对输入端进行了改进，主要包括<strong>数据增强Mosaic、cmBN、SAT自对抗训练</strong>，使得在卡不是很多时也能取得不错的结果。</p>
+<p>YOLO v4具有极大的工程意义，将近年来深度学习领域最新研究的tricks都引入到了YOLO v4做验证测试</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817537029823.jpeg" alt="图片" style="zoom:67%;"></p>
+<p>为什么一代比一代检测头更加复杂呢？答案是：因为它们的提特征网络更加强大了，能够支撑起检测头做更加复杂的操作</p>
+<h2 id="Anchor-Free-系列"><a href="#Anchor-Free-系列" class="headerlink" title="Anchor-Free 系列"></a>Anchor-Free 系列</h2><p>基于Anchor的检测算法由于Anchor太多导致计算复杂，及其所带来的大量超参数都会影响模型性能。近年的Anchor free技术则摒弃Anchor，通过确定关键点的方式来完成检测，大大减少了网络超参数的数量。</p>
+<p> <strong>CornerNet</strong>是Anchor free技术路线的开创之作，该网络提出了一种新的对象检测方法，将网络对目标边界框的检测转化为一对关键点的检测(即左上角和右下角)，通过将对象检测为成对的关键点，而无需设计Anchor box作为先验框。</p>
+<h2 id="基于transformer的目标检测"><a href="#基于transformer的目标检测" class="headerlink" title="基于transformer的目标检测"></a>基于transformer的目标检测</h2><h3 id="DETR"><a href="#DETR" class="headerlink" title="DETR"></a>DETR</h3><p>DETR 是 Facebook 团队于 2020 年提出的基于 Transformer 的端到端目标检测，没有非极大值抑制 NMS 后处理步骤、没有 anchor 等先验知识和约束，整个由网络实现端到端的目标检测实现，大大简化了目标检测的 pipeline</p>
+<h2 id="目标检测常见指标"><a href="#目标检测常见指标" class="headerlink" title="目标检测常见指标"></a>目标检测常见指标</h2><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307102437011-167815588021814.png" alt="image-20230307102437011"></p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/70.png" alt="在这里插入图片描述"></p>
+<p>precision高可能会漏检，recall高可能出现很多冗余框</p>
+<p>通过调整不同的confidence阈值来构造PR曲线；对于recall相同的点，只取precision最高的。如下：</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20230307104915451.png" alt="image-20230307104915451"></p>
+<h2 id="非极大值抑制"><a href="#非极大值抑制" class="headerlink" title="非极大值抑制"></a>非极大值抑制</h2><p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/20201020204029755.png#pic_center" alt="img" style="zoom:50%;"></p>
+<p>我们可以看到，在图中对狗检测的有很多个框，0.9(a)，0.8(b)，0.7(c)，还有一个对猫的0.9(d)。 NMS极大值抑制就是在不影响猫的框的情况下去除对狗检测的其它得分小的框。 设置阈值th，用a分别对b,c,d,计算IOU值，将IOU值大于th的框都去除。</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/v2-4e9fab45f2fd1a862dbb656296a6ae85_1440w.webp" alt="img" style="zoom:50%;"></p>
+<p>面试的时候会问这样一个问题：NMS的适用情况是什么？</p>
+<p>答：1图多目标检测时用NMS。</p>
+<h2 id="遥感目标检测"><a href="#遥感目标检测" class="headerlink" title="遥感目标检测"></a>遥感目标检测</h2><p>近年来，随着遥感图像分辨率的提高，遥感图像目标检测(如飞机、船舶、油罐等的检测)成为研究热点，遥感图像目标检测具有广泛的应用，如军事侦查、灾害救援、城市交通管理等等。</p>
+<p><img src="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640-167817795102025.png" alt="图片" style="zoom:80%;"></p>
+<p>遥感目标检测任务中存在的难点与挑战可简要概括为如下四点：</p>
+<ol>
+<li><p>遥感图像分辨率巨大<br> 如上图8-5(a)所示，由于遥感图像分辨率巨大，因此如何快速准确的检测出遥感目标仍然是一个挑战性的问题。</p>
+</li>
+<li><p>目标遮挡问题<br> 如上图8-5(b)所示，超过50%的目标被云雾所遮挡，因此目标遮挡问题也是遥感图像目标检测所面临的一个挑战。</p>
+</li>
+<li><p>域适应问题<br> 由不同传感器所捕获的遥感图像仍然存在很大差异。</p>
+</li>
+<li><p>目标小而密集，且任意旋转角</p>
+</li>
+</ol>
+<p>不同传感器所捕获的遥感图像可能会出现以下差异：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/60276621">光谱差异：不同传感器的波长范围和波段数量可能不同，导致遥感图像的光谱信息和分辨率有所区别</a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/60276621">1</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">2</a>。</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">空间差异：不同传感器的观测角度和分辨元大小可能不同，导致遥感图像的空间信息和分辨率有所区别</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">2</a><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/多源遥感/22042704">3</a>。</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">辐射差异：不同传感器的响应特性和校正方法可能不同，导致遥感图像的辐射信息和准确度有所区别</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">2</a>。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/60276621">因此，在使用多源遥感图像进行分析时，需要进行一定的预处理，如配准、归一化、投影变换等，以消除或减小这些差异对结果的影响</a><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/60276621">1</a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/428385850">2</a>。</p>
+<h2 id="领域自适应的目标检测"><a href="#领域自适应的目标检测" class="headerlink" title="领域自适应的目标检测"></a>领域自适应的目标检测</h2><p>任何目标检测算法的训练过程本质上都可以看成数据在独立同分布(i.i.d.)下的似然估计过程，而对于不满足(i.i.d.)的目标检测数据(特别是对于一些现实世界的应用程序)仍然是一个挑战，GAN在领域自适应方面已经显示出 了强大的效果，这对于目标检测技术来讲应该具有很大的促进作用。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>young
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://youngyyp.github.io/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="">https://youngyyp.github.io/2023/03/11/计算机视觉/目标检测/基础知识/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C%E5%88%86%E7%B1%BB/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/11/%E8%BD%AF%E4%BB%B6%E4%BD%BF%E7%94%A8/%E5%85%B6%E4%BB%96/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!--插入访客地图-->
+      <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=oY_lgWsBgu9UBtnnlW5wbM7G1cJY_9ZHdsx3MAT2Yao&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">1.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BB%BC%E8%BF%B0"><span class="nav-number"></span> <span class="nav-text">目标检测综述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">传统算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HOG"><span class="nav-number">1.1.</span> <span class="nav-text">HOG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">传统方法的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">1.3.</span> <span class="nav-text"> </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5anchor-based-RCNN%E7%B3%BB%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">二阶段anchor based - RCNN系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RCNN"><span class="nav-number">2.1.</span> <span class="nav-text">RCNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fast-RCNN"><span class="nav-number">2.2.</span> <span class="nav-text">Fast RCNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Faster-RCNN"><span class="nav-number">2.3.</span> <span class="nav-text">Faster RCNN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E9%98%B6%E6%AE%B5anchor-based-YOLO%E7%B3%BB%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">一阶段anchor based - YOLO系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO-V1"><span class="nav-number">3.1.</span> <span class="nav-text">YOLO V1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO-V2"><span class="nav-number">3.2.</span> <span class="nav-text">YOLO V2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO-V3"><span class="nav-number">3.3.</span> <span class="nav-text">YOLO V3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#YOLO-V4"><span class="nav-number">3.4.</span> <span class="nav-text">YOLO V4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Anchor-Free-%E7%B3%BB%E5%88%97"><span class="nav-number">4.</span> <span class="nav-text">Anchor-Free 系列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8Etransformer%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">5.</span> <span class="nav-text">基于transformer的目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DETR"><span class="nav-number">5.1.</span> <span class="nav-text">DETR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%B8%B8%E8%A7%81%E6%8C%87%E6%A0%87"><span class="nav-number">6.</span> <span class="nav-text">目标检测常见指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E6%9E%81%E5%A4%A7%E5%80%BC%E6%8A%91%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">非极大值抑制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%A5%E6%84%9F%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">8.</span> <span class="nav-text">遥感目标检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E8%87%AA%E9%80%82%E5%BA%94%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">9.</span> <span class="nav-text">领域自适应的目标检测</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="young"
+      src="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+  <p class="site-author-name" itemprop="name">young</p>
+  <div class="site-description" itemprop="description">你的征途当是星辰大海</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xwh80uoDDnqi8uKvWVp8c9rr-gzGzoHsz',
+      appKey     : 'I7r0pki5w3TvCpU6LC8I3b2R',
+      placeholder: "欢迎大家评论哦~",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
