@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 6.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="栈与队列理论基础队列是先进先出，栈是先进后出。 我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。 deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。 SGI STL中队列一样是以deque为缺省情况下的底部结构 STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。">
+  <meta name="description" content="栈与队列理论基础 队列是先进先出，栈是先进后出。  我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。  deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。  SGI STL中队列一样是以deque为缺省情况下的底部结构  STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。  用栈实">
 <meta property="og:type" content="article">
 <meta property="og:title" content="栈与队列">
 <meta property="og:url" content="https://youngyyp.github.io/2023/02/01/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="栈与队列理论基础队列是先进先出，栈是先进后出。 我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。 deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。 SGI STL中队列一样是以deque为缺省情况下的底部结构 STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。">
+<meta property="og:description" content="栈与队列理论基础 队列是先进先出，栈是先进后出。  我们常用的SGI STL，如果没有指定底层实现的话，默认是以deque为缺省情况下栈的底层结构。  deque是一个双向队列，只要封住一段，只开通另一端就可以实现栈的逻辑了。  SGI STL中队列一样是以deque为缺省情况下的底部结构  STL 栈和队列都不被归类为容器，而被归类为container adapter（ 容器适配器）。  用栈实">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/232.%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%E7%89%88%E6%9C%AC2.gif">
 <meta property="og:image" content="https://youngyyp.github.io/2023/02/01/cpp/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/image-20230216192400940.png">
@@ -836,7 +836,7 @@ public:
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

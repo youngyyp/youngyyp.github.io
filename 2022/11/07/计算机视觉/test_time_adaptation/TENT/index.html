@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 6.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATIONINTRODUCTION在测试过程中，模型必须适应新的和不同的数据。在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。 深度网">
+  <meta name="description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION INTRODUCTION 在测试过程中，模型必须适应新的和不同的数据。 在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TENT论文阅读">
 <meta property="og:url" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATIONINTRODUCTION在测试过程中，模型必须适应新的和不同的数据。在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。 深度网">
+<meta property="og:description" content="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION INTRODUCTION 在测试过程中，模型必须适应新的和不同的数据。 在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117152108373.png">
 <meta property="og:image" content="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154043795.png">
@@ -401,12 +401,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/" rel="prev" title="TTA开题">
-      <i class="fa fa-chevron-left"></i> TTA开题
+    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" rel="prev" title="子空间论文阅读">
+      <i class="fa fa-chevron-left"></i> 子空间论文阅读
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" rel="next" title="子空间论文阅读">
-      子空间论文阅读 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E7%90%86%E8%A7%A3BN/" rel="next" title="理解BN">
+      理解BN <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -485,7 +485,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

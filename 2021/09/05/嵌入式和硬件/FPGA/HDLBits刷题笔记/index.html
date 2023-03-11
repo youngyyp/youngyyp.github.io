@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 6.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"youngyyp.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="有符号数相加Problem 69 : Signed addition overflow  牛刀小试 本题讨论的是有符号数相加的溢出问题中，需要实现一个 2 进制 8bit 有符号数加法器，加法器将输入的两个 8bit数补码相加，产生相加之和以及进位。 解答与分析 法一：">
+  <meta name="description" content="有符号数相加 Problem 69 : Signed addition overflow   牛刀小试  本题讨论的是有符号数相加的溢出问题中，需要实现一个 2 进制 8bit 有符号数加法器，加法器将输入的两个 8bit数补码相加，产生相加之和以及进位。  解答与分析  法一：  module top_module (     input [7:0] a,     input [7:0] b,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HDLBits刷题笔记">
 <meta property="og:url" content="https://youngyyp.github.io/2021/09/05/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/HDLBits%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="young&#39;s blog">
-<meta property="og:description" content="有符号数相加Problem 69 : Signed addition overflow  牛刀小试 本题讨论的是有符号数相加的溢出问题中，需要实现一个 2 进制 8bit 有符号数加法器，加法器将输入的两个 8bit数补码相加，产生相加之和以及进位。 解答与分析 法一：">
+<meta property="og:description" content="有符号数相加 Problem 69 : Signed addition overflow   牛刀小试  本题讨论的是有符号数相加的溢出问题中，需要实现一个 2 进制 8bit 有符号数加法器，加法器将输入的两个 8bit数补码相加，产生相加之和以及进位。  解答与分析  法一：  module top_module (     input [7:0] a,     input [7:0] b,">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://youngyyp.github.io/2021/09/05/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/HDLBits%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/image-20210905203713423.png">
 <meta property="article:published_time" content="2021-09-05T03:16:10.000Z">
@@ -499,7 +499,7 @@ endmodule
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

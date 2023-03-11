@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 6.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/Iron-Man-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/Iron-Man-16x16.png">
@@ -189,209 +189,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="你的征途当是星辰大海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="young's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/" class="post-title-link" itemprop="url">UAV和卫星图像配准思路</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-08 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-08T09:49:41+08:00">2022-11-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-11 14:21:00" itemprop="dateModified" datetime="2023-03-11T14:21:00+08:00">2023-03-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        
-          * 针对UAV和卫星匹配的特定任务，在图像检索的基础上进行特征匹配（可细分为图像检索和特征匹配两个任务）
-   
-    * 目的：
-       * 通过特征匹配结果协助进行图像检索 * CMU&amp;ICRA22 UAV俯瞰视觉定位竞赛（-2022.9.1） * 
-            
-            
-         
-         
-       * 通过特征匹配结果求解更精确的无人机位姿 * UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019) * 
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="你的征途当是星辰大海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="young's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">UAV和卫星图像配准论文阅读</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-08 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-08T09:49:41+08:00">2022-11-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-11 14:21:01" itemprop="dateModified" datetime="2023-03-11T14:21:01+08:00">2023-03-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        
-          <h2 id="UAV-Geolocalization-Using-Satellite-Imagery"><a href="#UAV-Geolocalization-Using-Satellite-Imagery" class="headerlink" title="UAV Geolocalization Using Satellite Imagery"></a><a target="_blank" rel="noopener" href="https://abhinavtripathi95.github.io/lets-talk/technical/2020/08/03/uav-geolocalization.html">UAV Geolocalization Using Satellite Imagery</a></h2><h3 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h3><p>无人机通常靠GPS来获得全局姿态估计，然而为了使用GPS进行精确的地理定位，无人机必须能够从四个或更多的GPS卫星接收直接的视线。这可能是一个问题，如果存在高楼大厦，山脉或干扰器，可以阻碍来自卫星的信号。<br>那么我们能在没有GPS的情况下推断出无人机的全局姿态吗?<br>答案是肯定的，我们可以使用无人机下面附加的相机传感器来比较场景和卫星图像，并推断出无人机的位置。</p>
-<h3 id="Geolocalization-as-an-Image-Matching-Problem"><a href="#Geolocalization-as-an-Image-Matching-Problem" class="headerlink" title="Geolocalization as an Image Matching Problem"></a>Geolocalization as an Image Matching Problem</h3><p>考虑这样一个场景，您有一个卫星图像数据库，其中标注了它们的位置。<br>通过将无人机相机的图像与数据库进行精确匹配，可以很好地获得无人机的经纬度近似。<br>为了从卫星数据库中检索相似的图像，我们必须能够精确地匹配卫星图像与无人机相机馈送。<br>因此，在本研究中，我们将自己局限于<strong>航空图像匹配问题</strong>，训练一个深度学习模型，<strong>可以精确匹配来自卫星和无人机相机的图像</strong>。</p>
-<h2 id="UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019"><a href="#UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019" class="headerlink" title="UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)"></a>UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&Satellite/%E8%B0%83%E7%A0%94/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -461,13 +258,8 @@
 
       
         
-          <h2 id="代码运行"><a href="#代码运行" class="headerlink" title="代码运行"></a>代码运行</h2><pre class=" language-lang-python"><code class="language-lang-python">train.py "configs/data/megadepth_trainval_640.py" "configs/loftr/outdoor/loftr_ds_dense.py" --exp_name="outdoor-ds-640" --gpus=2 --num_nodes=1 --accelerator="ddp" --batch_size=1 --num_workers=0 --pin_memory=true --check_val_every_n_epoch=1 --log_every_n_steps=1 --flush_logs_every_n_steps=1 --limit_val_batches=1. --num_sanity_val_steps=10 --benchmark=True --max_epochs=30
-
-demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs/outdoor-ds-640-bs=6/version_2/checkpoints/epoch=6-auc@5=0.433-auc@10=0.606-auc@20=0.742.ckpt --input /home/young/disk/code/feature_matching/LoFTR/data/videos/video1.mp4
-</code></pre>
-<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20220918163227217.png" alt="image-20220918163227217"></p>
-<p>修改train_list.txt来减少数据集的场景数目</p>
-<p>dataset的数量不会影响显存占用，输入网络的图像尺寸才会影响显存占用</p>
+          代码运行
+train.py "configs/data/megadepth_trainval_640.py" "configs/loftr/outdoor/loftr_ds_dense.py" --exp_name="outdoor-ds-640" --gpus=2 --num_nodes=1 --accelerator="ddp" --batch_size=1 --num_workers=0 --pin_memory=true --check_val_every_n_epoch=1 --log_every_n_steps=1 --flush_logs_every_n_steps=1 --li
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/#more" rel="contents">
@@ -598,106 +390,6 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="你的征途当是星辰大海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="young's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" class="post-title-link" itemprop="url">子空间论文阅读</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-07 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-07T09:49:41+08:00">2022-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-03-11 14:21:00" itemprop="dateModified" datetime="2023-03-11T14:21:00+08:00">2023-03-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        
-          <h2 id="Low-Dimensional-Trajectory-Hypothesis-is-True-DNNs-can-be-Trained-in-Tiny-Subspaces"><a href="#Low-Dimensional-Trajectory-Hypothesis-is-True-DNNs-can-be-Trained-in-Tiny-Subspaces" class="headerlink" title="Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces"></a>Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces</h2><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=0bb4d13f4bd26eaf7f64c37f29dc9f27">用最直观的方式告诉你：什么是主成分分析PCA_哔哩哔哩_bilibili</a></p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201516681.png" alt="image-20221117201516681" style="zoom:33%;"></p>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV16A411T7zX/?spm_id_from=333.788&amp;vd_source=0bb4d13f4bd26eaf7f64c37f29dc9f27">【学长小课堂】什么是奇异值分解SVD—SVD如何分解时空矩阵_哔哩哔哩_bilibili</a></p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117201821493.png" alt="image-20221117201821493"></p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/image-20221117203502974.png" alt="image-20221117203502974" style="zoom:33%;"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -767,13 +459,122 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <h2 id="TENT-FULLY-TEST-TIME-ADAPTATION-BY-ENTROPY-MINIMIZATION"><a href="#TENT-FULLY-TEST-TIME-ADAPTATION-BY-ENTROPY-MINIMIZATION" class="headerlink" title="TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION"></a>TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION</h2><h3 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h3><p>在测试过程中，模型必须适应新的和不同的数据。<br>在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（<strong>test entropy minimization - tent</strong>）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。</p>
-<p>深度网络可以在相同分布的训练和测试数据上实现高精度，然而，对新的和不同的数据的概括是有限的。当训练（源）数据与测试（目标）数据不同时，准确性会受到影响，这种情况被称为<strong>数据集偏移</strong>。模型在测试过程中可能对训练过程中未知的变化敏感，无论是自然变化还是腐蚀，如意外天气或传感器退化。然而，可能需要在不同的数据分布上部署模型，因此需要进行调整（<strong>adaptation</strong>）。<br>在测试期间，模型必须仅根据其参数和目标数据进行调整。这种完全测试时间自适应设置不能依赖于源数据或监督。因为源数据可能很庞大且无法及时获取当前测试数据的标签信息。</p>
-<p>数据量、计算量和任务需求这些实际问题引出了测试时间适应性的重要性：</p>
-<p>1.可用性。为了带宽、隐私或利润，模型可能在没有源数据的情况下分发。<br>2.效率。在测试期间（重新）处理源数据在计算上可能不实用。<br>3.准确性。如果不进行调整，模型可能太不准确，无法达到其目的。</p>
+          TENT: FULLY TEST-TIME ADAPTATION BY ENTROPY MINIMIZATION
+INTRODUCTION
+在测试过程中，模型必须适应新的和不同的数据。
+在这种完全测试时间自适应的设置中，模型只有测试数据和自己的参数。我们建议通过测试熵最小化（test entropy minimization - tent）进行调整：我们优化了模型的置信度，通过其预测的熵来衡量。
+
+深度网络可以在相同分布的训练和测试数据上实现高精度，然而，对新的和不同的数据的概括是有限的。当训练（源）数据与测试（目标）数据不同时，准确性会受到影响，这种情况被称为数据集偏移。模型在测试过程中可能
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" class="post-title-link" itemprop="url">子空间论文阅读</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-07 09:49:41" itemprop="dateCreated datePublished" datetime="2022-11-07T09:49:41+08:00">2022-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-11 14:21:00" itemprop="dateModified" datetime="2023-03-11T14:21:00+08:00">2023-03-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        
+          Low Dimensional Trajectory Hypothesis is True:DNNs can be Trained in Tiny Subspaces
+用最直观的方式告诉你：什么是主成分分析PCA_哔哩哔哩_bilibili
+
+
+
+【学长小课堂】什么是奇异值分解SVD—SVD如何分解时空矩阵_哔哩哔哩_bilibili
+
+
+
+
+
+摘要：深度神经网络（DNN）通常包含大量参数，但存在冗余，因此可以猜测它们可以在低维子空间中训练。在本文中，我们提出了一种基于训练轨迹的低维特性的动态线性降维（DLDR）。简化方法是有效的，并得到了综合实验的支持：在40维空间中优化DNN可以在数千甚至
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/Low%20Dimensional%20Trajectory%20Hypothesis%20is%20True/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -866,10 +667,13 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <h2 id="题目：在线自适应学习算法研究"><a href="#题目：在线自适应学习算法研究" class="headerlink" title="题目：在线自适应学习算法研究"></a>题目：<strong>在线自适应学习算法研究</strong></h2><h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>DA:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42990464/article/details/117149006">(59条消息) 域适应（domain adaptation）_点PY的博客-CSDN博客_domain adaptation</a></p>
-<p><a target="_blank" rel="noopener" href="https://fancp.blog.csdn.net/article/details/80956828?spm=1001.2101.3001.6650.10&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-10-80956828-blog-117149006.pc_relevant_3mothn_strategy_and_data_recovery&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~Rate-10-80956828-blog-117149006.pc_relevant_3mothn_strategy_and_data_recovery&amp;utm_relevant_index=16">(59条消息) 迁移学习——Domain Adaptation<em>Peanut</em>范的博客-CSDN博客_domain adaptation</a></p>
-<p>随着深度学习的不断发展，深度神经网络在各种应用中表现出良好的性能，特别是当测试样本来自与训练数据相同的分布时，网络预测的准确率可以达到非常高。然而，深度神经网络对于来自不同域数据的概括能力是有限的。当训练（源域）数据与测试（目标域）数据的分布不同时，模型预测的准确率会受到影响，这种情况被称为数据集偏移。例如场景的明暗变化、天气环境的变化以及传感器的退化。正因为存在数据集的偏移，模型在测试过程中可能对训练过程没有见过的未知变化敏感，当源域与目标域的差异过大时，会造成性能的急剧下降，在一些现实场景中，这样的性能下降可能会导致模型无法使用。</p>
-<p>在真实场景下的数据分布通常是与训练集的数据分布不同的，为了能在不同的数据分布上部署模型，我们需要模型能够对目标域进行自适应的学习。</p>
+          题目：在线自适应学习算法研究
+研究背景
+DA:(59条消息) 域适应（domain adaptation）_点PY的博客-CSDN博客_domain adaptation
+
+(59条消息) 迁移学习——Domain AdaptationPeanut范的博客-CSDN博客_domain adaptation
+
+随着深度学习的不断发展，深度神经网络在各种应用中表现出良好的性能，特别是当测试样本来自与训练数据相同的分布时，网络预测的准确率可以达到非常高。然而，深度神经网络对于来自不同域数据的概括能力是有限的。当训练（源域）数据与测试（目标域）数据的分布不同时，模型预测的准确率会受到影响，这种情况被称
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E5%BC%80%E9%A2%98/#more" rel="contents">
@@ -965,11 +769,22 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <h2 id="SITA-Single-Image-Test-time-Adaptation"><a href="#SITA-Single-Image-Test-time-Adaptation" class="headerlink" title="SITA: Single Image Test-time Adaptation"></a>SITA: Single Image Test-time Adaptation</h2><p><strong>SITA协议：</strong></p>
-<p>•不需要访问源训练数据。</p>
-<p>•在推理过程中几乎和原始模型一样快。</p>
-<p>•可以适应单个测试实例且不需要批处理。</p>
-<p>•适应于一个测试实例的模型不应该在后续实例上使用。</p>
+          SITA: Single Image Test-time Adaptation
+SITA协议：
+
+•不需要访问源训练数据。
+
+•在推理过程中几乎和原始模型一样快。
+
+•可以适应单个测试实例且不需要批处理。
+
+•适应于一个测试实例的模型不应该在后续实例上使用。
+
+•在测试时不需要超参数调优。
+
+类似于BN [ 28 ]，我们的方法校准了批范数统计量。然而，由于从单个测试实例中估计它们是不可靠的(如[ 28 ]中所做的)，我们利用单个测试实例的某些增强来获得批范数统计量的稳健估计。此外，我们提出了一种基于熵的方法来估计每个测试实例的校准参数（无需像BN那样手动设置超参）
+
+与TENT [ 31 ]
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E6%B3%9B%E8%AF%BB/#more" rel="contents">
@@ -1065,10 +880,23 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>目标检测究竟发展到了什么程度? | CVHub带你聊一聊目标检测发展的这22年<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/tZztakvzU9kl0nPbl8oCww">https://mp.weixin.qq.com/s/tZztakvzU9kl0nPbl8oCww</a></p>
-<p>视频学习：<a target="_blank" rel="noopener" href="https://space.bilibili.com/18161609/channel/seriesdetail?sid=244160">https://space.bilibili.com/18161609/channel/seriesdetail?sid=244160</a></p>
-<h1 id="目标检测综述"><a href="#目标检测综述" class="headerlink" title="目标检测综述"></a>目标检测综述</h1><p><strong>Anchor based</strong>方法(一阶段，二阶段)和<strong>Anchor free</strong>方法</p>
-<p><img src="/2022/10/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/640.jpeg" alt="图片"></p>
+          参考资料
+目标检测究竟发展到了什么程度? | CVHub带你聊一聊目标检测发展的这22年https://mp.weixin.qq.com/s/tZztakvzU9kl0nPbl8oCww
+
+视频学习：https://space.bilibili.com/18161609/channel/seriesdetail?sid=244160
+
+目标检测综述
+Anchor based方法(一阶段，二阶段)和Anchor free方法
+
+
+
+传统算法
+HOG
+HOG (Histogram of Oriented Gradients，方向梯度直方图) 
+
+1）主要思想：
+
+在一副图像中，局部目标的表象和形状
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/10/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/#more" rel="contents">
@@ -1164,11 +992,16 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <h1 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43605641/article/details/122572446">(34条消息) 特征点检测与匹配相关论文梳理（持续更新）<em>秋山丶雪绪的博客-CSDN博客</em>特征匹配论文</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43605641">(34条消息) 秋山丶雪绪的博客_CSDN博客-特征点检测与匹配,计算机系统结构,Python代码记录领域博主</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42708183/article/details/109133806">2020最强匹配综述—《Image Matching from Handcrafted to Deep Features: A Survey》阅读总结_喵呜喵喵喵的博客-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NDIyMjcyNg==&amp;mid=2652161460&amp;idx=1&amp;sn=4d2ee4e6973593e670ce460cc8eb590b&amp;chksm=f0f73e5dc780b74b1a4b68d6909708c261a539383720e245c2133f48753a8e871f98fd221912&amp;scene=21#wechat_redirect">CVPR2020图像匹配挑战赛，新数据集+新评测方法，SOTA正瑟瑟发抖！ (qq.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/387962855">CVPR 2021 | 图像匹配挑战赛总结 (SuperPoint + SuperGlue 缝缝补补还能再战一年) - 知乎 (zhihu.com)</a></p>
+          相关链接
+(34条消息) 特征点检测与匹配相关论文梳理（持续更新）秋山丶雪绪的博客-CSDN博客特征匹配论文
+
+(34条消息) 秋山丶雪绪的博客_CSDN博客-特征点检测与匹配,计算机系统结构,Python代码记录领域博主
+
+2020最强匹配综述—《Image Matching from Handcrafted to Deep Features: A Survey》阅读总结_喵呜喵喵喵的博客-CSDN博客
+
+CVPR2020图像匹配挑战赛，新数据集+新评测方法，SOTA正瑟瑟发抖！ (qq.com)
+
+CVPR 2021 | 图像匹配挑战赛总结 (SuperPoint + SuperGlue 
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/04/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/#more" rel="contents">
@@ -1264,12 +1097,15 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <p>训练：</p>
-<p>python train.py —data WANG/data.yaml —weights yolov5s.pt —img 640</p>
-<p>报错：</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41859890/article/details/119022689">(71条消息) yolov5训练时出现WARNING: Ignoring corrupted image and/or label_早睡早起吧的博客-CSDN博客</a></p>
-<p>加油口检测结果：</p>
-<p><img src="/2022/01/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/yolo/image-20230106105445743.png" alt="image-20230106105445743"></p>
+          训练：
+
+python train.py —data WANG/data.yaml —weights yolov5s.pt —img 640
+
+报错：
+
+(71条消息) yolov5训练时出现WARNING: Ignoring corrupted image and/or label_早睡早起吧的博客-CSDN博客
+
+加油口检测结果：
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/01/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/yolo/#more" rel="contents">
@@ -1365,15 +1201,253 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
 
       
         
-          <p>数据集不是问题，只需要模型，每张图片的姿态，mask（这个可以由前两者知道）</p>
-<p>可以用来制作数据集<a target="_blank" rel="noopener" href="https://github.com/3D-FRONT-FUTURE/3D-FUTURE-ToolBox#model-aligned-rendering">GitHub - 3D-FRONT-FUTURE/3D-FUTURE-ToolBox: FUTURE3D Toolbox: Rendering, Projection, and Re-Projection</a></p>
-<p>opencv姿态估计</p>
-<p><img src="/2021/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E9%A3%9E%E6%9C%BA%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220218151001060.png" alt="image-20220218151001060"></p>
-<p><img src="/2021/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E9%A3%9E%E6%9C%BA%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/image-20220218151033771.png" alt="image-20220218151033771"></p>
-<h2 id="相机参数-（opencv-是竖着来的）"><a href="#相机参数-（opencv-是竖着来的）" class="headerlink" title="相机参数 （opencv 是竖着来的）"></a>相机参数 （opencv 是竖着来的）</h2>
+          数据集不是问题，只需要模型，每张图片的姿态，mask（这个可以由前两者知道）
+
+可以用来制作数据集GitHub - 3D-FRONT-FUTURE/3D-FUTURE-ToolBox: FUTURE3D Toolbox: Rendering, Projection, and Re-Projection
+
+opencv姿态估计
+
+
+
+
+
+相机参数 （opencv 是竖着来的）
+牛博相机
+
+内参
+
+792.216153833603 0 0
+0 791.177146289919 0
+308.699841948659 229.681830886849 1
+
+
+
+畸变系数
+
+​ cameraParams
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/12/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BD%8D%E5%A7%BF%E4%BC%B0%E8%AE%A1/%E9%A3%9E%E6%9C%BA%E5%A7%BF%E6%80%81%E4%BC%B0%E8%AE%A1(%E6%9D%A8%E4%B8%9A%E9%B9%8F-20220310203222)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/" class="post-title-link" itemprop="url">SLAM十四讲代码bug及解决</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-24 18:50:44" itemprop="dateCreated datePublished" datetime="2021-11-24T18:50:44+08:00">2021-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-11 14:20:59" itemprop="dateModified" datetime="2023-03-11T14:20:59+08:00">2023-03-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        
+          第三章编译报错：
+error: ‘decay_t’ is not a member of ‘std’; did you mean ‘decay’?
+
+https://blog.csdn.net/qq_15987811/article/details/122937722 修改编译的C++版本为c++14
+
+set(CMAKE_CXX_FLAGS "-std=c++14")
+
+
+第四章安装Sophus报错
+error: implicitly-declared ‘Eigen::Map &gt;::Map(const Eig
+
+https://blog.csdn.net/weixin_41698305/ar
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/24/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/SLAM%E5%8D%81%E5%9B%9B%E8%AE%B2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://youngyyp.github.io/2021/11/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA/%E8%B0%83%E7%A0%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/youngyyp/blogpicture/master/img/image-20210212125129052.png">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="你的征途当是星辰大海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="young's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA/%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">事件相机调研</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-10 19:49:06" itemprop="dateCreated datePublished" datetime="2021-11-10T19:49:06+08:00">2021-11-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-03-11 14:05:49" itemprop="dateModified" datetime="2023-03-11T14:05:49+08:00">2023-03-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/11/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA/%E8%B0%83%E7%A0%94/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA/%E8%B0%83%E7%A0%94/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        
+          事件相机
+特点：高动态范围，高帧率
+
+「智科特测评」事件相机，可能你没有见过的新品种相机_哔哩哔哩_bilibili
+
+
+
+(4 封私信) 什么是事件相机，计算机视觉中事件相机这一方向需要学哪些相关知识？ - 知乎 (zhihu.com)
+
+一种事件相机描述子——DART (qq.com)
+
+事件相机角点检测，从原理到demo (qq.com)
+
+下面这幅图展示了实际事件相机拍摄的数据，红色和蓝色分别表示当前像素亮度的增加或减小。这幅图是将一段时间内的事件流累积获得的一组事件。
+
+
+
+【事件相机整理】角点检测与跟踪总结https://blog.csdn.net/tfb760/article/d
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/10/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E4%BA%8B%E4%BB%B6%E7%9B%B8%E6%9C%BA/%E8%B0%83%E7%A0%94/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1466,7 +1540,7 @@ demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
