@@ -43,9 +43,9 @@
 
 <script src="/js/iconfont.js?v=1.1.0" ></script>
 
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 <div style="display: none">
   <input class="theme_disqus_on" value="false">
@@ -366,15 +366,6 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="贪心算法">贪心算法</span>
-            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
-        </a>
-        
-        
-        <a  class="全部文章 CPP "
            href="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/"
            data-tag=""
            data-author="" >
@@ -384,10 +375,10 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="回溯">回溯</span>
+            <span class="post-title" title="贪心算法">贪心算法</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -397,6 +388,15 @@
            data-tag=""
            data-author="" >
             <span class="post-title" title="哈希表">哈希表</span>
+            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 CPP "
+           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="回溯">回溯</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -788,18 +788,18 @@
 <p><strong>我们的贡献：</strong></p>
 <p>•我们强调了只使用目标数据而不使用源数据的完全测试时间自适应设置。为了强调推理过程中的实际适应性，我们使用离线和在线更新进行基准测试。<br>•我们将熵作为自适应目标，并提出了tent：一种测试时间熵最小化方案，通过减少测试数据上模型预测的熵来减少泛化误差。<br>•对于损坏的鲁棒性，在ImageNet-C上，tent达到44:0%的错误，优于鲁棒训练的现状（50:2%）和测试时间标准化的强大基线（49:9%）。<br>•对于领域适应，tent能够在线和无源地适应数字分类和语义分割，甚至可以与使用源数据和更多优化的方法相媲美。</p>
 <h3 id="SETTING-FULLY-TEST-TIME-ADAPTATION"><a href="#SETTING-FULLY-TEST-TIME-ADAPTATION" class="headerlink" title="SETTING: FULLY TEST-TIME ADAPTATION"></a>SETTING: FULLY TEST-TIME ADAPTATION</h3><p>适应解决了从源到目标的泛化问题。具有在源数据和标签xs上训练的参数的模型f（x）；当对移位的目标数据xt进行测试时，ys可能不会泛化。表1总结了自适应设置、所需数据和损失类型。<strong>我们的完全测试时间自适应设置仅需要模型参数f和未标记的目标数据xt</strong>，以便在推理过程中进行自适应。</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/../Untitled/image-20221117152108373.png" alt="image-20221117152108373"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117152108373.png" alt="image-20221117152108373"></p>
 <p>现有的适应设置扩展了训练过程，使用了更多的数据和监督。通过微调进行转移学习（Donahue等人，2014；Yosinski等人，2014）需要目标标签来（重新）训练监督损失L（xt；yt）。如果没有目标标签，就无法进行这种有监督的训练。域自适应（DA）（Quionero Candela等人，2009年；Saenko等人，2010年；Ganin&amp;Lempitsky，2015年；Tzeng等人，2015年）需要源数据和目标数据来训练跨域损失L（xs；xt）。<br>测试时间训练（TTT）（Sun等人，2019b）在测试期间进行调整，但首先改变训练以联合优化其监督损失L（xs；ys）和自我监督损失L（xs）。如果没有source data，将无法使用跨域联合训练（DA）或损失（TTT）。<br>测试期间意外的目标数据需要测试时间调整（TTA）。TTT和我们的设置通过<strong>优化测试L（xt）期间的无监督损失</strong>来调整模型。在训练期间，TTT<strong>联合优化了源数据L（xs）上的无监督损失和监督损失L（xs；ys），以确保在损失之间共享参数</strong>，以与L（xt）的自适应兼容。）（测试时间训练（TTT）联合训练目标上的受监督和自监督任务，然后在测试过程中继续训练目标上自监督任务）。</p>
 <p>完全测试时间自适应与给定参数的训练数据和训练损失无关。通过不改变训练，我们的设置有可能需要更少的数据和计算来适应。</p>
-<h3 id="METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION"><a href="#METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION" class="headerlink" title="METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION"></a>METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION</h3><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/../Untitled/image-20221117154043795.png" alt="image-20221117154043795"></p>
+<h3 id="METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION"><a href="#METHOD-TEST-ENTROPY-MINIMIZATION-VIA-FEATURE-MODULATION" class="headerlink" title="METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION"></a>METHOD: TEST ENTROPY MINIMIZATION VIA FEATURE MODULATION</h3><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154043795.png" alt="image-20221117154043795"></p>
 <p><em>方法概述。Tent不改变训练阶段（a），但在给定参数和目标数据xt的约束调制下，在测试（b）期间最小化预测的熵</em></p>
 <p>模型要求：针对的是监督任务，所以模型需要经过有监督的训练；模型必须是概率模型，因为需要计算预测的熵；快速迭代优化需要梯度，所以模型必须可微。</p>
 <h4 id="ENTROPY-OBJECTIVE"><a href="#ENTROPY-OBJECTIVE" class="headerlink" title="ENTROPY OBJECTIVE"></a>ENTROPY OBJECTIVE</h4><p>我们的测试时间目标L（xt）是最小化模型预测的熵H（^y）^y=f（xt）。特别地，我们测量了香农熵（香农，1948），<img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117160701962.png" alt="image-20221117160701962" style="zoom: 33%;">。注意，优化单个预测有一个退化解：即将所有概率分配给最可能的类。我们通过在批处理中共享的参数上联合优化批处理预测来防止这种情况。<strong>（优化单个预测会得到退化解，因此联合优化一个批的预测概率）</strong><br><strong>熵是一个无监督的目标，因为它只依赖于预测而不是注释。然而，作为预测的度量，它与监督任务和模型直接相关</strong>。<br>相比之下，用于自我监督学习的代理任务与监督任务没有直接关系。<br>代理任务从没有任务标签y的输入xt导出自监督标签y0。这些代理的示例包括旋转预测（Gidaris等人，2018）、上下文预测（Doersch等人，2015）和跨信道自动编码（Zhang等人，2017）。代理任务上的过多进展可能会干扰受监督任务的性能，自我监督的自适应方法必须相应地限制或混合更新（Sun等人，2019b；a）。因此，需要谨慎地选择与域和任务兼容的代理，为代理模型设计架构，并平衡任务和代理目标之间的优化。我们的熵目标不需要这样的努力<strong>（自监督方法选择一个域与任务相兼容的proxy很重要）</strong></p>
 <h4 id="MODULATION-PARAMETERS"><a href="#MODULATION-PARAMETERS" class="headerlink" title="MODULATION PARAMETERS"></a>MODULATION PARAMETERS</h4><p>模型参数是测试时间优化的自然选择，这些是列车时间熵最小化的先前工作的选择（Grand代客和Bengio，2005；Dhillon等人，2020；Carlucci等人，2017）。然而，模型参数是我们设置中训练/源数据的唯一表示，改变可能会导致模型偏离其训练。此外，f可以是非线性的，并且可以是高维的，使得优化对于测试时间的使用过于<strong>敏感</strong>和低效。</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/../Untitled/image-20221117154513119.png" alt="image-20221117154513119"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117154513119.png" alt="image-20221117154513119"></p>
 <p><em>图4：Tent通过估计归一化统计数据来调制测试期间的特征；优化变换参数；. 标准化和变换将按通道缩放和移动应用于特征。在不使用源数据的情况下，根据目标数据更新统计信息和参数。在实践中，适应；是有效的，因为它们占模型参数的&lt;1%</em></p>
 <p>为了稳定性和效率，我们只更新线性（尺度和位移）和低维（信道方向）的特征调制。图4显示了我们调制的两个步骤：统计归一化和参数转换。标准化将输入x集中并标准化</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/../Untitled/image-20221117162250401.png" alt="image-20221117162250401"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221117162250401.png" alt="image-20221117162250401"></p>
 <p>为了实现，我们只需重新调整源模型的<strong>normalization layers</strong>的用途。我们在测试期间更新了所有层和通道的归一化统计和仿射参数。</p>
 <h4 id="ALGORITHM"><a href="#ALGORITHM" class="headerlink" title="ALGORITHM"></a>ALGORITHM</h4><p><strong>初始化</strong> 优化器收集源模型中每个归一化层l和通道k的仿射变换参数{γl，k，βl，k}。其余参数θ｛γl，k，βl，k｝是固定的。源数据的归一化统计{μl，k，σl，k}被丢弃。<br><strong>迭代 </strong>每个步骤都会更新一批数据的规范化统计信息和转换参数。在正向过程中，依次估计每个层的归一化统计。在反向传播过程中，通过预测熵的梯度更新变换参数γ、β。变换参数更新遵循当前批次的预测，因此它只影响下一批次（除非重复正向）。这只需要每个额外计算点一个梯度，因此我们默认使用此方案以提高效率。<br><strong>终止 </strong>对于在线适应，不需要终止，只要有测试数据，迭代就会继续。对于离线适应，首先更新模型，然后重复推理。<br>当然，适应可以通过多个时期的更新来继续</p>
 <h3 id="EXPERIMENTS"><a href="#EXPERIMENTS" class="headerlink" title="EXPERIMENTS"></a>EXPERIMENTS</h3><h4 id="ROBUSTNESS-TO-CORRUPTIONS"><a href="#ROBUSTNESS-TO-CORRUPTIONS" class="headerlink" title="ROBUSTNESS TO CORRUPTIONS"></a>ROBUSTNESS TO CORRUPTIONS</h4><p>为了对损坏的健壮性进行基准测试，我们使用了常见的图像损坏（示例参见附录A）。通过复制CIFAR-10\/100和ImageNet数据集的<strong>测试/验证集</strong>，并在五个严重级别应用15种类型的损坏，将CIFAR-10/100-C和ImageNet-C数据集转换为CIFAR-10/10-C和ImageNet C损坏基准。</p>
@@ -823,7 +823,7 @@
 <li><p>adversarial domain adaptation (RG):</p>
 <ul>
 <li>论文题目：Unsupervised Domain Adaptation by Backpropagation（2015）</li>
-<li><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/../TENT/image-20221204190413618.png" alt="image-20221204190413618"></li>
+<li><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/TENT/image-20221204190413618.png" alt="image-20221204190413618"></li>
 <li>需要修改训练流程且无法在测试时更新</li>
 </ul>
 </li>

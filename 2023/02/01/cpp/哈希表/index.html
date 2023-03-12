@@ -43,9 +43,9 @@
 
 <script src="/js/iconfont.js?v=1.1.0" ></script>
 
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 <div style="display: none">
   <input class="theme_disqus_on" value="false">
@@ -366,15 +366,6 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="贪心算法">贪心算法</span>
-            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
-        </a>
-        
-        
-        <a  class="全部文章 CPP "
            href="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/"
            data-tag=""
            data-author="" >
@@ -384,10 +375,10 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="回溯">回溯</span>
+            <span class="post-title" title="贪心算法">贪心算法</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -397,6 +388,15 @@
            data-tag=""
            data-author="" >
             <span class="post-title" title="哈希表">哈希表</span>
+            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 CPP "
+           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="回溯">回溯</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -777,13 +777,13 @@
 <p>当我们需要<strong>查询一个元素是否出现过，或者一个元素是否在集合里的时候</strong>，就要第一时间想到哈希法。</p>
 <p><strong>拉链法</strong></p>
 <p>刚刚小李和小王在索引1的位置发生了冲突，发生冲突的元素都被存储在链表中。 这样我们就可以通过索引找到小李和小王了</p>
-<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/../哈希表/20210104235015226.png" alt="哈希表4"></p>
+<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/20210104235015226.png" alt="哈希表4"></p>
 <p>（数据规模是dataSize， 哈希表的大小为tableSize）</p>
 <p>其实拉链法就是要选择适当的哈希表的大小，这样既不会因为数组空值而浪费大量内存，也不会因为链表太长而在查找上浪费太多时间。</p>
 <p><strong>线性探测法</strong></p>
 <p>使用线性探测法，一定要保证tableSize大于dataSize。 我们需要依靠哈希表中的空位来解决碰撞问题。</p>
 <p>例如冲突的位置，放了小李，那么就向下找一个空位放置小王的信息。所以要求tableSize一定要大于dataSize ，要不然哈希表上就没有空置的位置来存放 冲突的数据了。如图所示：</p>
-<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/../哈希表/20210104235109950.png" alt="哈希表5"></p>
+<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/20210104235109950.png" alt="哈希表5"></p>
 <p>常见的哈希结构：数组、set（集合）、map（映射）</p>
 <blockquote>
 <p>std::unordered_set底层实现为哈希表，std::set 和std::multiset 的底层实现是红黑树，红黑树是一种平衡二叉搜索树，所以key值是有序的，但key不可以修改，改动key值会导致整棵树的错乱，所以只能删除和增加。</p>
@@ -799,8 +799,8 @@
 <p>数组就是简单的哈希表，但是数组的大小可不是无限开辟的</p>
 </blockquote>
 <p>本题使用数组模拟哈希表，数组大小为26，元素值代表字母出现的次数</p>
-<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/../哈希表/242.有效的字母异位词.gif" alt="242.有效的字母异位词"></p>
-<h2 id="两个数组的交集"><a href="#两个数组的交集" class="headerlink" title="两个数组的交集"></a>两个数组的交集</h2><p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/../哈希表/20200818193523911.png" alt="349. 两个数组的交集"></p>
+<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/242.有效的字母异位词.gif" alt="242.有效的字母异位词"></p>
+<h2 id="两个数组的交集"><a href="#两个数组的交集" class="headerlink" title="两个数组的交集"></a>两个数组的交集</h2><p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/20200818193523911.png" alt="349. 两个数组的交集"></p>
 <p>本题结果是无重复的，且没有限制数组的长度，且无需排序，因此使用<strong>unordered_set</strong></p>
 <blockquote>
 <p><strong>使用数组来做哈希的题目，是因为题目都限制了数值的长度。</strong>而这道题目没有限制数值的长度，就无法使用数组来做哈希表了。</p>
@@ -1074,7 +1074,7 @@ public:
 };
 </code></pre>
 <p>使用双指针法更高效：</p>
-<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/../哈希表/15.三数之和.gif" alt="15.三数之和"></p>
+<p><img src="/2023/02/01/cpp/%E5%93%88%E5%B8%8C%E8%A1%A8/15.三数之和.gif" alt="15.三数之和"></p>
 <p>遇事不决先排序，两边逼近双指针</p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
 public:

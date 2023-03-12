@@ -43,9 +43,9 @@
 
 <script src="/js/iconfont.js?v=1.1.0" ></script>
 
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 <div style="display: none">
   <input class="theme_disqus_on" value="false">
@@ -366,15 +366,6 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="贪心算法">贪心算法</span>
-            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
-        </a>
-        
-        
-        <a  class="全部文章 CPP "
            href="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/"
            data-tag=""
            data-author="" >
@@ -384,10 +375,10 @@
         
         
         <a  class="全部文章 CPP "
-           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           href="/2023/02/01/cpp/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="回溯">回溯</span>
+            <span class="post-title" title="贪心算法">贪心算法</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -397,6 +388,15 @@
            data-tag=""
            data-author="" >
             <span class="post-title" title="哈希表">哈希表</span>
+            <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 CPP "
+           href="/2023/02/01/cpp/%E5%9B%9E%E6%BA%AF/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="回溯">回溯</span>
             <span class="post-date" title="2023-02-01 21:14:33">2023/02/01</span>
         </a>
         
@@ -795,7 +795,7 @@
 print(torch.version.cuda)
 </code></pre>
 <p>使用conda安装Pytorch时，所安装的cudatoolkit是阉割版的，所以并不包含nvcc等处理程序。此时编译时调用的是base环境下的nvcc</p>
-<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/../pytorch学习/image-20220929101035242.png" alt="image-20220929101035242"></p>
+<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20220929101035242.png" alt="image-20220929101035242"></p>
 <p>此时需要安装cudatoolkit-dev</p>
 <h2 id="anaconda命令"><a href="#anaconda命令" class="headerlink" title="anaconda命令"></a>anaconda命令</h2><p>注意创建新环境时记得关翻墙软件</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/z_dmsd/article/details/107394983?utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link">powershell激活conda失败；无法加载文件 C:\Users\user\Documents\WindowsPowerShell\profile.ps1，因为在此系统上禁止运行脚本_你可知外面的世界多大-CSDN博客</a></p>
@@ -827,7 +827,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 <p>在anaconda的pytorch环境中输入 <code>jupyter notebook</code> 运行</p>
 <p>shift+enter运行当前行并进入下一行</p>
 <p>修改默认打开位置：C:\Users\admin.jupyter\jupyter_notebook_config.py  搜索c.NotebookApp.notebook_dir</p>
-<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/../pytorch学习/image-20211116101152566.png" alt="image-20211116101152566"></p>
+<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20211116101152566.png" alt="image-20211116101152566"></p>
 <h2 id="python学习两大法宝函数"><a href="#python学习两大法宝函数" class="headerlink" title="python学习两大法宝函数"></a>python学习两大法宝函数</h2><p>dir():打开，看见</p>
 <p>help():说明</p>
 <h2 id="TensorBoard的使用"><a href="#TensorBoard的使用" class="headerlink" title="TensorBoard的使用"></a>TensorBoard的使用</h2><p>TensorBoard用于图像显示</p>
@@ -903,7 +903,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 <li>当a&lt;b时，max(a,b)=b，对a和b的导数分别为0,1；</li>
 <li>当a=b时，max(a,b)=a或者b，对a和b的导数分别为0,1(PyTorch偏向后者)；</li>
 </ul>
-<h2 id="VGG"><a href="#VGG" class="headerlink" title="VGG"></a>VGG</h2><h4 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h4><p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/../pytorch学习/image-20210926093605597.png" alt="image-20210926093605597"></p>
+<h2 id="VGG"><a href="#VGG" class="headerlink" title="VGG"></a>VGG</h2><h4 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h4><p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20210926093605597.png" alt="image-20210926093605597"></p>
 <p>上图给出了所有VGG网络的结构，VGG由5层卷积层、3层全连接层、softmax输出层构成，层与层之间使用max-pooling（最大化池）分开，所有隐层的激活单元都采用ReLU函数。</p>
 <p>其中VGG11网络结构为：</p>
 <ul>
@@ -923,7 +923,7 @@ python -m ipykernel install --user --name 虚拟环境名字 --display-name "显
 <p>VGG论文中提出的方法是：连续使用数个相同的填充为1、窗口形状为3 × 3的卷积层后紧接一个步幅为2、窗口形状为2 × 2的最大池化层。卷积层保持输入和输出的高和宽不变，而池化层对输入的尺寸减半。</p>
 <p>对于给定的感受野（与输出有关的输入图片的局部大小），采用堆积的小卷积核优于采用大的卷积核，因为增加网络深度可以保证网络能学习到更复杂的模式，而且整个模型的参数更少，代价还比较小。</p>
 <p>训练结果（数据集采用Fashion-MNIST）</p>
-<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/../pytorch学习/image-20210926165921945.png" alt="image-20210926165921945"></p>
+<p><img src="/2021/09/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/pytorch%E5%AD%A6%E4%B9%A0/image-20210926165921945.png" alt="image-20210926165921945"></p>
 <h3 id="网络中的网络（NiN）"><a href="#网络中的网络（NiN）" class="headerlink" title="网络中的网络（NiN）"></a>网络中的网络（NiN）</h3><p>LeNet、AlexNet和VGG在设计上的共同之处是：先以由卷积层构成的模块充分抽取空间<br>特征，再以由全连接层构成的模块来输出分类结果。其中，AlexNet和VGG对LeNet的改进主要在于如何对这两个模块加宽（增加通道数）和加深。</p>
 <p>NiN提供了另外一个思路路，即串联多个由卷积层和全连接层构成的小网络来构建一个深层网络。</p>
 <h2 id="批量归一化"><a href="#批量归一化" class="headerlink" title="批量归一化"></a>批量归一化</h2><p>在模型训练时，批量归一化利用小批量上的均值和标准差，不断调整神经网络的中间输出，从而使整个神经网络在各层的中间输出的数值更稳定。</p>
