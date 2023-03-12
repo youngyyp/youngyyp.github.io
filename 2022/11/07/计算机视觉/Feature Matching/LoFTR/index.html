@@ -784,25 +784,25 @@
 
 demo_loftr.py --weight /home/young/disk/code/feature_matching/LoFTR/logs/tb_logs/outdoor-ds-640-bs=6/version_2/checkpoints/epoch=6-auc@5=0.433-auc@10=0.606-auc@20=0.742.ckpt --input /home/young/disk/code/feature_matching/LoFTR/data/videos/video1.mp4
 </code></pre>
-<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20220918163227217.png" alt="image-20220918163227217"></p>
+<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20220918163227217.png" alt="image-20220918163227217"></p>
 <p>修改train_list.txt来减少数据集的场景数目</p>
 <p>dataset的数量不会影响显存占用，输入网络的图像尺寸才会影响显存占用</p>
 <p>原数据量（640*640）的测试结果</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20220930105732853.png" alt="image-20220930105732853"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20220930105732853.png" alt="image-20220930105732853"></p>
 <p>quadattention（640*640）</p>
 <p>5 epoch  45.90  63.19  76.30</p>
 <p>30 epoch  49.75  66.76  79.87</p>
 <p>best 27 epoch  50.96  68.05  80.32</p>
 <h3 id="test-1500-results"><a href="#test-1500-results" class="headerlink" title="test_1500 results"></a>test_1500 results</h3><p>loftr_od_ds</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20221012112651765.png" alt="image-20221012112651765"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20221012112651765.png" alt="image-20221012112651765"></p>
 <p>quad_od_ds (my)</p>
 <p>quad_od_ds(author)</p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20221012123020189.png" alt="image-20221012123020189"></p>
-<h3 id="用十分之一的数据测试结果"><a href="#用十分之一的数据测试结果" class="headerlink" title="用十分之一的数据测试结果"></a>用十分之一的数据测试结果</h3><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20220930110011605.png" alt="image-20220930110011605"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20221012123020189.png" alt="image-20221012123020189"></p>
+<h3 id="用十分之一的数据测试结果"><a href="#用十分之一的数据测试结果" class="headerlink" title="用十分之一的数据测试结果"></a>用十分之一的数据测试结果</h3><p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20220930110011605.png" alt="image-20220930110011605"></p>
 <p>20epoch的效果相当于原2epoch</p>
 <h2 id="原理部分"><a href="#原理部分" class="headerlink" title="原理部分"></a>原理部分</h2><p>线性attention</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/157490738?from_voters_page=true">https://zhuanlan.zhihu.com/p/157490738?from_voters_page=true</a></p>
-<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/image-20221013150606391.png" alt="image-20221013150606391"></p>
+<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/Feature%20Matching/LoFTR/../LoFTR/image-20221013150606391.png" alt="image-20221013150606391"></p>
 <h2 id="改进思路"><a href="#改进思路" class="headerlink" title="改进思路"></a>改进思路</h2><ul>
 <li>全部替换为旋转不变的transformer（包括cnn）</li>
 <li>添加几何信息指导</li>

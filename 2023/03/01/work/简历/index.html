@@ -781,8 +781,8 @@
 <h2 id="基于单目视觉的飞机位姿估计系统"><a href="#基于单目视觉的飞机位姿估计系统" class="headerlink" title="基于单目视觉的飞机位姿估计系统"></a>基于单目视觉的飞机位姿估计系统</h2><p>根据项目要求采用了传统方法和基于深度学习的方法，传统方法首先采集目标模板图像，使用sfm对目标进行稀疏重建以获得2D-3D点对应，通过orb特征匹配算法将输入图像与模板库图像进行匹配，选择最优匹配图像后通过PnP解算位姿，并通过卡尔曼滤波排除异常值。</p>
 <p>深度学习的方法，预先采集并标注目标检测数据集和关键点识别数据集，通过YOLOv5目标检测网络进行识别以及裁剪图像，然后通过自定义的UNet关键点检测网络识别目标上的2D关键点，最终通过PnP算法求解位姿。</p>
 <p>最终实现30ms延时内定位精度优于2%的效果。</p>
-<p><img src="/2023/03/01/work/%E7%AE%80%E5%8E%86/image-20230305114017843.png" alt="image-20230305114017843"></p>
-<p><img src="/2023/03/01/work/%E7%AE%80%E5%8E%86/流程图.png" alt="流程图"></p>
+<p><img src="/2023/03/01/work/%E7%AE%80%E5%8E%86/03/01/work/%E7%AE%80%E5%8E%86/../简历/image-20230305114017843.png" alt="image-20230305114017843"></p>
+<p><img src="/2023/03/01/work/%E7%AE%80%E5%8E%86/03/01/work/%E7%AE%80%E5%8E%86/../简历/流程图.png" alt="流程图"></p>
 <h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><h4 id="工具栈"><a href="#工具栈" class="headerlink" title="工具栈"></a>工具栈</h4><p>python、C++、verilog、pytorch、linux、opencv图像处理库</p>
 <h4 id="理论栈"><a href="#理论栈" class="headerlink" title="理论栈"></a>理论栈</h4><p>域自适应、特征匹配（传统or深度）、目标检测、视觉位姿估计算法、多视图几何？</p>
 <p>{YePeng Yang} received the B.E. degree in electronic information engineering from Huazhong University of Science and Technology, Wuhan, China, in 2021. Since 2021, he has been with the Brain-inspired Application Technology Center, Shanghai Jiao Tong University, where he is currently pursuing the Master degree. His main research interests include domain adaptation and feature matching.</p>

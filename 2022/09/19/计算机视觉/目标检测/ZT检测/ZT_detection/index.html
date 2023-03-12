@@ -784,16 +784,16 @@
 <p>0 0.412500 0.318981 0.358333 0.636111</p>
 <p>x,y是目标的中心坐标，width,height是目标的宽和高。这些坐标是通过归一化的，其中x，width是使用原图的width进行归一化；而y，height是使用原图的height进行归一化。</p>
 <p>使用darklabel进行标注</p>
-<p><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/image-20220919205553907.png" alt="image-20220919205553907"></p>
+<p><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/../ZT_detection/image-20220919205553907.png" alt="image-20220919205553907"></p>
 <p>256*256网络在3080上预测时间为7ms左右</p>
 <p>yolo命令：</p>
 <p>python detect.py —weights runs/train/exp20/last.pt —img 640 —source ZT/test1/images —save-crop —device 0</p>
-<h2 id="项目书"><a href="#项目书" class="headerlink" title="项目书"></a>项目书</h2><p><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/image-20220924204115038.png" alt="image-20220924204115038"></p>
+<h2 id="项目书"><a href="#项目书" class="headerlink" title="项目书"></a>项目书</h2><p><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/../ZT_detection/image-20220924204115038.png" alt="image-20220924204115038"></p>
 <p>对应部分</p>
 <p>就说白天的正午、下午，开灯的下午、夜间</p>
 <p>先写试验报告</p>
 <p>unet网络结构</p>
-<p><strong><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/image-20220927151357892.png" alt="image-20220927151357892"></strong></p>
+<p><strong><img src="/2022/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/09/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/ZT%E6%A3%80%E6%B5%8B/ZT_detection/../ZT_detection/image-20220927151357892.png" alt="image-20220927151357892"></strong></p>
 <!-- flag of hidden posts -->
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
