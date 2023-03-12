@@ -773,7 +773,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="链表理论基础"><a href="#链表理论基础" class="headerlink" title="链表理论基础"></a>链表理论基础</h2><p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806194529815.png" alt="链表1"></p>
+        <h2 id="链表理论基础"><a href="#链表理论基础" class="headerlink" title="链表理论基础"></a>链表理论基础</h2><p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806194529815.png" alt="链表1"></p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">// 单链表
 struct ListNode {
     int val;  // 节点上存储的元素
@@ -781,11 +781,11 @@ struct ListNode {
     ListNode(int x) : val(x), next(NULL) {}  // 节点的构造函数，val初始化为x，next初始化为NULL
 };
 </code></pre>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/image-20221218173554982.png" alt="image-20221218173554982"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/image-20221218173554982.png" alt="image-20221218173554982"></p>
 <p>删除节点和添加节点：</p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195114541.png" alt="链表-删除节点"></p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195134331.png" alt="链表-添加节点"></p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195200276.png" alt="链表-链表与数据性能对比"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195114541.png" alt="链表-删除节点"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195134331.png" alt="链表-添加节点"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/20200806195200276.png" alt="链表-链表与数据性能对比"></p>
 <p>使用C，C++编程语言的话，不要忘了还要从<strong>内存中删除</strong>被移除的节点</p>
 <h2 id="移除链表元素"><a href="#移除链表元素" class="headerlink" title="移除链表元素"></a>移除链表元素</h2><p>为了使用一种统一的逻辑来移除链表的节点，我们可以设置<strong>虚拟头节点</strong></p>
 <p>最后在题目中，return 头结点的时候，需要 <code>return dummyNode-&gt;next;</code></p>
@@ -804,16 +804,16 @@ struct ListNode {
 delete[] arr;//注意要删除数组时，需要加[]，以表示arr为数组。
 </code></pre>
 <h2 id="翻转链表"><a href="#翻转链表" class="headerlink" title="翻转链表"></a>翻转链表</h2><p>双指针法</p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/008eGmZEly1gnrf1oboupg30gy0c44qp.gif" alt="img"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/008eGmZEly1gnrf1oboupg30gy0c44qp.gif" alt="img"></p>
 <h2 id="删除链表的倒数第N个节点"><a href="#删除链表的倒数第N个节点" class="headerlink" title="删除链表的倒数第N个节点"></a>删除链表的倒数第N个节点</h2><p>双指针法：fast先走n+1步，slow再和fast同时走。注意使用虚拟头节点</p>
 <p><img src="https://code-thinking.cdn.bcebos.com/pics/19.%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACN%E4%B8%AA%E8%8A%82%E7%82%B93.png" alt="img" style="zoom:50%;"></p>
 <h2 id="链表相交"><a href="#链表相交" class="headerlink" title="链表相交"></a>链表相交</h2><p>思路：相交部分长度相同，交点处指针相等。即先将长度对齐，再比较指针是否相同。</p>
 <p>注：<strong>判断链表结束是看是否指向NULL，</strong>而不是0。没有使用虚拟头节点的话，判断如下<code>while(curA != NULL)</code>,不需要用curA-&gt;next</p>
 <h2 id="环形链表"><a href="#环形链表" class="headerlink" title="环形链表"></a>环形链表</h2><p>题意： 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。</p>
 <p><strong>判断环内相遇</strong>：双指针，慢指针每走一步，快指针走两步，如果两指针相遇，则表明有环。</p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/141.环形链表.gif" alt="141.环形链表"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/141.环形链表.gif" alt="141.环形链表"></p>
 <p><strong>找到环的入口：</strong>（快指针可能走N圈才会和慢的相遇）</p>
-<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/142.环形链表II（求入口）.gif" alt="142.环形链表II（求入口）"></p>
+<p><img src="/2023/02/01/cpp/%E9%93%BE%E8%A1%A8/02/01/cpp/%E9%93%BE%E8%A1%A8/../链表/142.环形链表II（求入口）.gif" alt="142.环形链表II（求入口）"></p>
 <p><strong>从头结点出发一个指针，从相遇节点 也出发一个指针，这两个指针每次只走一个节点， 那么当这两个指针相遇的时候就是 环形入口的节点</strong>。</p>
 
       

@@ -932,7 +932,7 @@ public:
 <h2 id="96-不同的二叉搜索树"><a href="#96-不同的二叉搜索树" class="headerlink" title="96.不同的二叉搜索树"></a>96.不同的二叉搜索树</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/unique-binary-search-trees/">力扣题目链接(opens new window)</a></p>
 <p>给定一个整数 n，求以 1 … n 为节点组成的<strong>二叉搜索树</strong>有多少种？</p>
 <p>思路：</p>
-<p><img src="/2023/02/01/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/../动态规划/image-20230310111953290.png" alt="image-20230310111953290"> </p>
+<p><img src="/2023/02/01/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/02/01/cpp/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/../动态规划/image-20230310111953290.png" alt="image-20230310111953290"> </p>
 <p>dp[3] = dp[0]dp[2] + dp[1]dp[1]+dp[2]dp[0];</p>
 <p>节点的数值其实关系不大，只要每个值不一样就行；</p>
 <p>dp[i] += dp[j - 1] * dp[i - j];</p>

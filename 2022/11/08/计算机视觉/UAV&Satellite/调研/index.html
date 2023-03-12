@@ -782,7 +782,7 @@
       
         <h2 id="UAV-Geolocalization-Using-Satellite-Imagery"><a href="#UAV-Geolocalization-Using-Satellite-Imagery" class="headerlink" title="UAV Geolocalization Using Satellite Imagery"></a><a target="_blank" rel="noopener" href="https://abhinavtripathi95.github.io/lets-talk/technical/2020/08/03/uav-geolocalization.html">UAV Geolocalization Using Satellite Imagery</a></h2><h3 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h3><p>无人机通常靠GPS来获得全局姿态估计，然而为了使用GPS进行精确的地理定位，无人机必须能够从四个或更多的GPS卫星接收直接的视线。这可能是一个问题，如果存在高楼大厦，山脉或干扰器，可以阻碍来自卫星的信号。<br>那么我们能在没有GPS的情况下推断出无人机的全局姿态吗?<br>答案是肯定的，我们可以使用无人机下面附加的相机传感器来比较场景和卫星图像，并推断出无人机的位置。</p>
 <h3 id="Geolocalization-as-an-Image-Matching-Problem"><a href="#Geolocalization-as-an-Image-Matching-Problem" class="headerlink" title="Geolocalization as an Image Matching Problem"></a>Geolocalization as an Image Matching Problem</h3><p>考虑这样一个场景，您有一个卫星图像数据库，其中标注了它们的位置。<br>通过将无人机相机的图像与数据库进行精确匹配，可以很好地获得无人机的经纬度近似。<br>为了从卫星数据库中检索相似的图像，我们必须能够精确地匹配卫星图像与无人机相机馈送。<br>因此，在本研究中，我们将自己局限于<strong>航空图像匹配问题</strong>，训练一个深度学习模型，<strong>可以精确匹配来自卫星和无人机相机的图像</strong>。</p>
-<h2 id="UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019"><a href="#UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019" class="headerlink" title="UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)"></a>UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)</h2><p><img src="/调研/image-20221031184827896.png" alt="image-20221031184827896" style="zoom:30%;"></p>
+<h2 id="UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019"><a href="#UAV-Pose-Estimation-using-Cross-view-Geolocalization-with-Satellite-Imagery-ICRA-2019" class="headerlink" title="UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)"></a>UAV Pose Estimation using Cross-view Geolocalization with Satellite Imagery (ICRA 2019)</h2><p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221031184827896.png" alt="image-20221031184827896" style="zoom:30%;"></p>
 <p>数据集是从谷歌地图上收集的“Sample matching pairs of UAV images from Google Earth (top row) and satellite images from Google Maps (bottom row).”</p>
 <p>scene localization network 用于对每张图片生成一个描述符，计算欧式距离d，用于计算权重</p>
 <p>Camera Localization network 是一个双分支网络，第一个分支输出一个热力图，最大值位置代表x,y水平位置，第二个分支直接回归垂直位置，朝向(heading)和倾斜角度(tilt)</p>
@@ -792,7 +792,7 @@
 <p>还包括对应的卫星图像（由谷歌地球生成）</p>
 <p>在这项工作中，所有真实的和渲染的图像都是用指向最低点的相机拍摄的</p>
 <h2 id="UAV-Localization-Using-Autoencoded-Satellite-Images（IEEE-ROBOTICS-AND-AUTOMATION-LETTERS-2021）"><a href="#UAV-Localization-Using-Autoencoded-Satellite-Images（IEEE-ROBOTICS-AND-AUTOMATION-LETTERS-2021）" class="headerlink" title="UAV Localization Using Autoencoded Satellite Images（IEEE ROBOTICS AND AUTOMATION LETTERS 2021）"></a>UAV Localization Using Autoencoded Satellite Images（IEEE ROBOTICS AND AUTOMATION LETTERS 2021）</h2><p>和上一篇是一个团队</p>
-<p><img src="/调研/image-20221031194705659.png" alt="image-20221031194705659" style="zoom:33%;"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221031194705659.png" alt="image-20221031194705659" style="zoom:33%;"></p>
 <h3 id="动机："><a href="#动机：" class="headerlink" title="动机："></a>动机：</h3><p>由于谷歌地图中用于重建的卫星图像是多年前拍摄的，在照明、小对象移动(例如车辆、拖车)、大的结构变化(例如建筑物的增建/拆除)以及不寻常的对象重建方面与现场图像有所不同，特别是对于树木等非矩形对象。这使得<strong>基于特征的方法在很多情况下很难获得准确和稳健的结果。</strong></p>
 <h3 id="方法："><a href="#方法：" class="headerlink" title="方法："></a>方法：</h3><p>图像在GE中围绕所需的飞行路线进行渲染。对这些特定于路径的图像进行自动编码器训练，以将它们压缩成小得多的矢量表示。同样的自动编码器也用于压缩实时图像。通过内积核将压缩的实时图像向量与附近的所有压缩GE图像向量进行比较。这会产生与每个相应GE图像姿势相关联的权重。<br>根据这些权重，计算出带有伴随协方差的经度、纬度和航向的位置。</p>
 <h3 id="数据集："><a href="#数据集：" class="headerlink" title="数据集："></a>数据集：</h3><p>uav图像+GE图像</p>
@@ -802,13 +802,13 @@
 <h3 id="改进："><a href="#改进：" class="headerlink" title="改进："></a>改进：</h3><p>用最新的基于特征的方法进行尝试</p>
 <h2 id="UAV-Satellite-View-Synthesis-for-Cross-view-Geo-Localization"><a href="#UAV-Satellite-View-Synthesis-for-Cross-view-Geo-Localization" class="headerlink" title="UAV-Satellite View Synthesis for Cross-view Geo-Localization"></a>UAV-Satellite View Synthesis for Cross-view Geo-Localization</h2><p>（IEEE Transactions on Circuits and Systems for Video Technology TCSVT 2021)</p>
 <h3 id="数据集：-1"><a href="#数据集：-1" class="headerlink" title="数据集："></a>数据集：</h3><p>本研究使用的数据集是大学1652[30]，其中包含来自全球72所大学的1652栋建筑（1652个地点）。据我们所知，这是迄今为止<strong>唯一一个同时包含无人机视图图像和卫星视图图像的数据集</strong>。每个建筑物都与三个不同视角的图像相关联（见图7），包括一个卫星视图图像、54个不同高度和角度的无人机视图图像以及一个或多个地面视图图像。在本文中，我们使用了卫星图像（垂直视图）和无人机图像（斜视图）。大多数无人机视图是倾斜的，这为使用透视投影变换实现更好的匹配性能提供了巨大的潜力。</p>
-<h3 id="方法：-1"><a href="#方法：-1" class="headerlink" title="方法："></a>方法：</h3><p><img src="/调研/image-20221102151027518.png" alt="image-20221102151027518" style="zoom:33%;"></p>
+<h3 id="方法：-1"><a href="#方法：-1" class="headerlink" title="方法："></a>方法：</h3><p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221102151027518.png" alt="image-20221102151027518" style="zoom:33%;"></p>
 <p>通过数据集的先验信息进行的透视投影变换（？？？），然后采用GAN网络生成和卫星图像风格相似的图像（同时视角也更相似），如下图所示</p>
-<p><img src="/调研/image-20221101105655053.png" alt="image-20221101105655053" style="zoom: 80%;"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221101105655053.png" alt="image-20221101105655053" style="zoom: 80%;"></p>
 <p>随后对特征图采用一个方环分割策略来获取距离图像中心不同距离的上下文特征信息</p>
 <pre><code>如图6所示，我们将高级特征分为正方形环形分区中的几个部分。由于地理目标通常位于图像的中心，周围有上下文信息，分割方法不仅可以获得地理目标信息（区域A和B），还可以获得与地理目标具有不同距离的若干上下文信息部分（区域C和D）。因此，我们可以显式地利用上下文信息来优化PCL。我们观察到，我们的分割策略在本质上对图像旋转是鲁棒的。例如，当将图6中中间行的图像旋转到顶行的图像时，四个区域（A、B、C和D）仍然包含与中间图像的对应区域相同的信息。因此，根据方环分割策略设计的网络对图像旋转具有良好的鲁棒性
 </code></pre><p>(缺陷：只对90°旋转鲁棒，且目标不一定位于图像中心)</p>
-<p><img src="/调研/image-20221101110400421.png" alt="image-20221101110400421" style="zoom:33%;"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221101110400421.png" alt="image-20221101110400421" style="zoom:33%;"></p>
 <p>最后对图片生成一个描述符，并比较和其他图像的余弦相似性</p>
 <h3 id="疑问："><a href="#疑问：" class="headerlink" title="疑问："></a>疑问：</h3><p>UAV图像和卫星图像的视野范围基本一样？</p>
 <p>是否能生成已知对应关系的GAN网络</p>
@@ -822,17 +822,17 @@
 <p>（1）我们的方法不需要额外的注释，例如相机姿势、深度等。</p>
 <p>（2） 我们的方法不进行方位估计。</p>
 <p>（3） 所提出的方法考虑了点对点关系</p>
-<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221108091237749.png" alt="image-20221108091237749"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221108091237749.png" alt="image-20221108091237749"></p>
 <p>USC相当于算子</p>
 <p>-1 -1 -1</p>
 <p>-1  8 -1</p>
 <p>-1 -1 -1</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/AggMan96/RK-Net">AggMan96/RK-Net: Code for RK-Net (github.com)</a></p>
 <h2 id="Real-time-Geo-localization-Using-Satellite-Imagery-and-Topography-for-Unmanned-Aerial-Vehicles"><a href="#Real-time-Geo-localization-Using-Satellite-Imagery-and-Topography-for-Unmanned-Aerial-Vehicles" class="headerlink" title="Real-time Geo-localization Using Satellite Imagery and Topography for Unmanned Aerial Vehicles"></a>Real-time Geo-localization Using Satellite Imagery and Topography for Unmanned Aerial Vehicles</h2><p>使用谷歌地球提供的3D模型+blender渲染卫星图像和深度图像</p>
-<p><img src="/调研/image-20221108110109358.png" alt="image-20221108110109358" style="zoom: 50%;"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/image-20221108110109358.png" alt="image-20221108110109358" style="zoom: 50%;"></p>
 <h2 id="Multiple-environment-Self-adaptive-Network-for-Aerial-view-Geo-localization"><a href="#Multiple-environment-Self-adaptive-Network-for-Aerial-view-Geo-localization" class="headerlink" title="Multiple-environment Self-adaptive Network for Aerial-view Geo-localization"></a>Multiple-environment Self-adaptive Network for Aerial-view Geo-localization</h2><p>(arXiv 2022.4.18)</p>
 <p>现有的方法在真实的天气（如雨天和雾天）下会遇到较大的性能下降，因为它们没有考虑训练数据和多个测试环境之间的域转换。为了缩小这一领域差距，我们提出了一种多环境自适应网络（MuSe-Net），以动态调整环境变化引起的领域偏移。<br>特别是，MuSe-Net采用了包含一个多环境类型提取网络和一个自适应特征提取网络的两分支神经网络。顾名思义，多环境风格提取网络用于提取与环境相关的风格信息，而自适应特征提取网络利用自适应调制模块来动态地最小化与环境有关的风格差距。</p>
-<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221108105026501.png" alt="image-20221108105026501"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221108105026501.png" alt="image-20221108105026501"></p>
 <h2 id="CMU-amp-ICRA22-UAV俯瞰视觉定位竞赛"><a href="#CMU-amp-ICRA22-UAV俯瞰视觉定位竞赛" class="headerlink" title="CMU&amp;ICRA22 UAV俯瞰视觉定位竞赛"></a>CMU&amp;ICRA22 UAV俯瞰视觉定位竞赛</h2><p>[ICRA2022] General Place Recognition: Visual Terrain Relative Navigation</p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1NG411G78L/?spm_id_from=333.337.search-card.all.click&amp;vd_source=0bb4d13f4bd26eaf7f64c37f29dc9f27">CMU &amp; ICRA22 UAV俯瞰视觉定位竞赛冠军技术方案分享|军事科学院_哔哩哔哩_bilibili</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.sohu.com/a/587059840_121124366">CMU&amp;ICRA22 UAV俯瞰视觉定位竞赛亚军技术方案分享_VINS-Mono_VINS-Fusion_cvlife (sohu.com)</a></p>
@@ -883,7 +883,7 @@ In addition to the imagery in the Train and Val sets, we also provide a few csv 
 <p>自我运动估计方法应利用摄像机（丰富、密集的视觉信息）、激光雷达（可见范围内的精细粒度）和雷达（对恶劣天气的免疫力）的优势，同时解决其相对缺点。</p>
 <p>通过重建的质量来创建监督信号</p>
 <p>自监督的核心思想<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43882112/article/details/108610832">(54条消息) 【SLAM系列】Unsupervised Learning of Depth and Ego-Motion from Video<em>^</em>^ 晅菲的博客-CSDN博客</a></p>
-<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221106211924306.png" alt="image-20221106211924306"></p>
+<p><img src="/2022/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/11/08/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/UAV&amp;Satellite/%E8%B0%83%E7%A0%94/../调研/image-20221106211924306.png" alt="image-20221106211924306"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

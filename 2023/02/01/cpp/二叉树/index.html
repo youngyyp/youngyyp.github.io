@@ -794,7 +794,7 @@
 </li>
 </ul>
 <p>前中后是针对中间的节点</p>
-<p><img src="/二叉树/20200806191109896.png" alt="img" style="zoom:50%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200806191109896.png" alt="img" style="zoom:50%;"></p>
 <h3 id="二叉树的定义"><a href="#二叉树的定义" class="headerlink" title="#二叉树的定义"></a><a target="_blank" rel="noopener" href="https://www.programmercarl.com/二叉树理论基础.html#二叉树的定义">#</a>二叉树的定义</h3><p>刚刚我们说过了二叉树有两种存储方式顺序存储，和链式存储，顺序存储就是用数组来存，这个定义没啥可说的，我们来看看链式存储的二叉树节点的定义方式。</p>
 <p>C++代码如下：</p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">struct TreeNode {
@@ -872,7 +872,7 @@ public:
 <p>可以用<strong>栈</strong>实现二叉树的前后中序遍历</p>
 <h4 id="前序遍历（迭代法）"><a href="#前序遍历（迭代法）" class="headerlink" title="前序遍历（迭代法）"></a>前序遍历（迭代法）</h4><p>前序遍历是中左右，每次先处理的是中间节点，那么先将根节点放入栈中，然后将右孩子加入栈，再加入左孩子。</p>
 <p>为什么要先加入 右孩子，再加入左孩子呢？ 因为这样出栈的时候才是中左右的顺序。</p>
-<p><img src="/二叉树/二叉树前序遍历（迭代法）-16766184074375.gif" alt="二叉树前序遍历（迭代法）" style="zoom: 67%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/二叉树前序遍历（迭代法）-16766184074375.gif" alt="二叉树前序遍历（迭代法）" style="zoom: 67%;"></p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
@@ -1259,7 +1259,7 @@ public:
 </code></pre>
 <h2 id="222-完全二叉树的节点个数"><a href="#222-完全二叉树的节点个数" class="headerlink" title="222.完全二叉树的节点个数"></a>222.完全二叉树的节点个数</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-complete-tree-nodes/">力扣题目链接(opens new window)</a></p>
 <p>给出一个完全二叉树，求出该树的节点个数。</p>
-<p><img src="/二叉树/20200920221638903.png" alt="img" style="zoom: 33%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20200920221638903.png" alt="img" style="zoom: 33%;"></p>
 <p>我的代码（没有针对完全二叉树做优化）：</p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
 public:
@@ -1474,7 +1474,7 @@ public:
 <p>注意: 你可以假设树中没有重复的元素。</p>
 <p>例如，给出</p>
 <p>中序遍历 inorder = [9,3,15,20,7] 后序遍历 postorder = [9,15,7,20,3] 返回如下的二叉树：</p>
-<p><img src="/二叉树/20210203154316774-16775032045302.png" alt="106. 从中序与后序遍历序列构造二叉树1" style="zoom:100%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/20210203154316774-16775032045302.png" alt="106. 从中序与后序遍历序列构造二叉树1" style="zoom:100%;"></p>
 <p>思路：</p>
 <p>以 后序数组的最后一个元素为切割点，先切中序数组，根据中序数组，反过来再切后序数组。一层一层切下去，每次后序数组最后一个元素就是节点元素</p>
 <p>题解：</p>
@@ -1746,7 +1746,7 @@ public:
 </code></pre>
 <p>题解：</p>
 <p>主要是理清这张图的逻辑</p>
-<p><img src="/二叉树/202102041512582.png" alt="236.二叉树的最近公共祖先2" style="zoom:50%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/202102041512582.png" alt="236.二叉树的最近公共祖先2" style="zoom:50%;"></p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
@@ -1801,7 +1801,7 @@ public:
 };
 </code></pre>
 <h2 id="701-二叉搜索树中的插入操作"><a href="#701-二叉搜索树中的插入操作" class="headerlink" title="701.二叉搜索树中的插入操作"></a>701.二叉搜索树中的插入操作</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/insert-into-a-binary-search-tree/">力扣题目链接</a></p>
-<p><img src="/二叉树/insertbst-16777246991064.jpg" alt="img" style="zoom:50%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/insertbst-16777246991064.jpg" alt="img" style="zoom:50%;"></p>
 <p>我的代码：</p>
 <p>迭代法</p>
 <p>找到空的就插入新节点</p>
@@ -1904,7 +1904,7 @@ public:
 };
 </code></pre>
 <h2 id="669-修剪二叉搜索树"><a href="#669-修剪二叉搜索树" class="headerlink" title="669. 修剪二叉搜索树*"></a>669. 修剪二叉搜索树*</h2><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/trim-a-binary-search-tree/">力扣题目链接</a></p>
-<p><img src="/二叉树/trim2.jpg" alt="img" style="zoom:33%;"></p>
+<p><img src="/2023/02/01/cpp/%E4%BA%8C%E5%8F%89%E6%A0%91/trim2.jpg" alt="img" style="zoom:33%;"></p>
 <p>题解：</p>
 <pre class=" language-lang-cpp"><code class="language-lang-cpp">class Solution {
 public:

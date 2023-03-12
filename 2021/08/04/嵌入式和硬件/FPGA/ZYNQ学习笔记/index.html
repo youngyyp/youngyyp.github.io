@@ -822,7 +822,7 @@
 <h2 id="MIO、EMIO、AXI-总线控制GPIO的不同"><a href="#MIO、EMIO、AXI-总线控制GPIO的不同" class="headerlink" title="MIO、EMIO、AXI 总线控制GPIO的不同"></a>MIO、EMIO、AXI 总线控制GPIO的不同</h2><p>MIO和EMIO都是PS端的，MIO直接通过PS操纵PS端的外设（如GPIO），不需要经过PL；EMIO则通过连接到PL端，进而控制PL端的外设。</p>
 <p>也可以采用AXI总线的方式进行PS和PL之间的通信。</p>
 <h2 id="自定义pwm-IP实验"><a href="#自定义pwm-IP实验" class="headerlink" title="自定义pwm_IP实验"></a>自定义pwm_IP实验</h2><p>在进行实验custom<em>pwm_ip时出现玄学错误，无法build platform和新建application，但是通过该博客方法修改makefile文件后居然真好了[vitis报错：platform out-of-date，编译时makefile error；修改后application编译报undefined reference</em>不缺席的阳光的博客-CSDN博客](<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_50988214/article/details/118523143">https://blog.csdn.net/weixin_50988214/article/details/118523143</a>)</p>
-<p><img src="/2021/08/04/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/ZYNQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/../ZYNQ学习笔记/image-20210819222535205.png" alt="image-20210819222535205"></p>
+<p><img src="/2021/08/04/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/ZYNQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/08/04/%E5%B5%8C%E5%85%A5%E5%BC%8F%E5%92%8C%E7%A1%AC%E4%BB%B6/FPGA/ZYNQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/../ZYNQ学习笔记/image-20210819222535205.png" alt="image-20210819222535205"></p>
 <p>无符号数加到最大后再加会自动变为0，可以利用这一点进行pwm计数器的设计。</p>
 <p>呼吸灯原理是设定固定的pwm频率，而不断改变占空比。</p>
 <p>待解问题：明明只定义了一个led，为什么其他的几个也一直亮着。（可能是因为这几个led是共阴/共阳吧）</p>

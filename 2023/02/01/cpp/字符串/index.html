@@ -982,7 +982,7 @@ public:
 <p><strong>前缀表是用来回退的，它记录了模式串与主串(文本串)不匹配的时候，模式串应该从哪里开始重新匹配。</strong></p>
 <p><img src="https://code-thinking.cdn.bcebos.com/gifs/KMP%E7%B2%BE%E8%AE%B21.gif" alt="KMP详解1"></p>
 <p>前缀表的求法：</p>
-<p><img src="/字符串/image-20230212143008343.png" alt="image-20230212143008343" style="zoom: 25%;"></p>
+<p><img src="/2023/02/01/cpp/%E5%AD%97%E7%AC%A6%E4%B8%B2/image-20230212143008343.png" alt="image-20230212143008343" style="zoom: 25%;"></p>
 <p>遇见冲突后找冲突的前一位所对应的前缀表，再从前缀表所对下标处继续匹配</p>
 <p><img src="https://code-thinking.cdn.bcebos.com/gifs/KMP%E7%B2%BE%E8%AE%B22.gif" alt="KMP精讲2"></p>
 <p>初始化： j 指向前缀末尾位置（也是当前公共前后缀的长度）   i 指向后缀末尾位置</p>
