@@ -43,9 +43,9 @@
 
 <script src="/js/iconfont.js?v=1.1.0" ></script>
 
-<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
-
+<meta name="generator" content="Hexo 6.0.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="young's blog" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 <div style="display: none">
   <input class="theme_disqus_on" value="false">
@@ -81,7 +81,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(40)</small>
+                <small>(43)</small>
             
         </div>
     </li>
@@ -166,7 +166,7 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="40">
+<input type="hidden" id="yelog_site_posts_number" value="43">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -336,6 +336,33 @@
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 "
+           href="/2023/04/12/cpp/%E5%89%91%E6%8C%87offer/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2023-04-12 14:06:03">2023/04/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2023/04/08/cpp/%E5%8D%95%E8%B0%83%E6%A0%88/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2023-04-08 19:02:21">2023/04/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/2023/03/26/cpp/ACM%E6%A8%A1%E5%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2023-03-26 15:14:55">2023/03/26</span>
+        </a>
         
         
         <a  class="全部文章 CPP "
@@ -735,7 +762,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-03-11 14:35:58'>2023-02-01 21:14</time>
+            发布时间 : <time class="date" title='最后更新: 2023-04-08 19:02:21'>2023-02-01 21:14</time>
         
     </div>
     <div class="article-meta">
@@ -780,6 +807,48 @@
 </li>
 <li>比较left、middle和right三个值</li>
 </ul>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">// 版本一
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1; // 定义target在左闭右闭的区间里，[left, right]
+        while (left <= right) { // 当left==right，区间[left, right]依然有效，所以用 <=
+            int middle = left + ((right - left) / 2);// 防止溢出 等同于(left + right)/2
+            if (nums[middle] > target) {
+                right = middle - 1; // target 在左区间，所以[left, middle - 1]
+            } else if (nums[middle] < target) {
+                left = middle + 1; // target 在右区间，所以[middle + 1, right]
+            } else { // nums[middle] == target
+                return middle; // 数组中找到目标值，直接返回下标
+            }
+        }
+        // 未找到目标值
+        return -1;
+    }
+};
+</code></pre>
+<pre class=" language-lang-cpp"><code class="language-lang-cpp">// 版本二
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size(); // 定义target在左闭右开的区间里，即：[left, right)
+        while (left < right) { // 因为left == right的时候，在[left, right)是无效的空间，所以使用 <
+            int middle = left + ((right - left) >> 1);
+            if (nums[middle] > target) {
+                right = middle; // target 在左区间，在[left, middle)中
+            } else if (nums[middle] < target) {
+                left = middle + 1; // target 在右区间，在[middle + 1, right)中
+            } else { // nums[middle] == target
+                return middle; // 数组中找到目标值，直接返回下标
+            }
+        }
+        // 未找到目标值
+        return -1;
+    }
+};
+</code></pre>
 <h2 id="移除元素"><a href="#移除元素" class="headerlink" title="移除元素"></a>移除元素</h2><p>数组的元素在内存地址中是连续的，不能单独删除数组中的某个元素，只能覆盖。</p>
 <p><strong>双指针法（快慢指针法</strong>）：通过一个快指针和慢指针在一个for循环下完成两个for循环的工作</p>
 <ul>
