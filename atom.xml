@@ -6,7 +6,7 @@
   <link href="https://youngyyp.github.io/atom.xml" rel="self"/>
   
   <link href="https://youngyyp.github.io/"/>
-  <updated>2023-05-30T13:04:35.064Z</updated>
+  <updated>2023-06-26T14:20:26.514Z</updated>
   <id>https://youngyyp.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://youngyyp.github.io/2023/06/26/work/%E7%AE%80%E5%8E%86%E4%BC%98%E5%8C%96/"/>
+    <id>https://youngyyp.github.io/2023/06/26/work/%E7%AE%80%E5%8E%86%E4%BC%98%E5%8C%96/</id>
+    <published>2023-06-26T14:14:08.930Z</published>
+    <updated>2023-06-26T14:20:26.514Z</updated>
+    
+    <content type="html"><![CDATA[<p>可按照备受HR推崇的<strong>STAR原则</strong>来写：</p><p><strong>Situation:</strong> 事情是在什么情况下发生的</p><p><strong>Task:</strong> 你是如何明确你的任务的</p><p><strong>Action:</strong> 针对这样的情况分析，你采用了什么行动方式</p><p><strong>Result:</strong> 结果怎样，在这样的情况下你学习到了什么</p><p>每个项目按背景、难点、方法、成果来写。</p>]]></content>
+    
+    
+    <summary type="html">可按照备受HR推崇的STAR原则来写：
+
+Situation: 事情是在什么情况下发生的
+
+Task: 你是如何明确你的任务的
+
+Action: 针对这样的情况分析，你采用了什么行动方式
+
+Result: 结果怎样，在这样的情况下你学习到了什么
+
+每个项目按背景、难点、方法、成果来写。</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>图</title>
@@ -638,35 +665,6 @@ train.py &quot;configs/data/megadepth_trainval_640.py&quot; &quot;configs/loftr/
     
     
     <category term="特征匹配" scheme="https://youngyyp.github.io/tags/%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>理解BN</title>
-    <link href="https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E7%90%86%E8%A7%A3BN/"/>
-    <id>https://youngyyp.github.io/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E7%90%86%E8%A7%A3BN/</id>
-    <published>2022-11-07T01:49:41.000Z</published>
-    <updated>2023-03-13T09:32:54.716Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="/2022/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/test_time_adaptation/%E7%90%86%E8%A7%A3BN/85bab1e5493a4f74a97b8e7b473ad406.jpeg" alt="在这里插入图片描述"></p><ul><li><p>BN和Dropout在训练和测试时的差别</p><p>  (<a href="https://www.zhihu.com/people/hai-chen-wei">https://www.zhihu.com/people/hai-chen-wei</a>)</p></li><li><p><a href="https://zhuanlan.zhihu.com/p/61725100">https://zhuanlan.zhihu.com/p/61725100</a></p></li><li><p>我们<strong>在训练和推理过程中BatchNorm有不同的行为</strong>。在训练中，我们记录均值和方差的指数移动平均值，以供以后在推理时使用。其原因是，在训练期间处理批次时，我们可以获得输入随时间变化的均值和方差的更好估计，然后将其用于推理。在推理过程中使用输入批次的平均值和方差将不太准确，因为其大小可能比训练中使用的小得多，大数定律在这里发挥了作用。</p></li><li><p>即model.train()模式下会计算统计参数</p></li><li><p>BN在训练时是在每个batch上计算均值和方差来进行归一化，每个batch的样本量都不大，所以每次计算出来的均值和方差就存在差异。预测时一般传入一个样本，所以不存在归一化，其次哪怕是预测一个batch，但batch计算出来的均值和方差是偏离总体样本的，所以通常是通过滑动平均结合训练时所有batch的均值和方差来得到一个总体均值和方差。</p></li><li><p>Dropout在训练时会随机丢弃一些神经元，这样会导致输出的结果变小。而预测时往往关闭dropout，保证预测结果的一致性（不关闭dropout可能同一个输入会得到不同的输出，不过输出会服从某一分布。另外有些情况下可以不关闭dropout，比如文本生成下，不关闭会增大输出的多样性）。</p></li></ul><p><a href="https://blog.csdn.net/qq_40728667/article/details/121865517">（Pytorch）BatchNorm中的track_running_stats参数_Think@的博客-CSDN博客_track_running_stats</a></p><p><a href="https://blog.csdn.net/lovep1/article/details/114646667">(77条消息) 详解常用的Batch Norm、Group Norm，Layer norm、Instance Norm_groupnorm_lovep1的博客-CSDN博客</a></p><p><a href="https://blog.csdn.net/qq_43827595/article/details/121877901">(77条消息) 深入理解NLP中LayerNorm的原理以及LN的代码详解_捡起一束光的博客-CSDN博客</a></p><p>BN和IN 可以设置参数：momentum 和 track_running_stats来获得在全局数据上更准确的 running mean 和 running std。 </p><p>LN 和 GN 只能计算当前 batch 内数据的真实均值和标准差</p>]]></content>
-    
-    
-    <summary type="html">* BN和Dropout在训练和测试时的差别
-   
-    (https://www.zhihu.com/people/hai-chen-wei)
-   
-   
- * https://zhuanlan.zhihu.com/p/61725100
-   
-   
- * 我们在训练和推理过程中BatchNorm有不同的行为。在训练中，我们记录均值和方差的指数移动平均值，以供以后在推理时使用。其原因是，在训练期间处理批次时，我们可以获得输入随时间变化的均值和方差的更好估计，然后将其用于推理。在推理过程中使用输入批次的平均值和方差将不太准确，因为其大小可能比训练中使用的小得多，大数定律在这里发挥了作</summary>
-    
-    
-    
-    <category term="计算机视觉" scheme="https://youngyyp.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
-    
-    
-    <category term="batch norm" scheme="https://youngyyp.github.io/tags/batch-norm/"/>
     
   </entry>
   
